@@ -3,235 +3,127 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>李仲恩 英文家教</title>
-    
+    <title>GSAT 英文滿級分衝刺 | 李仲恩</title>
     <meta name="google-site-verification" content="5Ncnb-iB0SQhloWAkXmP1dvax36anpep7HUPSsZcucw" />
-    
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        /* A4 尺寸的長寬比大約是 1:1.414 */
-        /* 我們在電腦版上模擬這個比例，但在手機上保持流暢 */
-        @media (min-width: 1024px) {
-            .a4-container {
-                max-width: 800px; /* A4 寬度模擬 */
-                margin-left: auto;
-                margin-right: auto;
-            }
-        }
-        body {
-            font-family: 'Inter', 'Noto Sans TC', sans-serif;
-        }
-        h1, h2, h3, h4 {
-            font-family: 'Noto Sans TC', sans-serif;
-            font-weight: 700;
-        }
+        body { font-family: 'Inter', 'Noto Sans TC', sans-serif; background-color: #f8fafc; color: #334155; }
+        .page-content { display: none; }
+        #part1 { display: block; }
+        /* 您的原始表格和樣式設定保留 */
+        table { width: 100%; border-collapse: separate; border-spacing: 0; margin: 1rem 0; border-radius: 8px; overflow: hidden; border: 1px solid #e2e8f0; }
+        th, td { padding: 1rem; text-align: left; border-bottom: 1px solid #e2e8f0; }
+        th { background-color: #f1f5f9; font-weight: 700; color: #1e293b; }
+        td { background-color: #ffffff; }
+        tr:last-child td { border-bottom: none; }
+        .lecture-focus { background-color: #eff6ff; border-left: 5px solid #3b82f6; padding: 1.5rem; margin-bottom: 1.5rem; border-radius: 0 0.5rem 0.5rem 0; }
+        .focus-title { font-weight: 700; color: #1e40af; margin-bottom: 0.5rem; display: block; font-size: 1.1rem; }
+        .material-card { background: white; border: 1px solid #e2e8f0; border-radius: 0.75rem; padding: 1.25rem; margin-bottom: 1rem; }
+        .material-tag { display: inline-block; background-color: #dbeafe; color: #1e40af; padding: 0.25rem 0.75rem; border-radius: 9999px; font-weight: 700; margin-bottom: 0.5rem; font-size: 0.85rem; }
+        .table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; margin-bottom: 1.5rem; }
+        .sentence-card { background-color: #fff; border: 1px solid #e2e8f0; border-radius: 0.5rem; padding: 1rem; margin-bottom: 0.75rem; border-left: 4px solid #6366f1; }
+        .sentence-type { font-size: 0.85rem; font-weight: 700; text-transform: uppercase; color: #6366f1; margin-bottom: 0.25rem; display: block; }
     </style>
 </head>
-<body class="bg-gray-200 p-4 md:p-8">
+<body class="bg-slate-50 text-gray-800">
 
-    <div class="a4-container bg-white shadow-2xl rounded-lg overflow-hidden">
-        
-        <header class="bg-indigo-800 text-white p-8 md:p-12 text-center relative">
-            <div class="absolute top-4 right-4 bg-red-500 text-white py-2 px-4 rounded-full text-sm md:text-base font-bold shadow-lg animate-pulse">
-                僅再收 1 位！
+    <nav class="bg-gray-900 text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <a href="index.html" class="font-bold text-xl tracking-wider hover:text-blue-400 transition">
+                    李仲恩英文
+                </a>
+
+                <div class="hidden md:flex space-x-8">
+                    <a href="index.html" class="text-blue-400 font-bold border-b-2 border-blue-400">GSAT 滿級分系統</a>
+                    <a href="tutoring.html" class="hover:text-blue-400 transition duration-300">關於我 / 家教課程</a>
+                </div>
+
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="outline-none mobile-menu-button">
+                        <svg class="w-6 h-6 hover:text-blue-400" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                            <path d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
             </div>
-            <h1 class="text-3xl md:text-5xl font-bold mb-3">學測英文作文衝刺</h1>
-            <p class="text-xl md:text-2xl text-indigo-200">114學測滿級分/全國前0.04%名師・李仲恩</p>
-            <p class="text-sm md:text-base mt-2 text-indigo-300">#英文作文 #學測衝刺 #高中英文 #新竹家教 #線上家教 </p>
-        </header>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden bg-gray-800">
+            <a href="index.html" class="block py-3 px-4 text-sm text-blue-400 font-bold bg-gray-700">GSAT 滿級分系統</a>
+            <a href="tutoring.html" class="block py-3 px-4 text-sm hover:bg-gray-700 border-b border-gray-700">關於我 / 家教課程</a>
+        </div>
+    </nav>
 
-        <main class="p-6 md:p-10">
+    <header class="bg-white shadow-sm py-6">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h1 class="text-2xl md:text-3xl font-bold text-center text-blue-700 tracking-tight">GSAT 英文滿級分衝刺</h1>
+            <p class="text-center text-sm md:text-base text-gray-500 mt-1">李仲恩老師編授 | 系統化詳細指引</p>
+        </div>
+    </header>
 
-            <section class="flex flex-col md:flex-row gap-6 md:gap-8 mb-8">
-                <div class="md:w-1/3 flex-shrink-0">
-                    <img src="個人照.jpg" alt="李仲恩老師個人照" class="w-full h-auto rounded-lg shadow-md object-cover">
-                </div>
-                <div class="md:w-2/3 bg-indigo-50 border-l-4 border-indigo-500 p-6 rounded-lg shadow-sm">
-                    <h2 class="text-2xl font-bold text-indigo-900 mb-4">不只是教學，更是全方位衝刺</h2>
-                    <p class="text-lg text-gray-700 mb-4">
-                        距離學測剩近60天，只要方法正確，英文作文完全可以快速提升！
-                    </p>
-                    <div class="space-y-3">
-                        <div class="bg-yellow-100 border border-yellow-300 p-4 rounded-lg">
-                            <h3 class="font-bold text-yellow-900 text-lg">🚀 專屬題庫＋無限批改</h3>
-                            <p class="text-yellow-800">只要學生肯寫，我就一定批改、詳細回饋，讓學生不斷實戰演練！</p>
-                        </div>
-                        <div class="bg-green-100 border border-green-300 p-4 rounded-lg">
-                            <h3 class="font-bold text-green-900 text-lg">🎁 獨家加贈</h3>
-                            <p class="text-green-800">國英數自全科解題服務！</p>
-                        </div>
-                        <div class="bg-red-100 border border-red-300 p-4 rounded-lg">
-                            <h3 class="font-bold text-red-900 text-lg">❤️ 耐心親和・保證聽懂</h3>
-                            <p class="text-red-800">有耐心與親和力，用最淺顯的方式說明，確保學生真正理解。</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
+    <nav class="bg-white shadow-sm z-10 border-t border-gray-100">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-wrap justify-center -mb-px space-x-1 md:space-x-6">
+                <button id="nav-part1" class="nav-button" onclick="showPage('part1')">Part 1: 核心原則</button>
+                <button id="nav-part2" class="nav-button" onclick="showPage('part2')">Part 2: 選擇題</button>
+                <button id="nav-part3" class="nav-button" onclick="showPage('part3')">Part 3: 英文作文</button>
+                <button id="nav-part4" class="nav-button" onclick="showPage('part4')">Part 4: 中翻英</button>
+                <button id="nav-part5" class="nav-button" onclick="showPage('part5')">Part 5: 實戰計畫</button>
+                <button id="nav-part6" class="nav-button" onclick="showPage('part6')">Part 6: 猜題分析</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-5xl mx-auto p-4 md:p-8">
+        <div class="bg-white shadow-xl rounded-2xl p-6 md:p-10 min-h-[80vh]">
             
-            <section class="mb-8">
-                <h2 class="text-3xl font-bold text-center text-indigo-900 mb-6">黃金背景 實力保證</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="bg-indigo-50 p-6 rounded-lg shadow-sm">
-                        <h3 class="text-2xl font-bold text-indigo-800 mb-4">優異學歷與錄取校系</h3>
-                        <ul class="list-disc list-inside text-gray-700 space-y-2 mb-4">
-                            <li>114年學測 <strong>國英數自全科頂標</strong></li>
-                            <li>陽明交通大學 應用化學系 (正取2)</li>
-                            <li>國防醫學院 醫學系 (正取)</li>
-                            <li>臺北醫學大學 臨床藥學系 (正取26)</li>
-                            <li>成功大學 化學工程學系 (正取19)</li>
-                            <li>台中市私立衛道中學 直升高中資優乙班</li>
-                        </ul>
-                    </div>
-
-                    <div class="bg-gray-50 p-6 rounded-lg shadow-sm">
-                        <h3 class="text-2xl font-bold text-gray-800 mb-4">頂尖英文實力</h3>
-                        <ul class="list-disc list-inside text-gray-700 space-y-2 mb-4">
-                            <li>學測英文 <strong>15滿級分</strong></li>
-                            <li>分科英文 <strong>換算60滿級分</strong></li>
-                            <li>英文作文 <strong>19 / 20分 (全國前 0.04%)</strong></li>
-                            <li>高中英文聽力測驗 <strong>A級</strong></li>
-                            <li>全國英文單字比賽中區決賽 <strong>佳作</strong></li>
-                            <li>校內英文單字比賽 <strong>第一名</strong></li>
-                        </ul>
-                        <img src="英文單字比賽獎狀.jpg" alt="英文單字比賽獎狀" class="w-full h-auto rounded-lg shadow-md">
-                    </div>
+            <section id="part1" class="page-content">
+                <h2 class="text-3xl font-bold text-gray-900 mb-8 border-l-8 border-blue-600 pl-6">Part 1: 滿級分的基礎原則</h2>
+                <p class="mb-8 text-lg text-gray-700 leading-relaxed">學測英文科中取得15級分，不僅是詞彙量的競賽，更是一場關於「戰略資源分配」的競賽。</p>
+                <div class="lecture-focus">
+                    <span class="focus-title">1.1. 解構滿級分</span>
+                    <p class="text-gray-700">滿級分的競賽，不是贏在72%的閱讀；而是贏在28%的翻譯寫作。</p>
                 </div>
-            </section>
-
-            <section class="mb-8">
-                <h2 class="text-3xl font-bold text-center text-indigo-900 mb-6">家長/學生 一致好評</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div> <img src="家長好評_1.png" alt="家長好評 1" class="w-full h-auto rounded-lg shadow-md border-4 border-gray-100">
-                        <p class="text-center text-lg text-gray-700 mt-3 font-medium">"課程有幫助、有目標，孩子上課很開心！"</p>
-                    </div>
-                    <div> <img src="家長好評_2.jpg" alt="家長好評 2" class="w-full h-auto rounded-lg shadow-md border-4 border-gray-100">
-                        <p class="text-center text-lg text-gray-700 mt-3 font-medium">"教學清晰易懂，比補習班老師更清楚！"</p>
-                    </div>
+                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-r-lg">
+                    <p class="font-semibold text-yellow-800">本指引的核心論點確立：滿級分的競賽，不是贏在72%的閱讀；而是贏在28%的翻譯寫作。</p>
                 </div>
-            </section>
-
-            <section class="mb-8">
-                <h2 class="text-3xl font-bold text-center text-indigo-900 mb-6">實戰指導經驗</h2>
-                <div class="bg-green-50 p-6 rounded-lg shadow-sm border-l-4 border-green-500">
-                    <ul class="list-disc list-inside text-green-800 space-y-2 columns-1 md:columns-2">
-                        <li>台中一中 高一英文</li>
-                        <li>台中一中 高二學測英文作文</li>
-                        <li>台中一中 高三學測英文作文衝刺</li>
-                        <li>台中一中 重考學測英文作文衝刺</li>
-                        <li>正心高中 高三學測英文作文衝刺</li>
-                        <li>復旦高中 高三學測英文作文衝刺</li>
-                        <li>新竹高商 高三學測英文作文衝刺</li>
-                        <li>新竹中學 中高級英檢複試寫作</li>
-                        <li>弘文中學 國中會考英文衝刺</li>
-                        <li>康橋小學 英文作文能力培訓</li>
-                    </ul>
-                </div>
-            </section>
+                </section>
             
-            <section class="mb-8">
-                <h2 class="text-3xl font-bold text-center text-indigo-900 mb-6">🏆 亮眼學習表現 (全科)</h2>
-                <div class="bg-gray-100 p-6 rounded-lg shadow-sm">
-                    <p class="text-center text-gray-600 mb-4">不只英文，更能提供全科學習策略支援</p>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
-                        <div>
-                            <h4 class="text-lg font-bold text-indigo-700">🧪 化學科</h4>
-                            <ul class="list-disc list-inside text-gray-700">
-                                <li>APX高中數理能力檢定化學科 高級通過</li>
-                                <li>高中五學期化學科總成績校排 1%</li>
-                                <li>化學科能力競賽校內選拔 第三名</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h4 class="text-lg font-bold text-indigo-700">🧬 生物科</h4>
-                            <ul class="list-disc list-inside text-gray-700">
-                                <li>生物奧林匹亞國手選拔初選 嘉獎證書</li>
-                                <li>高中五學期生物科總成績校排 2%</li>
-                                <li>生物學科能力競賽校內選拔 第三名</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h4 class="text-lg font-bold text-indigo-700">💡 物理科</h4>
-                            <ul class="list-disc list-inside text-gray-700">
-                                <li>高中物理探究實作競賽初賽 全國二等獎</li>
-                                <li>高中物理探究實作競賽複賽 參與證書</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h4 class="text-lg font-bold text-indigo-700">➕ 數學科</h4>
-                            <ul class="list-disc list-inside text-gray-700">
-                                <li>國際數學競賽新加坡決賽IMC 銅牌獎</li>
-                                <li>高中數學學團體競賽TRML 中區三等獎</li>
-                                <li>美國數學競賽AMC10 非常優良獎項</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </section>
+            </div>
+    </main>
 
-            <section class="mb-8">
-                <h2 class="text-3xl font-bold text-center text-indigo-900 mb-6">高效率教學重點 (獨家講義)</h2>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div class="bg-gray-100 p-6 rounded-lg shadow-sm text-center">
-                        <div class="text-4xl mb-2">💡</div>
-                        <h3 class="text-xl font-bold mb-2">系統化高分架構</h3>
-                        <p class="text-gray-700">獨家講義，「清楚、流暢、可複製」的寫作系統。</p>
-                    </div>
-                    <div class="bg-gray-100 p-6 rounded-lg shadow-sm text-center">
-                        <div class="text-4xl mb-2">🎯</div>
-                        <h3 class="text-xl font-bold mb-2">模板句型＋內容素材</h3>
-                        <p class="text-gray-700">提供高分句型庫與四大素材庫，腦中不再空白。</p>
-                    </div>
-                    <div class="bg-gray-100 p-6 rounded-lg shadow-sm text-center">
-                        <div class="text-4xl mb-2">🔁</div>
-                        <h3 class="text-xl font-bold mb-2">實戰演練＋逐字精批</h3>
-                        <p class="text-gray-700">不只教，更幫你改到好。實戰是進步的唯一途徑。</p>
-                    </div>
-                </div>
-            </section>
+    <footer class="text-center py-8 mt-10">
+        <p class="text-gray-500 text-sm">學測英文滿級分衝刺指引 &copy; 2025 | <a href="tutoring.html" class="text-blue-500 hover:underline">聯絡李仲恩老師</a></p>
+    </footer>
 
-            <section class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                <div class="bg-gray-100 p-6 rounded-lg shadow-sm">
-                    <h3 class="text-2xl font-bold text-gray-800 mb-4">課程費用</h3>
-                    <p class="text-gray-700 mb-2">(可提供半價試教)</p>
-                    <div class="mb-3">
-                        <p class="text-lg font-bold text-indigo-700">高中英文 / 作文指導</p>
-                        <p class="text-2xl font-bold text-gray-900">1000 <span class="text-base font-normal">/ hr</span></p>
-                        <p class="text-sm text-gray-600">(含題庫＋批改＋各科解題)</p>
-                    </div>
-                    <div>
-                        <p class="text-lg font-bold text-indigo-700">英文作文單篇批改</p>
-                        <p class="text-2xl font-bold text-gray-900">200 <span class="text-base font-normal">/ 篇</span></p>
-                    </div>
-                </div>
-                <div class="bg-gray-100 p-6 rounded-lg shadow-sm">
-                    <h3 class="text-2xl font-bold text-gray-800 mb-4">上課地點</h3>
-                    <ul class="list-none space-y-2">
-                        <li class="flex items-center text-lg text-gray-800">
-                            <span class="bg-blue-500 text-white rounded-md px-2 py-1 text-sm mr-3">面授</span>
-                            <span>新竹地區 (陽明交大校區周邊佳)</span>
-                        </li>
-                        <li class="flex items-center text-lg text-gray-800">
-                            <span class="bg-green-500 text-white rounded-md px-2 py-1 text-sm mr-3">線上</span>
-                            <span>使用Google meet授課</span>
-                        </li>
-                    </ul>
-                </div>
-            </section>
+    <script>
+        const activeNavClass = 'border-blue-600 text-blue-600 font-bold border-b-4';
+        const inactiveNavClass = 'border-transparent text-gray-500 hover:text-gray-700 py-2 px-3 font-medium text-sm md:text-base transition';
 
-        </main>
+        function showPage(pageId) {
+            document.querySelectorAll('.page-content').forEach(page => page.style.display = 'none');
+            const target = document.getElementById(pageId);
+            if (target) {
+                target.style.display = 'block';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+            document.querySelectorAll('.nav-button').forEach(btn => {
+                btn.className = 'nav-button ' + inactiveNavClass;
+                if (btn.id === 'nav-' + pageId) {
+                    btn.classList.remove('border-transparent', 'text-gray-500');
+                    btn.classList.add('border-blue-600', 'text-blue-600', 'font-bold', 'border-b-4');
+                }
+            });
+        }
 
-        <footer class="bg-indigo-900 text-white p-8 md:p-10 text-center">
-            <h2 class="text-3xl font-bold mb-4">立即聯絡，搶佔最後名額！</h2>
-            <p class="text-2xl font-bold text-yellow-300 mb-4">
-                LINE: 0981658627
-            </p>
-            <p class="text-indigo-200">
-                皆可以與我討論課程規劃、學生狀況、價錢細節！
-            </p>
-        </footer>
+        // 漢堡選單開關
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+        btn.addEventListener('click', () => { menu.classList.toggle('hidden'); });
 
-    </div>
-
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => { showPage('part1'); });
+    </script>
 </body>
 </html>
