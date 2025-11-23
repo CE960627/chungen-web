@@ -6,24 +6,154 @@
     <title>GSAT 英文滿級分衝刺 | 李仲恩</title>
     <meta name="google-site-verification" content="5Ncnb-iB0SQhloWAkXmP1dvax36anpep7HUPSsZcucw" />
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', 'Noto Sans TC', sans-serif; background-color: #f8fafc; color: #334155; }
-        .page-content { display: none; }
-        #part1 { display: block; }
-        /* 您的原始表格和樣式設定保留 */
-        table { width: 100%; border-collapse: separate; border-spacing: 0; margin: 1rem 0; border-radius: 8px; overflow: hidden; border: 1px solid #e2e8f0; }
-        th, td { padding: 1rem; text-align: left; border-bottom: 1px solid #e2e8f0; }
-        th { background-color: #f1f5f9; font-weight: 700; color: #1e293b; }
-        td { background-color: #ffffff; }
-        tr:last-child td { border-bottom: none; }
-        .lecture-focus { background-color: #eff6ff; border-left: 5px solid #3b82f6; padding: 1.5rem; margin-bottom: 1.5rem; border-radius: 0 0.5rem 0.5rem 0; }
-        .focus-title { font-weight: 700; color: #1e40af; margin-bottom: 0.5rem; display: block; font-size: 1.1rem; }
-        .material-card { background: white; border: 1px solid #e2e8f0; border-radius: 0.75rem; padding: 1.25rem; margin-bottom: 1rem; }
-        .material-tag { display: inline-block; background-color: #dbeafe; color: #1e40af; padding: 0.25rem 0.75rem; border-radius: 9999px; font-weight: 700; margin-bottom: 0.5rem; font-size: 0.85rem; }
-        .table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; margin-bottom: 1.5rem; }
-        .sentence-card { background-color: #fff; border: 1px solid #e2e8f0; border-radius: 0.5rem; padding: 1rem; margin-bottom: 0.75rem; border-left: 4px solid #6366f1; }
-        .sentence-type { font-size: 0.85rem; font-weight: 700; text-transform: uppercase; color: #6366f1; margin-bottom: 0.25rem; display: block; }
+        /* 全域字體設定 */
+        body {
+            font-family: 'Inter', 'Noto Sans TC', sans-serif;
+            background-color: #f8fafc;
+            color: #334155;
+        }
+        /* 隱藏內容分頁的機制 */
+        .page-content {
+            display: none;
+        }
+        /* 預設顯示第一個分頁 */
+        #part1 {
+            display: block;
+        }
+        /* 表格樣式設定 */
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+        }
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            vertical-align: top;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        th {
+            background-color: #f1f5f9;
+            font-weight: 700;
+            color: #1e293b;
+            white-space: nowrap;
+        }
+        td {
+            background-color: #ffffff;
+            color: #475569;
+            line-height: 1.6;
+        }
+        tr:last-child td {
+            border-bottom: none;
+        }
+        /* 強調區塊樣式 */
+        .lecture-focus {
+            background-color: #eff6ff;
+            border-left: 5px solid #3b82f6;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 0 0.5rem 0.5rem 0;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+        .focus-title {
+            font-weight: 700;
+            color: #1e40af;
+            margin-bottom: 0.5rem;
+            display: block;
+            font-size: 1.1rem;
+        }
+        /* 素材卡片樣式 */
+        .material-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+            transition: all 0.2s;
+        }
+        .material-card:hover {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border-color: #cbd5e1;
+        }
+        .material-tag {
+            display: inline-block;
+            background-color: #dbeafe;
+            color: #1e40af;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+        /* 收合元件樣式 */
+        details > summary {
+            list-style: none;
+            cursor: pointer;
+            background-color: #f8fafc;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            color: #1e3a8a;
+            border: 1px solid #e2e8f0;
+            transition: background-color 0.2s;
+        }
+        details > summary:hover {
+            background-color: #f1f5f9;
+        }
+        details[open] > summary {
+            background-color: #eff6ff;
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+            border-bottom: 1px solid #bfdbfe;
+        }
+        details > summary::-webkit-details-marker {
+            display: none;
+        }
+        /* 手機版表格可橫向捲動 */
+        .table-wrapper {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin-bottom: 1.5rem;
+        }
+        /* 戰術手冊專用樣式 */
+        .tactic-card {
+            border-left: 4px solid #10b981;
+            background-color: #f0fdf4;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 0 0.5rem 0.5rem 0;
+        }
+        .tactic-title {
+            font-weight: 700;
+            color: #047857;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+        /* 新增：句型庫卡片樣式 */
+        .sentence-card {
+            background-color: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            border-left: 4px solid #6366f1; /* indigo-500 */
+        }
+        .sentence-type {
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #6366f1;
+            margin-bottom: 0.25rem;
+            display: block;
+        }
     </style>
 </head>
 <body class="bg-slate-50 text-gray-800">
@@ -57,7 +187,9 @@
 
     <header class="bg-white shadow-sm py-6">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h1 class="text-2xl md:text-3xl font-bold text-center text-blue-700 tracking-tight">GSAT 英文滿級分衝刺</h1>
+            <h1 class="text-2xl md:text-3xl font-bold text-center text-blue-700 tracking-tight">
+                GSAT 英文滿級分衝刺
+            </h1>
             <p class="text-center text-sm md:text-base text-gray-500 mt-1">李仲恩老師編授 | 系統化詳細指引</p>
         </div>
     </header>
@@ -65,65 +197,1061 @@
     <nav class="bg-white shadow-sm z-10 border-t border-gray-100">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-wrap justify-center -mb-px space-x-1 md:space-x-6">
-                <button id="nav-part1" class="nav-button" onclick="showPage('part1')">Part 1: 核心原則</button>
-                <button id="nav-part2" class="nav-button" onclick="showPage('part2')">Part 2: 選擇題</button>
-                <button id="nav-part3" class="nav-button" onclick="showPage('part3')">Part 3: 英文作文</button>
-                <button id="nav-part4" class="nav-button" onclick="showPage('part4')">Part 4: 中翻英</button>
-                <button id="nav-part5" class="nav-button" onclick="showPage('part5')">Part 5: 實戰計畫</button>
-                <button id="nav-part6" class="nav-button" onclick="showPage('part6')">Part 6: 猜題分析</button>
+                <button id="nav-part1" class="nav-button" onclick="showPage('part1')">
+                    Part 1: 核心原則
+                </button>
+                <button id="nav-part2" class="nav-button" onclick="showPage('part2')">
+                    Part 2: 選擇題
+                </button>
+                <button id="nav-part3" class="nav-button" onclick="showPage('part3')">
+                    Part 3: 英文作文
+                </button>
+                <button id="nav-part4" class="nav-button" onclick="showPage('part4')">
+                    Part 4: 中翻英
+                </button>
+                <button id="nav-part5" class="nav-button" onclick="showPage('part5')">
+                    Part 5: 實戰計畫
+                </button>
+                <button id="nav-part6" class="nav-button" onclick="showPage('part6')">
+                    Part 6: 猜題分析
+                </button>
             </div>
         </div>
     </nav>
 
     <main class="max-w-5xl mx-auto p-4 md:p-8">
         <div class="bg-white shadow-xl rounded-2xl p-6 md:p-10 min-h-[80vh]">
-            
+
             <section id="part1" class="page-content">
-                <h2 class="text-3xl font-bold text-gray-900 mb-8 border-l-8 border-blue-600 pl-6">Part 1: 滿級分的基礎原則</h2>
-                <p class="mb-8 text-lg text-gray-700 leading-relaxed">學測英文科中取得15級分，不僅是詞彙量的競賽，更是一場關於「戰略資源分配」的競賽。</p>
+                <h2 class="text-3xl font-bold text-gray-900 mb-8 border-l-8 border-blue-600 pl-6">
+                    Part 1: 滿級分的基礎原則：重塑戰略思維
+                </h2>
+                <p class="mb-8 text-lg text-gray-700 leading-relaxed">
+                    學測英文科中取得15級分，不僅是詞彙量的競賽，更是一場關於「戰略資源分配」、「風險管理」與「系統化執行」的競賽。本指引提供一個源自學測命題設計底層邏輯的通用框架，專注於在高壓下實現回報最大化與失誤最小化。
+                </p>
+
                 <div class="lecture-focus">
-                    <span class="focus-title">1.1. 解構滿級分</span>
-                    <p class="text-gray-700">滿級分的競賽，不是贏在72%的閱讀；而是贏在28%的翻譯寫作。</p>
+                    <span class="focus-title">1.1. 解構滿級分：分數架構的戰略性意涵</span>
+                    <p class="text-gray-700 mb-4">考試結構為以下三大部分：</p>
+                    <ul class="list-disc list-inside bg-white p-4 rounded-lg border border-blue-100 shadow-sm space-y-2 mb-4 text-gray-700">
+                        <li><strong>第壹部分：</strong>選擇題 - 佔 62分</li>
+                        <li><strong>第貳部分：</strong>混合題 - 佔 10分</li>
+                        <li><strong>第參部分：</strong>非選擇題 - 佔 28分</li>
+                    </ul>
+                    <p class="text-gray-700 mb-4">
+                        初步分析顯示，這場考試絕大部分是閱讀理解與詞彙語法的測驗（合計72%）。然而，非選擇題（中譯英8分，英文作文20分）正是頂尖考生的「主要鑑別度」所在。
+                    </p>
+                    <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-r-lg">
+                        <p class="font-semibold text-yellow-800">
+                            本指引的核心論點確立：滿級分的競賽，不是贏在72%的閱讀；而是贏在28%的翻譯寫作。72%的部分決定了你是否有14-15級分的潛力，但28%的部分決定了你是否能實際拿到15級分。
+                        </p>
+                    </div>
                 </div>
-                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-r-lg">
-                    <p class="font-semibold text-yellow-800">本指引的核心論點確立：滿級分的競賽，不是贏在72%的閱讀；而是贏在28%的翻譯寫作。</p>
+
+                <h3 class="text-2xl font-bold text-gray-800 mt-12 mb-6">1.2. 關鍵衝刺：高效益活動 vs. 低效益活動</h3>
+                <p class="text-gray-700 mb-6">此戰略論點要求我們根據「投資報酬率」對備考活動進行嚴格排序。</p>
+                <div class="grid md:grid-cols-2 gap-6 mb-10">
+                    <div class="bg-red-50 border border-red-200 rounded-xl p-6">
+                        <h4 class="text-xl font-bold text-red-700 mb-4 flex items-center">
+                            <span class="mr-2">⚠️</span> 低效益活動
+                        </h4>
+                        <ul class="space-y-3 text-red-800">
+                            <li class="flex items-start"><span class="mr-2">•</span> 被動、無焦點的閱讀</li>
+                            <li class="flex items-start"><span class="mr-2">•</span> 罕見詞彙記憶</li>
+                            <li class="flex items-start"><span class="mr-2">•</span> 單純抄寫解答訂正</li>
+                        </ul>
+                    </div>
+                    <div class="bg-green-50 border border-green-200 rounded-xl p-6">
+                        <h4 class="text-xl font-bold text-green-700 mb-4 flex items-center">
+                            <span class="mr-2">✅</span> 高效益活動
+                        </h4>
+                        <ul class="space-y-3 text-green-800">
+                            <li class="flex items-start"><span class="mr-2">•</span> 系統化產出（掌握寫作系統）</li>
+                            <li class="flex items-start"><span class="mr-2">•</span> 針對性除錯（個人錯誤日誌）</li>
+                            <li class="flex items-start"><span class="mr-2">•</span> 主動、穩定SOP化的模擬考</li>
+                        </ul>
+                    </div>
                 </div>
-                </section>
-            
-            </div>
+
+                <h3 class="text-2xl font-bold text-gray-800 mt-12 mb-6">1.3. 3C 基礎框架：超越單字的精準度</h3>
+                <p class="text-gray-700 mb-6">貫穿整個考試（包含閱讀和寫作）的基礎認知框架建立在三大支柱之上。詞彙不是孤立定義的列表，而是一個動態系統。</p>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="bg-slate-50 p-6 rounded-xl border border-slate-200">
+                        <div class="text-blue-600 font-bold text-xl mb-2">1. 語境 (Context)</div>
+                        <p class="text-sm text-gray-600">詞彙是在語境中被測驗的。答案由周圍的語意場決定。</p>
+                    </div>
+                    <div class="bg-slate-50 p-6 rounded-xl border border-slate-200">
+                        <div class="text-blue-600 font-bold text-xl mb-2">2. 搭配詞 (Collocation)</div>
+                        <p class="text-sm text-gray-600">認識一個單字意味著認識它的搭配詞。</p>
+                    </div>
+                    <div class="bg-slate-50 p-6 rounded-xl border border-slate-200">
+                        <div class="text-blue-600 font-bold text-xl mb-2">3. 連貫性 (Coherence)</div>
+                        <p class="text-sm text-gray-600">英文是一項邏輯測驗。克漏字、篇章結構和閱讀測驗，完全建立在邏輯論證的能力之上。</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="part2" class="page-content">
+                <h2 class="text-3xl font-bold text-gray-900 mb-8 border-l-8 border-blue-600 pl-6">
+                    Part 2: 🎯 學測英文選擇題攻略
+                </h2>
+                <p class="mb-8 text-lg text-gray-700 leading-relaxed">
+                    學測英文不只是考語感，更是考邏輯與解題效率。以下針對各大題型，拆解最高效的準備心法與考場答題策略。
+                </p>
+
+                <div class="mb-12 bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition-shadow duration-300">
+                    <div class="bg-slate-800 p-4">
+                        <h3 class="text-xl font-bold text-white flex items-center">
+                            <span class="bg-blue-500 text-white w-8 h-8 rounded-lg flex items-center justify-center mr-3 text-sm font-bold">1</span>
+                            詞彙題 (Vocabulary)
+                        </h3>
+                    </div>
+                    
+                    <div class="bg-blue-50 px-6 py-3 border-b border-blue-100 flex items-start">
+                        <span class="text-blue-600 mr-2 font-bold flex-shrink-0">💡 核心概念：</span>
+                        <p class="text-blue-900 font-medium text-sm md:text-base">不只背單字，要背「語塊 (Collocations)」。</p>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-slate-100">
+                        <div class="p-6 bg-white">
+                            <h4 class="flex items-center text-slate-700 font-bold mb-4 border-b border-slate-100 pb-2">
+                                <span class="text-xl mr-2">🛠️</span> 平時準備
+                            </h4>
+                            <ul class="space-y-4">
+                                <li class="text-slate-600 text-sm leading-relaxed">
+                                    <strong class="text-slate-800 block mb-1">語境記憶法</strong>
+                                    拒絕抱著單字書從 A 背到 Z。看到單字必須連同「例句」一起看，確認它在語句中的用法。
+                                </li>
+                                <li class="text-slate-600 text-sm leading-relaxed">
+                                    <strong class="text-slate-800 block mb-1">搭配詞 (Collocations)</strong>
+                                    這是拿分的關鍵。例如學到 "effort"，要同時記 "make an effort"；學到 "conclusion"，要記 "draw a conclusion"。
+                                </li>
+                                <li class="text-slate-600 text-sm leading-relaxed">
+                                    <strong class="text-slate-800 block mb-1">一字多義</strong>
+                                    針對 Level 5-6 的高頻單字，特別留意其「熟詞僻義」（例如：address 不只是地址，還有處理、演說之意）。
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="p-6 bg-emerald-50/30">
+                            <h4 class="flex items-center text-emerald-700 font-bold mb-4 border-b border-emerald-100 pb-2">
+                                <span class="text-xl mr-2">⚡</span> 答題策略
+                            </h4>
+                            <ul class="space-y-4">
+                                <li class="text-slate-700 text-sm leading-relaxed">
+                                    <strong class="text-emerald-800 block mb-1">抓關鍵字 (Keywords)</strong>
+                                    快速掃描題幹，圈出動詞或形容詞，預判空格需要的詞意方向（正向/負向）。
+                                </li>
+                                <li class="text-slate-700 text-sm leading-relaxed">
+                                    <strong class="text-emerald-800 block mb-1">刪去法</strong>
+                                    遇到生字不要慌，先刪除確定錯誤的選項。若剩下兩個猶豫，代入句子唸一次，檢查文法搭配（如介系詞是否吻合）。
+                                </li>
+                                <li class="bg-white p-3 rounded border border-red-200 text-slate-700 text-sm leading-relaxed shadow-sm border-l-4 border-l-red-500">
+                                    <strong class="text-red-600 block mb-1">💡 必殺技</strong>
+                                    如果選項單字全看不懂，回頭看題幹的轉折詞 (However, Although) 或因果詞 (Therefore)，通常答案會與題幹前半段形成強烈對比或因果對應。
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-12 bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition-shadow duration-300">
+                    <div class="bg-slate-800 p-4">
+                        <h3 class="text-xl font-bold text-white flex items-center">
+                            <span class="bg-blue-500 text-white w-8 h-8 rounded-lg flex items-center justify-center mr-3 text-sm font-bold">2</span>
+                            綜合測驗 (Cloze Test)
+                        </h3>
+                    </div>
+                    <div class="bg-blue-50 px-6 py-3 border-b border-blue-100 flex items-start">
+                        <span class="text-blue-600 mr-2 font-bold flex-shrink-0">💡 核心概念：</span>
+                        <p class="text-blue-900 font-medium text-sm md:text-base">這是考「邏輯」與「片語」，不是考翻譯。</p>
+                    </div>
+                    <div class="grid md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-slate-100">
+                        <div class="p-6 bg-white">
+                            <h4 class="flex items-center text-slate-700 font-bold mb-4 border-b border-slate-100 pb-2">
+                                <span class="text-xl mr-2">🛠️</span> 平時準備
+                            </h4>
+                            <ul class="space-y-4">
+                                <li class="text-slate-600 text-sm leading-relaxed">
+                                    <strong class="text-slate-800 block mb-1">轉折語氣詞</strong>
+                                    徹底搞懂 However, Therefore, Moreover, On the contrary 的邏輯功能。這是克漏字最愛考的題型。
+                                </li>
+                                <li class="text-slate-600 text-sm leading-relaxed">
+                                    <strong class="text-slate-800 block mb-1">文法地雷區</strong>
+                                    專攻「分詞構句」、「關係代名詞」與「假設語氣」。
+                                </li>
+                                <li class="text-slate-600 text-sm leading-relaxed">
+                                    <strong class="text-slate-800 block mb-1">片語積累</strong>
+                                    整理歷屆試題出現過的動詞片語 (Phrasal Verbs)，這是許多考生的失分坑。
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="p-6 bg-emerald-50/30">
+                            <h4 class="flex items-center text-emerald-700 font-bold mb-4 border-b border-emerald-100 pb-2">
+                                <span class="text-xl mr-2">⚡</span> 答題策略
+                            </h4>
+                            <ul class="space-y-4">
+                                <li class="text-slate-700 text-sm leading-relaxed">
+                                    <strong class="text-emerald-800 block mb-1">看前後句</strong>
+                                    絕不要只看空格那一句！答案線索通常藏在前一句的結尾或後一句的開頭。
+                                </li>
+                                <li class="text-slate-700 text-sm leading-relaxed">
+                                    <strong class="text-emerald-800 block mb-1">判斷邏輯關係</strong>
+                                    先問自己，這兩句是「順承」、「轉折」還是「因果」？
+                                </li>
+                                <li class="text-slate-700 text-sm leading-relaxed">
+                                    <strong class="text-emerald-800 block mb-1">注意時態一致性</strong>
+                                    掃描整段文章的主時態，排除時態突兀的選項。
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-12 bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition-shadow duration-300">
+                    <div class="bg-slate-800 p-4">
+                        <h3 class="text-xl font-bold text-white flex items-center">
+                            <span class="bg-blue-500 text-white w-8 h-8 rounded-lg flex items-center justify-center mr-3 text-sm font-bold">3</span>
+                            文意選填 (Discourse Structure)
+                        </h3>
+                    </div>
+                    <div class="bg-blue-50 px-6 py-3 border-b border-blue-100 flex items-start">
+                        <span class="text-blue-600 mr-2 font-bold flex-shrink-0">💡 核心概念：</span>
+                        <p class="text-blue-900 font-medium text-sm md:text-base">這不是英文題，這是「詞性配對」的數學題。</p>
+                    </div>
+                    <div class="grid md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-slate-100">
+                        <div class="p-6 bg-white">
+                            <h4 class="flex items-center text-slate-700 font-bold mb-4 border-b border-slate-100 pb-2">
+                                <span class="text-xl mr-2">🛠️</span> 平時準備
+                            </h4>
+                            <ul class="space-y-4">
+                                <li class="text-slate-600 text-sm leading-relaxed">
+                                    <strong class="text-slate-800 block mb-1">詞性敏感度</strong>
+                                    訓練看到單字能立刻標記詞性（n., v., adj., adv., v-ing, p.p.）。
+                                </li>
+                                <li class="text-slate-600 text-sm leading-relaxed">
+                                    <strong class="text-slate-800 block mb-1">句構分析</strong>
+                                    練習拆解長難句，快速找出主詞、動詞，判斷句子「缺什麼成分」。
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="p-6 bg-emerald-50/30">
+                            <h4 class="flex items-center text-emerald-700 font-bold mb-4 border-b border-emerald-100 pb-2">
+                                <span class="text-xl mr-2">⚡</span> 答題策略
+                            </h4>
+                            <ul class="space-y-4">
+                                <li class="text-slate-700 text-sm leading-relaxed">
+                                    <strong class="text-emerald-800 block mb-1">先標選項詞性</strong>
+                                    拿到題目，先花 30 秒將 10 個選項的詞性標在旁邊（注意一字多詞性，如 process 可作名詞也可作動詞）。
+                                </li>
+                                <li class="text-slate-700 text-sm leading-relaxed">
+                                    <strong class="text-emerald-800 block mb-1">分析空格屬性</strong>
+                                    <ul class="list-disc pl-4 mt-1 space-y-1 text-slate-600">
+                                        <li>空格在冠詞 (a/the) 後 &rarr; 找名詞。</li>
+                                        <li>空格在助動詞後 &rarr; 找原形動詞。</li>
+                                        <li>空格在名詞前 &rarr; 找形容詞。</li>
+                                        <li>句子完整什麼都不缺 &rarr; 找副詞。</li>
+                                    </ul>
+                                </li>
+                                <li class="bg-white p-3 rounded border border-red-200 text-slate-700 text-sm leading-relaxed shadow-sm border-l-4 border-l-red-500">
+                                    <strong class="text-red-600 block mb-1">💡 必殺技</strong>
+                                    遇到 V-ing 與 V-pp (分詞) 的選項，直接看空格與主詞的關係是「主動」還是「被動」。
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-12 bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition-shadow duration-300">
+                    <div class="bg-slate-800 p-4">
+                        <h3 class="text-xl font-bold text-white flex items-center">
+                            <span class="bg-blue-500 text-white w-8 h-8 rounded-lg flex items-center justify-center mr-3 text-sm font-bold">4</span>
+                            閱讀測驗 (Reading Comprehension)
+                        </h3>
+                    </div>
+                    <div class="bg-blue-50 px-6 py-3 border-b border-blue-100 flex items-start">
+                        <span class="text-blue-600 mr-2 font-bold flex-shrink-0">💡 核心概念：</span>
+                        <p class="text-blue-900 font-medium text-sm md:text-base">閱讀是為了「找答案」，不是為了「學知識」。</p>
+                    </div>
+                    <div class="grid md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-slate-100">
+                        <div class="p-6 bg-white">
+                            <h4 class="flex items-center text-slate-700 font-bold mb-4 border-b border-slate-100 pb-2">
+                                <span class="text-xl mr-2">🛠️</span> 平時準備
+                            </h4>
+                            <ul class="space-y-4">
+                                <li class="text-slate-600 text-sm leading-relaxed">
+                                    <strong class="text-slate-800 block mb-1">廣泛涉獵</strong>
+                                    學測愛考科普、文化、環保議題。每週閱讀不同領域的文章（如 CNN, BBC, National Geographic 摘要）。
+                                </li>
+                                <li class="text-slate-600 text-sm leading-relaxed">
+                                    <strong class="text-slate-800 block mb-1">長難句拆解</strong>
+                                    習慣看到 3-4 行的長句子不恐懼，學會括號修飾語，直取核心主動詞。
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="p-6 bg-emerald-50/30">
+                            <h4 class="flex items-center text-emerald-700 font-bold mb-4 border-b border-emerald-100 pb-2">
+                                <span class="text-xl mr-2">⚡</span> 答題策略
+                            </h4>
+                            <ul class="space-y-4">
+                                <li class="text-slate-700 text-sm leading-relaxed">
+                                    <strong class="text-emerald-800 block mb-1">先看題目 (Question First)</strong>
+                                    絕對先看題目問什麼，圈出題目的關鍵字（人名、地名、年代、專有名詞），再回文章「定位」。
+                                </li>
+                                <li class="text-slate-700 text-sm leading-relaxed">
+                                    <strong class="text-emerald-800 block mb-1">略讀與掃讀 (Skimming & Scanning)</strong>
+                                    <span class="block">主旨題：讀首段前兩句、末段最後一句。</span>
+                                    <span class="block">細節題：用關鍵字回文定位，答案通常就在關鍵字的前後一句。</span>
+                                </li>
+                                <li class="text-slate-700 text-sm leading-relaxed">
+                                    <strong class="text-emerald-800 block mb-1">同義字轉換 (Paraphrasing)</strong>
+                                    正確選項通常不會照抄原文，而是用「同義字」換句話說。若選項跟原文長得一模一樣，通常是陷阱。
+                                </li>
+                                <li class="bg-white p-3 rounded border border-red-200 text-slate-700 text-sm leading-relaxed shadow-sm border-l-4 border-l-red-500">
+                                    <strong class="text-red-600 block mb-1">💡 必殺技</strong>
+                                    遇到看不懂的專有名詞或形容詞，直接跳過或用 X 代替，不要停下來。上下文會解釋它的意思，卡住只會浪費時間。
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-800 rounded-xl p-8 text-center shadow-lg transform hover:scale-[1.01] transition-transform">
+                    <h4 class="text-2xl font-bold text-white mb-4 tracking-wider">🏆 總結</h4>
+                    <p class="text-blue-100 text-lg leading-relaxed mb-6 font-medium">
+                        學測英文的戰場上，速度就是你的武器，精準度就是你的盾牌。
+                    </p>
+                    <div class="inline-block bg-slate-700/50 rounded-lg p-4 border border-slate-600">
+                        <p class="text-gray-300 font-medium">
+                            不要用「感覺」寫題，要用「證據」解題。<br>
+                            每一題的答案，文章裡都有線索，你的任務是把它找出來，而不是把它發明出來。
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="part3" class="page-content">
+                <h2 class="text-3xl font-bold text-gray-900 mb-8 border-l-8 border-blue-600 pl-6">
+                    Part 3: 英文作文 (20分) 破解與實戰
+                </h2>
+                
+                <div class="mb-16">
+                    <div class="flex items-center mb-6">
+                        <span class="bg-blue-600 text-white text-sm font-bold px-3 py-1 rounded mr-3">核心</span>
+                        <h3 class="text-2xl font-bold text-gray-800">英文作文 (20分) 執行協議</h3>
+                    </div>
+                    
+                    <div class="lecture-focus">
+                        <span class="focus-title">1. 破解評分標準 (四大支柱)</span>
+                        <p class="text-gray-600 mb-4">要拿高分，首先要知道裁判怎麼給分。每項約占5分：</p>
+                        <ul class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <li class="bg-white p-4 rounded border border-blue-100 shadow-sm">
+                                <strong class="text-blue-700 block mb-1">內容 (Content)</strong>
+                                <span class="text-sm text-gray-600">主題句是否切題？論點是否有具體細節支持？</span>
+                            </li>
+                            <li class="bg-white p-4 rounded border border-blue-100 shadow-sm">
+                                <strong class="text-blue-700 block mb-1">組織 (Organization)</strong>
+                                <span class="text-sm text-gray-600">文章架構是否完整 (開頭/發展/結尾)？轉承語是否使用得當？</span>
+                            </li>
+                            <li class="bg-white p-4 rounded border border-blue-100 shadow-sm">
+                                <strong class="text-blue-700 block mb-1">文法句構 (Grammar)</strong>
+                                <span class="text-sm text-gray-600">文法、標點符號錯誤是否極少？句型結構是否有變化？</span>
+                            </li>
+                            <li class="bg-white p-4 rounded border border-blue-100 shadow-sm">
+                                <strong class="text-blue-700 block mb-1">字彙拼字 (Vocab)</strong>
+                                <span class="text-sm text-gray-600">用字是否精確、得宜？拼字錯誤是否極少？</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="lecture-focus">
+                        <span class="focus-title">2. 高分作文骨幹：穩固的二段式架構</span>
+                        <p class="text-gray-600 mb-2">學測作文要求文分二段。這是一個萬用的「安全網」架構。</p>
+                        <div class="table-wrapper">
+                            <table class="bg-white">
+                                <thead>
+                                    <tr>
+                                        <th width="50%">第一段：分析現象 / 闡述立場</th>
+                                        <th width="50%">第二段：提出方法 / 延伸論證</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Topic Sentence</td>
+                                        <td>Topic Sentence</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Transition: From my perspective...<br>
+                                            Supporting Idea 1<br>
+                                            Supporting Idea 2<br>
+                                            Supporting Idea 3 </td>
+                                        <td>
+                                            Transition: From my point of view...<br>
+                                            Method / Reason 1<br>
+                                            Method / Reason 2<br>
+                                            Method / Reason 3
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Concluding: To briefly sum up...</td>
+                                        <td>Concluding: To encapsulate...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <h4 class="text-xl font-bold text-gray-800 mt-10 mb-4 px-2 border-l-4 border-blue-300">3. 內容填充：六大萬用素材</h4>
+                    <p class="text-gray-600 mb-4 px-2">腦袋一片空白時，請從以下素材進行套用：</p>
+                    
+                    <div class="grid md:grid-cols-2 gap-4 mb-10">
+                        <div class="material-card">
+                            <span class="material-tag">1. 身體健康 (Physical Health)</span>
+                            <p class="text-sm text-gray-700 font-medium">
+                                When strolling on the path, we can not only breathe wholesome phytoncide, relish in the bosom of Mother Earth, but also nourish our body and soul, leaving us invigorated and serene.
+                            </p>
+                        </div>
+                        <div class="material-card">
+                            <span class="material-tag">2. 心理健康 (Mental Health)</span>
+                            <p class="text-sm text-gray-700 font-medium">
+                                My life has consecutively been bombarded with a plenitude of homework and textbooks; hiking can not only appease my fluttering heart but also rinse my fatigued soul.
+                            </p>
+                        </div>
+                        <div class="material-card">
+                            <span class="material-tag">3. 人際關係 (Relationships)</span>
+                            <p class="text-sm text-gray-700 font-medium">
+                                By participating in team sports, we can cultivate a profound connection with acquaintances and ultimately evolve into intimate friends.
+                            </p>
+                        </div>
+                        <div class="material-card">
+                            <span class="material-tag">4. 科技影響 (Technology)</span>
+                            <p class="text-sm text-gray-700 font-medium">
+                                With the sophistication of contemporary technology, people tend to engross themselves in the metaverse interwoven by digital networks.
+                            </p>
+                        </div>
+                        <div class="material-card">
+                            <span class="material-tag">5. 增廣見聞 (Horizons)</span>
+                            <p class="text-sm text-gray-700 font-medium">
+                                When absorbing myself in the bosom of reading a plenitude of practical books, we can either equip ourselves with pragmatic knowledge or broaden our horizons.
+                            </p>
+                        </div>
+                        <div class="material-card">
+                            <span class="material-tag">6. 愉悅氛圍 (Ambiance)</span>
+                            <p class="text-sm text-gray-700 font-medium">
+                                We envelope the ambiance in euphoria and exaltation.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="lecture-focus">
+                        <span class="focus-title">4. 語言能力升級：打造高分句型與詞彙庫</span>
+                        <p class="text-gray-600 mb-6">平庸句子只能得到平庸分數。務必將以下句型背誦至極度熟稔。</p>
+
+                        <div class="space-y-6">
+                            <div>
+                                <h5 class="font-bold text-slate-700 mb-3 flex items-center">
+                                    <span class="bg-blue-100 text-blue-600 rounded px-2 py-1 text-sm mr-2">1</span> 開頭主題句
+                                </h5>
+                                <div class="grid gap-3">
+                                    <div class="sentence-card border-l-green-500">
+                                        <span class="sentence-type text-green-600">正面主題 A</span>
+                                        <p class="text-gray-700 text-sm md:text-base font-medium">Acting as a form of enchanting and exhilarating manifestation for..., (Subject) serves as the savior that extricates us from the bustling and hustling lifestyle.</p>
+                                    </div>
+                                    <div class="sentence-card border-l-green-500">
+                                        <span class="sentence-type text-green-600">正面主題 B</span>
+                                        <p class="text-gray-700 text-sm md:text-base font-medium">Like a beacon illuminating light over the path to human well-being, (Subject) plays an indispensable role in our lives.</p>
+                                    </div>
+                                    <div class="sentence-card border-l-red-500">
+                                        <span class="sentence-type text-red-600">負面主題</span>
+                                        <p class="text-gray-700 text-sm md:text-base font-medium">Like a veil casting shadows over the path to human well-being, (Subject) has become a thorny issue we must confront.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <h5 class="font-bold text-slate-700 mb-3 flex items-center">
+                                    <span class="bg-blue-100 text-blue-600 rounded px-2 py-1 text-sm mr-2">2</span> 過渡句 (Transition)
+                                </h5>
+                                <div class="grid gap-3">
+                                    <div class="sentence-card border-l-indigo-500">
+                                        <span class="sentence-type text-indigo-600">有圖表時 (第一段)</span>
+                                        <p class="text-gray-700 text-sm md:text-base font-medium">According to the offered pictures, both of which illustrate the difference and commonality that correlate to the topic.</p>
+                                    </div>
+                                    <div class="sentence-card border-l-indigo-500">
+                                        <span class="sentence-type text-indigo-600">第二段開頭</span>
+                                        <p class="text-gray-700 text-sm md:text-base font-medium">From my perspective, there are three reasons that correlate to the topic.</p>
+                                    </div>
+                                    
+                                    <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-center my-2">
+                                        <p class="text-yellow-800 font-bold text-sm">💡 內容填充部分：請詳見上方的「萬用素材」區塊</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <h5 class="font-bold text-slate-700 mb-3 flex items-center">
+                                    <span class="bg-blue-100 text-blue-600 rounded px-2 py-1 text-sm mr-2">3</span> 結尾句 (Conclusion)
+                                </h5>
+                                <div class="grid gap-3">
+                                    <div class="sentence-card border-l-purple-500">
+                                        <span class="sentence-type text-purple-600">第一段小結</span>
+                                        <p class="text-gray-700 text-sm md:text-base font-medium">To briefly sum up, I firmly believe that...</p>
+                                    </div>
+                                    <div class="sentence-card border-l-purple-500">
+                                        <span class="sentence-type text-purple-600">全文總結</span>
+                                        <p class="text-gray-700 text-sm md:text-base font-medium">To encapsulate, I hold an unceasing and unwavering conviction that...</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p class="text-gray-800 mt-8 mb-4 font-bold px-1 border-l-4 border-yellow-400 pl-2 text-lg">詞彙升級引擎 (Synonyms)</p>
+                        <div class="table-wrapper">
+                            <table class="bg-white w-full">
+                                <thead>
+                                    <tr>
+                                        <th width="30%">常用平庸詞</th>
+                                        <th>升級高分字</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>beautiful</td>
+                                        <td>fascinating, gorgeous, magnificent, enchanting, mesmerizing</td>
+                                    </tr>
+                                    <tr>
+                                        <td>plenty of</td>
+                                        <td>a plethora of, a multitude of, a plenitude of, innumerable</td>
+                                    </tr>
+                                    <tr>
+                                        <td>various</td>
+                                        <td>a variety of, a myriad of, miscellaneous, kaleidoscopic</td>
+                                    </tr>
+                                    <tr>
+                                        <td>entertainment</td>
+                                        <td>amusement, recreation, pastime</td>
+                                    </tr>
+                                    <tr>
+                                        <td>energetic</td>
+                                        <td>animated, dynamic, vigorous, vivacious</td>
+                                    </tr>
+                                    <tr>
+                                        <td>happy</td>
+                                        <td>delightful, on cloud nine, joyous, elated</td>
+                                    </tr>
+                                    <tr>
+                                        <td>interesting</td>
+                                        <td>intriguing</td>
+                                    </tr>
+                                    <tr>
+                                        <td>atmosphere</td>
+                                        <td>vibe, ambiance</td>
+                                    </tr>
+                                    <tr>
+                                        <td>popular</td>
+                                        <td>prevalent</td>
+                                    </tr>
+                                    <tr>
+                                        <td>practical</td>
+                                        <td>feasible, pragmatic</td>
+                                    </tr>
+                                    <tr>
+                                        <td>participate in</td>
+                                        <td>partake in, take part in, get involved in</td>
+                                    </tr>
+                                    <tr>
+                                        <td>relate to</td>
+                                        <td>correlate to, be relevant to</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-16 pt-10 border-t-4 border-dotted border-gray-200">
+                    <div class="flex items-center mb-6">
+                        <span class="bg-gray-800 text-white text-sm font-bold px-3 py-1 rounded mr-3">範文</span>
+                        <h3 class="text-2xl font-bold text-gray-800 flex items-center">
+                            實戰範文解析 
+                            <span class="ml-2 text-sm font-normal text-gray-500 bg-gray-100 px-2 py-1 rounded-full">🔒 學生專區</span>
+                        </h3>
+                    </div>
+
+                    <div id="lock-screen" class="text-center py-12 bg-gray-50 rounded-xl border border-gray-200">
+                        <div class="text-4xl mb-4">🔒</div>
+                        <h4 class="text-xl font-bold text-gray-700 mb-2">此區塊內容僅限學生觀看</h4>
+                        <p class="text-gray-500 mb-6 text-sm">請輸入上課提供的通行碼以解鎖範文</p>
+                        <div class="flex justify-center gap-2 max-w-xs mx-auto">
+                            <input type="password" id="password-input" placeholder="輸入密碼" class="border border-gray-300 rounded px-4 py-2 w-full focus:outline-none focus:border-blue-500">
+                            <button onclick="unlockContent()" class="bg-blue-600 text-white px-6 py-2 rounded font-bold hover:bg-blue-700 transition">解鎖</button>
+                        </div>
+                        <p id="error-msg" class="text-red-500 text-sm mt-3 hidden">密碼錯誤，請再試一次。</p>
+                    </div>
+
+                    <div id="protected-content" class="hidden space-y-4">
+                        
+                        <p class="text-center text-green-600 font-bold mb-4 text-sm">✓ 已驗證學生身份</p>
+
+                        <details class="group bg-white border border-gray-200 rounded-lg shadow-sm">
+                            <summary class="flex justify-between items-center font-bold text-lg text-blue-900">
+                                <span>📝 範文 1：YouTuber (114-2北模)</span>
+                                <span class="text-blue-400 transition-transform group-open:rotate-180">▼</span>
+                            </summary>
+                            <div class="p-6 border-t border-gray-100 bg-slate-50">
+                                <div class="mb-6">
+                                    <h5 class="font-bold text-gray-700 mb-2 border-l-4 border-blue-400 pl-2">Paragraph 1</h5>
+                                    <p class="text-gray-600 leading-relaxed text-justify text-sm md:text-base">
+                                        Acting as a form of enchanting and exhilarating manifestation for participating in leisure entertainment, a YouTuber serves as the savior that extricates us from the bustling and hustling lifestyle. According to the offered picture, an adolescent wearing trendy clothes is vigorously and vivaciously presenting her practical perspectives to the public, via the prevalent platform called YouTube. First of all, in the program, she previously set up a professional camera in front of the wooden desk. She elaborately decorated her background with kaleidoscopic genres of books on the high-textured desk. In order to present her innovative viewpoints on the topic correlated to feasible knowledge, which we are able to readily use after watching the channel. Furthermore, she also put a laptop and a paper on the desk, which not only ornamented the whole background, but also offered the anchor a useful memo when podcasting the channel. What's more, the woman also holds an iPad in her right hand and vivid gestures with her left hand, seemingly selling and promoting the iPad to attract her audiences to purchase the commodities and thus make a profit with the firm she collaborates with. The adorned and gorgeous anchor entices her fans with her pragmatic knowledge and the intriguing vibe she presented. To briefly sum up, the trend of becoming a popular YouTuber is more and more ubiquitous in the modern era, and this is a dream vocation for hordes of adolescents in their future.
+                                    </p>
+                                </div>
+                                <div>
+                                    <h5 class="font-bold text-gray-700 mb-2 border-l-4 border-blue-400 pl-2">Paragraph 2</h5>
+                                    <p class="text-gray-600 leading-relaxed text-justify text-sm md:text-base">
+                                        Like a beacon illuminating light over the park to human well-being, if I had the golden chance to become a YouTuber, I will indubitably make my audiences electrified. I firmly believe that the sort of the video channel will have a correlation to hiking, and there are three reasons that I opt for it. For starters, since my life has consecutively been bombarded with a plenitude of homework and textbooks, in order to pursue my future aspiration, the existence of hiking can not only appease my fluttering heart, but also rinse my fatigued soul; as a consequence, I would like to share the fabulous outdoor activity which we can partake in our free time with my audiences. Moreover, when strolling in the deep mountains, we can not only breathe a plethora of wholesome phytoncide, relish in the bosom of Mother Earth, but also nourish our body and soul, leaving us invigorated and serene, and eventually envelope the ambience of euphoria and exhilaration. Hence, it goes without saying that hiking is one of the best forms of recreation the public are capable of participating in during their leisure time, and I will teach my audiences the effective and efficient approaches to concentrate in the moment, and eventually become healthier than before. Last but not least, with the sophistication of contemporary technology, people nowadays tend to engross themselves in the metaverse interwoven by digital networks; nonetheless, when taking part in hiking, we can extricate ourselves from the Internet, keep away from the monitors and make ourselves more elated. To encapsulate, I hold an unceasing and unwavering conviction that if I become a YouTuber sharing hiking experiences with my audiences, the unforgettable memories will surely be engraved in the public's mind.
+                                    </p>
+                                </div>
+                            </div>
+                        </details>
+
+                        <details class="group bg-white border border-gray-200 rounded-lg shadow-sm">
+                            <summary class="flex justify-between items-center font-bold text-lg text-blue-900">
+                                <span>📝 範文 2：讀書地點偏好 (114-3北模)</span>
+                                <span class="text-blue-400 transition-transform group-open:rotate-180">▼</span>
+                            </summary>
+                            <div class="p-6 border-t border-gray-100 bg-slate-50">
+                                <div class="mb-6">
+                                    <h5 class="font-bold text-gray-700 mb-2 border-l-4 border-blue-400 pl-2">Paragraph 1</h5>
+                                    <p class="text-gray-600 leading-relaxed text-justify text-sm md:text-base">
+                                        Acting as a form of enchanting and exhilarating manifestation for participating in leisure entertainment, reading serves as the savior that extricates us from the bustling and hustling lifestyle. According to the offered pictures, both of which illustrate the differences correlate to the topic. For starters, the picture A showcases a woman studying at her home in a tranquil atmosphere, the surroundings is quiet, and she is capable of concentrate on her textbooks, without any trivial chores and noises; nonetheless, since she merely studies alone, neither could the woman communicate with her friends when tired, nor could she be motivated by other assiduous people when fatigued. On the other hand, picture B shows an adolescent studying in an elaborate coffee shop, he listens to the euphonious music when writing the texts, and the surroundings are filled with hordes of the public, chit-chatting with each other, or just scrolling their smartphones. The man is able to immerse himself in the crowds, enhancing his capability of concentrating while listening to music and other peoples' voices; nevertheless, if his self-control is weak, then he will definitely be distracted by the masses. To briefly sum up, both of the pictures illustrate the commonality and divergent aspects when studying, and it is everyone's preference to choose a surroundings where he or she has a liking for.
+                                    </p>
+                                </div>
+                                <div>
+                                    <h5 class="font-bold text-gray-700 mb-2 border-l-4 border-blue-400 pl-2">Paragraph 2</h5>
+                                    <p class="text-gray-600 leading-relaxed text-justify text-sm md:text-base">
+                                        Like a beacon illuminating light over the path to my welfare, I firmly believe that studying at a cafeteria will be my priority, and there are three reasons that contribute to my ultimate option. First of all, since my life has consecutively bombarded with a plenitude of homework and textbooks in school, which makes me feel monotonous and pedestrian; hence, when studying at a place full of vigorous and vivacious people, it can not only appease my fluttering heart but also rinse my fatigued soul, makes me feel invigorated and refreshing. Furthermore, with the sophistication of contemporary technology, people tend to engross themselves in the metaverse interwoven by the digital networks, when he or she is supposed to study hard during the period; consequently, studying at a public surroundings, the passersby make me feel "monitored" by others, thereby absorbing myself in the bosom of a plethora of pragmatic and practical knowledge, rather than be mocked by people for my less self-discipline. Last but not least, as I am an extrovert, I am prone to hang out with my bosom friends and study together at a cafeteria, we can not only discuss on specific subjects or domains, broaden our horizons and equip ourselves with a multitude of feasible knowledge, and eventually envelop the ambiance in euphoria and exaltation. To encapsulate, I hold an unceasing and unwavering conviction that studying in public circumstances, such as a cafeteria, is always my ultimate choice, and every delightful part I immerse myself in when studying assiduously will surely engrave in my heart permanently and indelibly.
+                                    </p>
+                                </div>
+                            </div>
+                        </details>
+
+                        <details class="group bg-white border border-gray-200 rounded-lg shadow-sm">
+                            <summary class="flex justify-between items-center font-bold text-lg text-blue-900">
+                                <span>📝 範文 3：旅遊規劃 (114-3全模)</span>
+                                <span class="text-blue-400 transition-transform group-open:rotate-180">▼</span>
+                            </summary>
+                            <div class="p-6 border-t border-gray-100 bg-slate-50">
+                                <div class="mb-6">
+                                    <h5 class="font-bold text-gray-700 mb-2 border-l-4 border-blue-400 pl-2">Paragraph 1</h5>
+                                    <p class="text-gray-600 leading-relaxed text-justify text-sm md:text-base">
+                                        Like a beacon illuminating light over the path to human well-being, there are a myriad of methods for the public to choose tourist attractions. From my point of view, I often take comments and recommendations from social media into consideration, and there are three reasons that contribute to my ultimate choice. For starters, with the sophistication of contemporary technology, people tend to engross themselves in social media interwoven by digital networks, and I am no exception; hence, reviews are most of the public's references in this regard. Furthermore, when scrolling through social media and interacting with other netizens, we can not only communicate with each other on the topic of tourist destinations and broaden our horizons, but also equip ourselves with a plenitude of practical and pivotal knowledge. Moreover, since I am an extrovert, social media platforms like Instagram and Facebook serve as the media that enable me to chit-chat with others via the Internet. I can thereby forge bonds with people worldwide, travel with them to different destinations, and eventually become intimate friends. To briefly sum up, when scheduling a trip with my family members or friends, reviews from social media platforms are my priority from time to time.
+                                    </p>
+                                </div>
+                                <div>
+                                    <h5 class="font-bold text-gray-700 mb-2 border-l-4 border-blue-400 pl-2">Paragraph 2</h5>
+                                    <p class="text-gray-600 leading-relaxed text-justify text-sm md:text-base">
+                                        Acting as a form of enchanting and exhilarating manifestation for participating in leisure entertainment, touring serves as a savior that extricates us from the bustling and hustling lifestyle. Take myself for instance; I have utilized social media widely and have arranged an unforgettable trip with my friends. First of all, since my life has consecutively been bombarded with a multitude of homework and textbooks, scrolling through social media and searching for prevalent attractions can not only appease my fatigued soul but also soothe my fluttering heart; therefore, I scheduled a trip to Sun Moon Lake with my friends based on recommendations on Instagram. What's more, after traveling with my companions and arriving at the tourist destination, we partook in hiking in the deep mountains, as netizens mentioned. When strolling on the path, we could not only breathe a plethora of wholesome phytoncide, relish in the bosom of Mother Earth, and behold enticing and enchanting scenery, but also cultivate a profound connection with my friends, and eventually immerse ourselves in sheer euphoria and exaltation. Last but not least, it is the reviews and recommendations on social media platforms that made our journey relishing and unforgettable. To encapsulate, I hold an unceasing and unwavering conviction that arranging tourist attractions via social media is invariably my first option, and the journey will be engraved in our minds permanently and indelibly.
+                                    </p>
+                                </div>
+                            </div>
+                        </details>
+
+                    </div>
+                </div>
+            </section>
+
+            <section id="part4" class="page-content">
+                <h2 class="text-3xl font-bold text-gray-900 mb-8 border-l-8 border-blue-600 pl-6">
+                    Part 4: 中翻英 (8分) 執行協議
+                </h2>
+                <p class="mb-8 text-lg text-gray-700 leading-relaxed">
+                    這8分完全由「零失誤」準則支配。評分是殘酷的懲罰性，沒有任何小失誤的空間。
+                </p>
+                
+                <div class="mb-12">
+                    <h3 class="text-2xl font-bold text-blue-800 mb-4 flex items-center">
+                        <span class="bg-blue-100 text-blue-800 rounded-full w-10 h-10 flex items-center justify-center mr-3 text-lg">1</span>
+                        S.T.C. Check 黃金法則
+                    </h3>
+                    <div class="lecture-focus">
+                        <p class="text-gray-700">下筆前請快速掃描這四步，能減少 80% 粗心錯誤。</p>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                            <div class="text-blue-600 font-bold text-lg mb-2 flex items-center">
+                                <span class="bg-blue-50 w-8 h-8 rounded flex items-center justify-center mr-2">S</span>
+                                Structure (結構)
+                            </div>
+                            <p class="text-gray-600 text-sm">
+                                找主詞(S)與動詞(V)。一句話只能有一個主要動詞。若有第二個動作，必須用連接詞、不定詞或分詞。
+                            </p>
+                        </div>
+                        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                            <div class="text-blue-600 font-bold text-lg mb-2 flex items-center">
+                                <span class="bg-blue-50 w-8 h-8 rounded flex items-center justify-center mr-2">T</span>
+                                Tense (時態)
+                            </div>
+                            <p class="text-gray-600 text-sm">
+                                陳述事實用現在式；歷史事件用過去式；持續狀態用完成式。
+                            </p>
+                        </div>
+                        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                            <div class="text-blue-600 font-bold text-lg mb-2 flex items-center">
+                                <span class="bg-blue-50 w-8 h-8 rounded flex items-center justify-center mr-2">C</span>
+                                Collocation (搭配)
+                            </div>
+                            <p class="text-gray-600 text-sm">
+                                避免直翻。例如：存錢 (save money)、培養習慣 (cultivate a habit)。
+                            </p>
+                        </div>
+                        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                            <div class="text-blue-600 font-bold text-lg mb-2 flex items-center">
+                                <span class="bg-blue-50 w-8 h-8 rounded flex items-center justify-center mr-2">C</span>
+                                Check (檢查)
+                            </div>
+                            <p class="text-gray-600 text-sm">
+                                最後確認：單複數 (s/es)、冠詞 (a/an/the)、拼字正確性。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-12">
+                    <h3 class="text-2xl font-bold text-blue-800 mb-4 flex items-center">
+                        <span class="bg-blue-100 text-blue-800 rounded-full w-10 h-10 flex items-center justify-center mr-3 text-lg">2</span>
+                        模式識別：高頻陷阱
+                    </h3>
+                    <div class="grid md:grid-cols-3 gap-4">
+                        <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                            <strong class="text-red-600 block mb-1">1. 被動語態</strong>
+                            <p class="text-sm text-gray-600">中文常省略「被」。<br>(例: 交通法規 <strong>must be</strong> enforced)</p>
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                            <strong class="text-red-600 block mb-1">2. 主動詞一致</strong>
+                            <p class="text-sm text-gray-600">S單數→V單數 / S複數→V複數。</p>
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                            <strong class="text-red-600 block mb-1">3. 冠詞 (a/an/the)</strong>
+                            <p class="text-sm text-gray-600">中文無冠詞，英文必加。泛指用a/an，特指用the。</p>
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                            <strong class="text-red-600 block mb-1">4. 介系詞</strong>
+                            <p class="text-sm text-gray-600">時間、地點、方式的介系詞是否精確？</p>
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                            <strong class="text-red-600 block mb-1">5. 時態</strong>
+                            <p class="text-sm text-gray-600">事實(Present)、過去(Past)、未來(Future)？</p>
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                            <strong class="text-red-600 block mb-1">6. 詞性誤用</strong>
+                            <p class="text-sm text-gray-600">勿用副詞修飾名詞，或形容詞修飾動詞。</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-6 rounded-r-lg">
+                    <h4 class="text-xl font-bold text-yellow-800 mb-2">自我修正策略：A-B 測試</h4>
+                    <ul class="space-y-2 text-yellow-900">
+                        <li><strong>A 階段 (Write):</strong> 寫下初步翻譯。</li>
+                        <li><strong>B 階段 (Check):</strong> 用不同焦點重讀，只檢查上述六個陷阱。</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="part5" class="page-content">
+                <h2 class="text-3xl font-bold text-gray-900 mb-8 border-l-8 border-blue-600 pl-6">
+                    Part 5: 關鍵衝刺實戰計畫
+                </h2>
+                <p class="mb-8 text-lg text-gray-700 leading-relaxed">
+                    本節將所有協議整合成一個可執行的、分階段的關鍵衝刺計畫。此計畫落實了「高效益」活動，將系統化練習、詞彙獲取和回饋循環整合在一起。
+                </p>
+
+                <div class="space-y-8">
+                    <div class="bg-white border border-blue-200 rounded-xl overflow-hidden shadow-sm">
+                        <div class="bg-blue-600 text-white p-4 font-bold text-xl">
+                            階段一：基礎與系統建構
+                        </div>
+                        <div class="p-6">
+                            <p class="text-blue-800 font-medium mb-4 bg-blue-50 inline-block px-3 py-1 rounded">
+                                🎯 焦點：掌握 28% 解決方案，優先停止失分。
+                            </p>
+                            <ul class="space-y-3 text-gray-700">
+                                <li class="flex items-start"><span class="text-blue-500 mr-2 font-bold">1.</span> <strong>每日行動：</strong> 開始 "7000字" 詞彙演練，重點在搭配詞和語境 (3C框架)。</li>
+                                <li class="flex items-start"><span class="text-blue-500 mr-2 font-bold">2.</span> <strong>每日行動：</strong> 執行「零失誤」翻譯協議，練習3-5句並進行 A-B 測試。</li>
+                                <li class="flex items-start"><span class="text-blue-500 mr-2 font-bold">3.</span> <strong>每週行動：</strong> 執行兩次作文協議，不求創意，求穩定輸出。</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="bg-white border border-green-200 rounded-xl overflow-hidden shadow-sm">
+                        <div class="bg-green-600 text-white p-4 font-bold text-xl">
+                            階段二：解構與應用
+                        </div>
+                        <div class="p-6">
+                            <p class="text-green-800 font-medium mb-4 bg-green-50 inline-block px-3 py-1 rounded">
+                                🎯 焦點：應用 72% 認知工具包。
+                            </p>
+                            <ul class="space-y-3 text-gray-700">
+                                <li class="flex items-start"><span class="text-green-500 mr-2 font-bold">1.</span> <strong>每日行動：</strong> 繼續詞彙演練（搭配詞）。</li>
+                                <li class="flex items-start"><span class="text-green-500 mr-2 font-bold">2.</span> <strong>針對性練習：</strong> 隔離並演練選擇題/混合題 (例如：週一克漏字、週二閱讀)。</li>
+                                <li class="flex items-start"><span class="text-green-500 mr-2 font-bold">3.</span> <strong>每週行動：</strong> 在計時條件下 (20-25分鐘) 寫一篇完整作文。</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="bg-white border border-yellow-200 rounded-xl overflow-hidden shadow-sm">
+                        <div class="bg-yellow-500 text-white p-4 font-bold text-xl">
+                            階段三：全面模擬與錯誤分析
+                        </div>
+                        <div class="p-6">
+                            <p class="text-yellow-800 font-medium mb-4 bg-yellow-50 inline-block px-3 py-1 rounded">
+                                🎯 焦點：心理壓力測試、耐力、錯誤分析。
+                            </p>
+                            <ul class="space-y-3 text-gray-700">
+                                <li class="flex items-start"><span class="text-yellow-500 mr-2 font-bold">1.</span> <strong>高頻率：</strong> 進行完整、計時 (100分鐘) 的模擬考試，建立認知耐力。</li>
+                                <li class="flex items-start"><span class="text-red-500 mr-2 font-bold">2.</span> <strong>關鍵步驟：</strong> 考後對每一個錯誤進行根本原因分析，仔細更新「個人錯誤日誌」。</li>
+                                <li class="flex items-start"><span class="text-yellow-500 mr-2 font-bold">3.</span> <strong>最後一週：</strong> 停止新模考，只複習「個人錯誤日誌」和本指南核心表格。</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-100 border-l-4 border-slate-500 p-6 rounded-r-lg mt-12">
+                    <h3 class="text-xl font-bold text-slate-800 mb-3">結論</h3>
+                    <p class="text-slate-700 mb-2">
+                        追求15級分是一場精準度的競賽。72% 的閱讀理解透過 3C 框架掌握，28% 的非選擇題透過「零失誤」協議掌握。
+                    </p>
+                    <p class="text-slate-900 font-bold">
+                        透過這種系統化方法，你將不再是「期望」高分，而是開始「建構」高分。
+                    </p>
+                </div>
+            </section>
+
+            <section id="part6" class="page-content">
+                <h2 class="text-3xl font-bold text-gray-900 mb-8 border-l-8 border-blue-600 pl-6">
+                    Part 6: 選擇題 (A, B, C, D) 分布統計與猜題分析
+                </h2>
+                
+                <div class="bg-green-50 border-l-4 border-green-400 p-6 rounded-r-lg mt-6 mb-8">
+                    <h3 class="text-2xl font-bold text-green-800 mb-3">給考生的話</h3>
+                    <p class="font-semibold text-green-800 text-lg">
+                        考試的最後關頭，你已經準備得很好了！這份資料是基於大數據的統計分析，僅供您在毫無頭緒時作為參考。請記住，充分的準備和穩定的心態才是取得好成績的關鍵。相信自己，你一定可以的！
+                    </p>
+                </div>
+
+                <p class="mb-4 text-gray-700">這份分析是基於111、112、113、114學年度學測考題與答案,以及115學年度參考試卷。</p>
+                <p class="mb-4 text-gray-700">下表統計了五份試卷中,(A)(B)(C) (D) 選項在指定題型中出現的總次數 (已排除文意字彙、篇章結構Q21-34)。</p>
+
+                <h4 class="text-xl font-bold text-gray-800 mt-6 mb-3">近五年 ABCD 選項分佈統計</h4>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>題型</th>
+                                <th>(A)</th>
+                                <th>(B)</th>
+                                <th>(C)</th>
+                                <th>(D)</th>
+                                <th>總題數</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>詞彙題 (1-10)</strong></td>
+                                <td>14</td>
+                                <td>13</td>
+                                <td>11</td>
+                                <td>12</td>
+                                <td>50</td>
+                            </tr>
+                            <tr>
+                                <td><strong>克漏字 (11-20)</strong></td>
+                                <td>9</td>
+                                <td>13</td>
+                                <td>14</td>
+                                <td>14</td>
+                                <td>50</td>
+                            </tr>
+                            <tr>
+                                <td><strong>閱讀測驗 (35-46)</strong></td>
+                                <td>14</td>
+                                <td>13</td>
+                                <td>16</td>
+                                <td>17</td>
+                                <td>60</td>
+                            </tr>
+                            <tr>
+                                <td><strong>總計</strong></td>
+                                <td><strong>41</strong></td>
+                                <td><strong>35</strong></td>
+                                <td><strong>41</strong></td>
+                                <td><strong>43</strong></td>
+                                <td><strong>160</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3 class="text-2xl font-bold text-gray-800 mt-12 mb-6">數據分析與猜題 TIPS</h3>
+                <p class="mb-4 text-gray-700">根據上表，我們可以得出以下重要結論：</p>
+                <ul class="list-none space-y-4 mt-6">
+                    <li class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                        <strong class="text-blue-700">【TIPS 1: 整體分佈(D)最多,(B)明顯最少】</strong>
+                        <p class="mt-2 text-gray-700">
+                            ○ 在160題的總數中,分佈為:(D)43題,(A)41題,(C) 41題,而(B)僅35題。<br>
+                            ○ <strong>分析:</strong> (B)選項的出現頻率明顯低於其他三者。在完全隨機猜測的情況下,(B)的歷史命中率最低。
+                        </p>
+                    </li>
+                    <li class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                        <strong class="text-blue-700">【TIPS 2: 克漏字(11-20)應避免猜(A)】</strong>
+                        <p class="mt-2 text-gray-700">
+                            ○ 在克漏字題型中,(C)和(D)各出現14次並列最多,但(A)僅出現9次。<br>
+                            ○ <strong>分析:</strong> (A)在克漏字中的佔比極低 (9/50 = 18%)。若您在克漏字大題有題目需要猜測,(A)應是最後的選擇。
+                        </p>
+                    </li>
+                    <li class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                        <strong class="text-blue-700">【TIPS 3: 閱讀測驗(35-46)偏好(C) (D)】</strong>
+                        <p class="mt-2 text-gray-700">
+                            ○ 在題數最多的閱讀測驗中,(D)出現17次,(C)出現16次。<br>
+                            ○ <strong>分析:</strong> (C)和(D)在閱讀測驗中的佔比略高於(A)和(B)。
+                        </p>
+                    </li>
+                    <li class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                        <strong class="text-blue-700">【TIPS 4: 最佳策略 — 統計平衡法】</strong>
+                        <p class="mt-2 text-gray-700">
+                            ○ 鑑於大考中心仍會盡力平衡選項,最有效的策略依然是「統計平衡法」。<br>
+                            ○ <strong>方法:</strong> 在寫完所有有把握的題目後,快速計算您答案卡上(A)、(B)、(C)、(D)各劃了幾個,使你的答案分佈趨於平衡。
+                        </p>
+                    </li>
+                    <li class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                        <strong class="text-blue-700">【TIPS 5: 連續答案是可能的】</strong>
+                        <p class="mt-2 text-gray-700">
+                            ○ 有些人會避免寫出連續兩個相同的答案(例如A,A)。<br>
+                            ○ <strong>分析:</strong> 114學年甚至出現了大量連續答案。不要害怕填寫連續相同的選項,如果你確定答案是對的,就勇敢寫下去。<br>
+                            ○ <strong class="text-red-600">但是:</strong> 連續三題答案相同(如BBB, CCC)在這五年的179題中一次也沒有出現過。如果你寫出了AAA,強烈建議你重新檢查這三題。
+                        </p>
+                    </li>
+                </ul>
+
+                <h4 class="text-xl font-bold text-gray-800 mt-6 mb-3">終極猜題順序表 (依總頻率)</h4>
+                <p class="mb-4 text-gray-700">若在沒有任何資訊下盲猜,以下是基於這五份試卷160題「總出現頻率」所排出的猜題順序表：</p>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>優先順序</th>
+                                <th>選項</th>
+                                <th>總出現次數 (160題中)</th>
+                                <th>佔比</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>1</strong></td>
+                                <td>(D)</td>
+                                <td>43</td>
+                                <td>26.9%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>2、3</strong></td>
+                                <td>(A)、(C)</td>
+                                <td>41</td>
+                                <td>25.6%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>4</strong></td>
+                                <td>(B)</td>
+                                <td>35</td>
+                                <td>21.9%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <p class="mt-6 text-md font-medium text-gray-600">本分析僅供參考。考試的最後關頭,充分的準備和穩定的心態方為取得好成績的關鍵。</p>
+
+            </section>
+
+        </div>
     </main>
 
     <footer class="text-center py-8 mt-10">
-        <p class="text-gray-500 text-sm">學測英文滿級分衝刺指引 &copy; 2025 | <a href="tutoring.html" class="text-blue-500 hover:underline">聯絡李仲恩老師</a></p>
+        <p class="text-gray-500 text-sm">學測英文滿級分衝刺指引 &copy; 2025</p>
     </footer>
 
     <script>
-        const activeNavClass = 'border-blue-600 text-blue-600 font-bold border-b-4';
+        // 樣式定義
+        const activeNavClass = 'border-blue-600 text-blue-600 font-bold border-b-2';
         const inactiveNavClass = 'border-transparent text-gray-500 hover:text-gray-700 py-2 px-3 font-medium text-sm md:text-base transition';
 
+        // 切換頁面函數
         function showPage(pageId) {
-            document.querySelectorAll('.page-content').forEach(page => page.style.display = 'none');
-            const target = document.getElementById(pageId);
-            if (target) {
-                target.style.display = 'block';
+            // 1. 隱藏所有內容
+            document.querySelectorAll('.page-content').forEach(page => {
+                page.style.display = 'none';
+            });
+            // 2. 顯示目標內容
+            const targetPage = document.getElementById(pageId);
+            if (targetPage) {
+                targetPage.style.display = 'block';
+                // 捲動到內容頂部
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }
-            document.querySelectorAll('.nav-button').forEach(btn => {
-                btn.className = 'nav-button ' + inactiveNavClass;
-                if (btn.id === 'nav-' + pageId) {
-                    btn.classList.remove('border-transparent', 'text-gray-500');
-                    btn.classList.add('border-blue-600', 'text-blue-600', 'font-bold', 'border-b-4');
+            // 3. 更新按鈕樣式
+            document.querySelectorAll('.nav-button').forEach(button => {
+                // 重置所有按鈕樣式
+                button.className = 'nav-button ' + inactiveNavClass;
+                
+                // 如果是當前選中的按鈕
+                if (button.id === 'nav-' + pageId) {
+                    button.classList.remove('border-transparent', 'text-gray-500');
+                    button.classList.add('border-blue-600', 'text-blue-600', 'font-bold', 'border-b-4');
                 }
             });
         }
 
-        // 漢堡選單開關
+        // 密碼解鎖功能
+        function unlockContent() {
+            const password = document.getElementById('password-input').value;
+            const correctPassword = "2025"; // 設定你的密碼
+            const lockScreen = document.getElementById('lock-screen');
+            const protectedContent = document.getElementById('protected-content');
+            const errorMsg = document.getElementById('error-msg');
+
+            if (password === correctPassword) {
+                lockScreen.classList.add('hidden');
+                protectedContent.classList.remove('hidden');
+                errorMsg.classList.add('hidden');
+            } else {
+                errorMsg.classList.remove('hidden');
+            }
+        }
+
+        // 漢堡選單 Script
         const btn = document.getElementById('mobile-menu-btn');
         const menu = document.getElementById('mobile-menu');
-        btn.addEventListener('click', () => { menu.classList.toggle('hidden'); });
+        if (btn && menu) {
+            btn.addEventListener('click', () => {
+                menu.classList.toggle('hidden');
+            });
+        }
 
         // 初始化
-        document.addEventListener('DOMContentLoaded', () => { showPage('part1'); });
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.nav-button').forEach(button => {
+                button.className = 'nav-button ' + inactiveNavClass;
+            });
+            // 初始化第一個按鈕樣式
+            const firstButton = document.getElementById('nav-part1');
+            if(firstButton) {
+                firstButton.classList.remove('border-transparent', 'text-gray-500');
+                firstButton.classList.add('border-blue-600', 'text-blue-600', 'font-bold', 'border-b-4');
+            }
+            showPage('part1');
+        });
     </script>
+
 </body>
 </html>
