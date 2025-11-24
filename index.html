@@ -196,28 +196,30 @@
         </div>
     </header>
 
-    <nav class="bg-white shadow-sm z-10 border-t border-gray-100">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-wrap justify-center -mb-px space-x-1 md:space-x-6">
-                <button id="nav-part1" class="nav-button" onclick="showPage('part1')">
-                    Part 1: 核心原則
-                </button>
-                <button id="nav-part2" class="nav-button" onclick="showPage('part2')">
-                    Part 2: 選擇題
-                </button>
-                <button id="nav-part3" class="nav-button" onclick="showPage('part3')">
-                    Part 3: 英文作文
-                </button>
-                <button id="nav-part4" class="nav-button" onclick="showPage('part4')">
-                    Part 4: 中翻英
-                </button>
-                <button id="nav-part5" class="nav-button" onclick="showPage('part5')">
-                    Part 5: 實戰計畫
-                </button>
-                <button id="nav-part6" class="nav-button" onclick="showPage('part6')">
-                    Part 6: 猜題分析
-                </button>
+    <nav class="bg-gray-900 text-white shadow-lg sticky top-0 z-[60]">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <a href="index.html" class="font-bold text-xl tracking-wider hover:text-blue-400 transition">
+                    李仲恩英文
+                </a>
+                <div class="hidden md:flex space-x-8">
+                    <a href="index.html" class="hover:text-blue-400 transition duration-300">GSAT 滿級分系統</a>
+                    <a href="vocab.html" class="hover:text-yellow-400 transition duration-300">歷屆高頻單字神器</a>
+                    <a href="conversation.html" class="text-green-400 font-bold border-b-2 border-green-400">英語生存模擬器</a>
+                    <a href="tutoring.html" class="hover:text-blue-400 transition duration-300">關於我 / 家教課程</a>
+                </div>
+                <div class="md:hidden flex items-center">
+                    <button id="global-mobile-menu-btn" class="outline-none mobile-menu-button">
+                         <svg class="w-6 h-6 hover:text-blue-400" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor"><path d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    </button>
+                </div>
             </div>
+        </div>
+        <div id="global-mobile-menu" class="hidden md:hidden bg-gray-800">
+            <a href="index.html" class="block py-3 px-4 text-sm hover:bg-gray-700 border-b border-gray-700">GSAT 滿級分系統</a>
+            <a href="vocab.html" class="block py-3 px-4 text-sm hover:bg-gray-700 border-b border-gray-700">歷屆高頻單字神器</a>
+            <a href="conversation.html" class="block py-3 px-4 text-sm text-green-400 font-bold border-b border-gray-700">英語生存模擬器</a>
+            <a href="tutoring.html" class="block py-3 px-4 text-sm hover:bg-gray-700">關於我 / 家教課程</a>
         </div>
     </nav>
 
@@ -1257,3 +1259,4 @@
 
 </body>
 </html>
+
