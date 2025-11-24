@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>實用生活英文 | Daily Conversation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', 'Noto Sans TC', sans-serif;
+            background-color: #FFFFFF;
+            color: #1F2937;
+            -webkit-font-smoothing: antialiased;
+        }
+        .en-font { font-family: 'Inter', sans-serif !important; letter-spacing: -0.01em; }
+        .zh-font { font-family: 'Noto Sans TC', sans-serif !important; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #E5E7EB; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #D1D5DB; }
+        .card-anim { transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); }
+        .card-anim:hover { transform: translateY(-4px); box-shadow: 0 12px 24px -6px rgba(0, 0, 0, 0.08); }
+        .btn-click:active { transform: scale(0.96); }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .input-focus:focus { outline: none; box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15); border-color: #6366F1; }
+        .fade-enter { opacity: 0; transform: translateY(10px); }
+        .fade-enter-active { opacity: 1; transform: translateY(0); transition: opacity 0.3s, transform 0.3s; }
+        .hidden-content { display: none; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
+        .loader { border: 3px solid #f3f3f3; border-radius: 50%; border-top: 3px solid #4f46e5; width: 20px; height: 20px; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col bg-slate-50">
+
+    <nav class="bg-gray-900 text-white shadow-lg sticky top-0 z-[60]">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <a href="index.html" class="font-bold text-xl tracking-wider hover:text-blue-400 transition">
+                    李仲恩英文
+                </a>
+                <div class="hidden md:flex space-x-8">
+                    <a href="index.html" class="hover:text-blue-400 transition duration-300">GSAT 滿級分系統</a>
+                    <a href="vocab.html" class="hover:text-yellow-400 transition duration-300">歷屆高頻單字神器</a>
+                    <a href="conversation.html" class="text-green-400 font-bold border-b-2 border-green-400">英語生存模擬器</a>
+                    <a href="tutoring.html" class="hover:text-blue-400 transition duration-300">關於我 / 家教課程</a>
+                </div>
+                <div class="md:hidden flex items-center">
+                    <button id="global-mobile-menu-btn" class="outline-none mobile-menu-button">
+                        <svg class="w-6 h-6 hover:text-blue-400" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                            <path d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="global-mobile-menu" class="hidden md:hidden bg-gray-800">
+            <a href="index.html" class="block py-3 px-4 text-sm hover:bg-gray-700 border-b border-gray-700">GSAT 滿級分系統</a>
+            <a href="vocab.html" class="block py-3 px-4 text-sm hover:bg-gray-700 border-b border-gray-700">歷屆高頻單字神器</a>
+            <a href="conversation.html" class="block py-3 px-4 text-sm text-green-400 font-bold border-b border-gray-700">英語生存模擬器</a>
+            <a href="tutoring.html" class="block py-3 px-4 text-sm hover:bg-gray-700">關於我 / 家教課程</a>
+        </div>
+    </nav>
+
+    <nav class="sticky top-16 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100 shadow-sm">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex items-center justify-between h-16 gap-4">
+                <button onclick="goHome()" class="font-bold text-gray-900 text-lg tracking-tight btn-click hover:opacity-60 transition-opacity whitespace-nowrap flex items-center gap-2">
+                    <i class="ph-fill ph-chats-teardrop text-indigo-600"></i>
+                    Daily Conversation
+                </button>
+
+                <div id="filter-container" class="flex-1 flex overflow-x-auto px-2 gap-2 justify-start items-center no-scrollbar mask-linear">
+                    </div>
+            </div>
+        </div>
+    </nav>
+
+    <main id="main-container" class="flex-grow max-w-5xl mx-auto w-full px-4 py-8 transition-all duration-300">
+        
+        <div id="view-home" class="fade-enter-active">
+            <div class="text-center py-12 md:py-20">
+                <span class="inline-block py-1 px-3 rounded-full bg-indigo-50 text-indigo-600 text-sm font-medium mb-6">
+                    生活英文會話大補帖
+                </span>
+                <h1 class="text-4xl md:text-6xl font-bold text-gray-900 mb-6 tracking-tight leading-tight">
+                    讓<span class="text-indigo-600">仲恩</span>成為你的<br/><span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-blue-500">隨身英語教練</span>
+                </h1>
+                <p class="text-gray-500 text-lg md:text-xl max-w-2xl mx-auto mb-12 leading-relaxed">
+                    精選 10 大生活主題、40 個實用範例。<br class="hidden md:block">立即開始最真實的對話練習。
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto text-left">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:border-indigo-100 transition-colors group">
+                        <div class="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600 mb-4 group-hover:scale-110 transition-transform">
+                            <i class="ph-duotone ph-squares-four text-2xl"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-900 mb-2">1. 選擇情境</h3>
+                        <p class="text-gray-500 text-sm leading-relaxed">
+                            點擊上方選單選擇你想練習的主題，例如「機場」、「餐廳」或「購物」。
+                        </p>
+                    </div>
+                    
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:border-indigo-100 transition-colors group">
+                        <div class="w-12 h-12 bg-indigo-50 rounded-xl flex items-center justify-center text-indigo-600 mb-4 group-hover:scale-110 transition-transform">
+                            <i class="ph-duotone ph-copy text-2xl"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-900 mb-2">2. 複製設定</h3>
+                        <p class="text-gray-500 text-sm leading-relaxed">
+                            一鍵複製「角色設定指令」，貼給 ChatGPT 或 Gemini，讓它扮演對應角色。
+                        </p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:border-indigo-100 transition-colors group">
+                        <div class="w-12 h-12 bg-green-50 rounded-xl flex items-center justify-center text-green-600 mb-4 group-hover:scale-110 transition-transform">
+                            <i class="ph-duotone ph-chats-circle text-2xl"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-900 mb-2">3. 開始對話</h3>
+                        <p class="text-gray-500 text-sm leading-relaxed">
+                            參考範例句子與 AI 對話，或輸入中文讓系統生成新的練習句。
+                        </p>
+                    </div>
+                </div>
+
+                <div class="mt-16">
+                    <p class="text-sm text-gray-400 mb-4">準備好了嗎？點擊上方任一情境開始 😊</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="view-scenario" class="hidden-content">
+            
+            <section id="scene-header" class="mb-10 bg-white border border-gray-200 rounded-3xl p-6 md:p-8 shadow-sm relative overflow-hidden group">
+                <div class="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-indigo-50 to-transparent rounded-bl-full -mr-16 -mt-16 opacity-50 transition-transform group-hover:scale-110"></div>
+                
+                <div class="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                    <div>
+                        <div class="flex items-center gap-2 text-indigo-600 mb-3 font-bold text-xs uppercase tracking-widest">
+                            <i class="ph-fill ph-target"></i>
+                            <span>CURRENT MISSION</span>
+                        </div>
+                        <h2 id="scene-title" class="text-3xl md:text-4xl font-bold text-gray-900 mb-3">情境標題</h2>
+                        <p id="scene-desc" class="text-gray-500 text-base max-w-xl leading-relaxed">
+                            </p>
+                    </div>
+                    <button onclick="copyScenePrompt(this)" class="w-full md:w-auto flex items-center justify-center gap-2 bg-gray-900 text-white px-6 py-3.5 rounded-xl font-bold shadow-lg shadow-gray-200 hover:bg-gray-800 hover:-translate-y-0.5 transition-all btn-click">
+                        <i class="ph-bold ph-copy text-lg"></i>
+                        <span>複製 AI 角色設定</span>
+                    </button>
+                </div>
+            </section>
+
+            <div id="scenarios-grid" class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-16">
+                </div>
+
+            <div class="relative flex py-5 items-center mb-10">
+                <div class="flex-grow border-t border-gray-200"></div>
+                <span class="flex-shrink-0 mx-4 text-gray-400 text-sm font-medium tracking-widest uppercase">Custom Practice</span>
+                <div class="flex-grow border-t border-gray-200"></div>
+            </div>
+
+            <section class="max-w-2xl mx-auto mb-16">
+                <div class="bg-white rounded-2xl p-1 shadow-sm border border-indigo-100 ring-4 ring-indigo-50/50">
+                    <div class="p-6 md:p-8">
+                        <div class="text-center mb-6">
+                            <div class="inline-flex items-center justify-center w-12 h-12 bg-indigo-100 text-indigo-600 rounded-full mb-3">
+                                <i class="ph-fill ph-magic-wand text-2xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-900">還想練習什麼句子呢?</h3>
+                            <p class="text-gray-500 text-sm mt-1">點擊下方建議，或輸入中文自動翻譯生成卡片</p>
+                        </div>
+
+                        <div class="relative flex items-center mb-6">
+                            <input 
+                                type="text" 
+                                id="custom-zh" 
+                                placeholder="輸入想學的中文句子..." 
+                                class="w-full pl-5 pr-14 py-4 bg-gray-50 border border-gray-200 rounded-xl text-gray-800 placeholder-gray-400 font-medium input-focus transition-all text-lg"
+                                onkeydown="if(event.key === 'Enter') handleCustomInput()"
+                            >
+                            <button 
+                                id="add-btn"
+                                onclick="handleCustomInput()" 
+                                class="absolute right-2 p-2.5 bg-indigo-600 text-white rounded-lg shadow-md hover:bg-indigo-700 transition-colors btn-click flex items-center justify-center"
+                                title="生成練習卡"
+                            >
+                                <i class="ph-bold ph-plus text-lg"></i>
+                            </button>
+                        </div>
+
+                        <div id="suggestion-area" class="flex flex-wrap justify-center gap-2">
+                            </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <div id="custom-cards-container" class="max-w-4xl mx-auto space-y-4 mb-12 hidden">
+                <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                    <i class="ph-fill ph-notebook text-indigo-600"></i>
+                    我的練習清單
+                </h3>
+                
+                <div id="custom-list-capture" class="bg-slate-50 p-6 rounded-2xl border border-gray-100">
+                    <div id="custom-list" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        </div>
+                    <div class="text-center mt-8 text-gray-400 text-xs font-medium tracking-widest">
+                        Daily Conversation Practice by Chungen
+                    </div>
+                </div>
+                
+                <div class="text-center pt-6">
+                    <button onclick="downloadStudyImage()" class="inline-flex items-center gap-2 px-6 py-3 bg-white border border-gray-300 shadow-sm text-gray-700 font-medium rounded-xl hover:bg-gray-50 transition-colors btn-click">
+                        <i class="ph-bold ph-image"></i>
+                        下載為圖片 (Image)
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <footer class="py-8 text-center text-gray-300 text-xs">
+        <p>© 2025 Chungen English.</p>
+    </footer>
+
+    <script>
+        // --- Configuration with Updated Prompt ---
+        const categorySettings = {
+            'Greetings': { display: '日常招呼', icon: 'ph-hand-waving', prompt: "Act as a friendly native English speaker. We are having a casual conversation. Respond naturally to my greetings and ask follow-up questions. practice English daily conversation." },
+            'Shopping': { display: '逛街購物', icon: 'ph-shopping-bag', prompt: "Act as a helpful shop assistant. I am a customer. Answer my questions about products, prices, and availability. practice English daily conversation." },
+            'Dining': { display: '用餐訂位', icon: 'ph-fork-knife', prompt: "Act as a professional waiter. I am a customer. Take my order, explain the menu, and handle my requests. practice English daily conversation." },
+            'Housing': { display: '租屋住宿', icon: 'ph-house-line', prompt: "Act as a hotel receptionist or landlord. I am asking about accommodation details, utilities, or rules. practice English daily conversation." },
+            'Transport': { display: '通勤交通', icon: 'ph-taxi', prompt: "Act as a taxi driver or commuter. I am asking for a ride, directions, or discussing traffic conditions. practice English daily conversation." },
+            'Directions': { display: '街上問路', icon: 'ph-map-pin', prompt: "Act as a local. I am a lost tourist asking for directions. Give clear instructions. practice English daily conversation." },
+            'Airport': { display: '機場出國', icon: 'ph-airplane-takeoff', prompt: "Act as airline staff or security. I am a traveler. Check my documents and help me check in. practice English daily conversation." },
+            'Entertainment': { display: '假日娛樂', icon: 'ph-confetti', prompt: "Act as a close friend. Discuss weekend plans, hobbies, or going out for a drink. practice English daily conversation." },
+            'Medical': { display: '就醫應答', icon: 'ph-first-aid', prompt: "Act as a doctor. I am a patient describing symptoms. Give medical advice and ask questions. practice English daily conversation." },
+            'Farewell': { display: '道別祝賀', icon: 'ph-handshake', prompt: "Act as a friend or colleague. We are saying goodbye. Match the tone (formal or casual). practice English daily conversation." }
+        };
+
+        // --- SUGGESTIONS DATA ---
+        const suggestionsDB = {
+            'Greetings': [
+                { zh: "好久不見！", en: "Long time no see!", kw: [{en:"Long time", zh:"好久"}, {en:"See", zh:"見"}] },
+                { zh: "你週末過得如何？", en: "How was your weekend?", kw: [{en:"Weekend", zh:"週末"}, {en:"How", zh:"如何"}] },
+                { zh: "家裡一切都好嗎？", en: "How is your family doing?", kw: [{en:"Family", zh:"家庭"}, {en:"Doing", zh:"狀況"}] },
+                { zh: "最近工作忙嗎？", en: "Have you been busy with work lately?", kw: [{en:"Busy", zh:"忙碌"}, {en:"Lately", zh:"最近"}] },
+                { zh: "天氣真不錯！", en: "The weather is really nice!", kw: [{en:"Weather", zh:"天氣"}, {en:"Nice", zh:"不錯"}] }
+            ],
+            'Shopping': [
+                { zh: "這件可以打折嗎？", en: "Can I get a discount on this?", kw: [{en:"Discount", zh:"折扣"}] },
+                { zh: "請問試衣間在哪裡？", en: "Where is the fitting room?", kw: [{en:"Fitting room", zh:"試衣間"}] },
+                { zh: "這個有大一點的尺寸嗎？", en: "Do you have this in a larger size?", kw: [{en:"Larger", zh:"更大"}, {en:"Size", zh:"尺寸"}] },
+                { zh: "可以刷卡嗎？", en: "Do you accept credit cards?", kw: [{en:"Credit card", zh:"信用卡"}, {en:"Accept", zh:"接受"}] }
+            ],
+            'Dining': [
+                { zh: "請問有素食餐點嗎？", en: "Do you have any vegetarian dishes?", kw: [{en:"Vegetarian", zh:"素食"}, {en:"Dish", zh:"菜餚"}] },
+                { zh: "我不吃辣，請幫我注意", en: "I don't eat spicy food, please make a note.", kw: [{en:"Spicy", zh:"辣"}, {en:"Note", zh:"注意"}] },
+                { zh: "這道菜裡面有什麼食材？", en: "What ingredients are in this dish?", kw: [{en:"Ingredients", zh:"食材"}] },
+                { zh: "我們可以分開結帳嗎？", en: "Can we split the bill?", kw: [{en:"Split", zh:"分開"}, {en:"Bill", zh:"帳單"}] }
+            ],
+            'Housing': [
+                { zh: "熱水器好像壞了", en: "The water heater seems to be broken.", kw: [{en:"Water heater", zh:"熱水器"}, {en:"Broken", zh:"壞掉"}] },
+                { zh: "請問垃圾要丟哪裡？", en: "Where should I throw the trash?", kw: [{en:"Trash", zh:"垃圾"}, {en:"Throw", zh:"丟"}] },
+                { zh: "我想續租一年", en: "I would like to renew the lease for another year.", kw: [{en:"Renew", zh:"續約"}, {en:"Lease", zh:"租約"}] },
+                { zh: "房間冷氣不冷", en: "The air conditioner in the room isn't cold.", kw: [{en:"AC", zh:"冷氣"}, {en:"Cold", zh:"冷"}] }
+            ],
+            'Transport': [
+                { zh: "請開快一點，我趕時間", en: "Please drive a bit faster, I'm in a hurry.", kw: [{en:"Faster", zh:"快點"}, {en:"Hurry", zh:"趕時間"}] },
+                { zh: "可以在前面的路口停嗎？", en: "Can you stop at the intersection ahead?", kw: [{en:"Stop", zh:"停"}, {en:"Intersection", zh:"路口"}] },
+                { zh: "請問這班車會到火車站嗎？", en: "Does this bus go to the train station?", kw: [{en:"Bus", zh:"公車"}, {en:"Train station", zh:"火車站"}] },
+                { zh: "車費總共多少錢？", en: "How much is the total fare?", kw: [{en:"Total", zh:"總共"}, {en:"Fare", zh:"車費"}] }
+            ],
+            'Directions': [
+                { zh: "請問最近的便利商店在哪？", en: "Where is the nearest convenience store?", kw: [{en:"Nearest", zh:"最近"}, {en:"Convenience store", zh:"便利商店"}] },
+                { zh: "這附近有藥局嗎？", en: "Is there a pharmacy nearby?", kw: [{en:"Pharmacy", zh:"藥局"}, {en:"Nearby", zh:"附近"}] },
+                { zh: "這條路通往市中心嗎？", en: "Does this road lead to the city center?", kw: [{en:"Lead to", zh:"通往"}, {en:"City center", zh:"市中心"}] },
+                { zh: "我好像迷路了", en: "I think I'm lost.", kw: [{en:"Lost", zh:"迷路"}] }
+            ],
+            'Airport': [
+                { zh: "我的行李好像遺失了", en: "My luggage seems to be missing.", kw: [{en:"Luggage", zh:"行李"}, {en:"Missing", zh:"遺失"}] },
+                { zh: "我想換到靠窗的座位", en: "I'd like to change to a window seat.", kw: [{en:"Change", zh:"更換"}, {en:"Window seat", zh:"靠窗座"}] },
+                { zh: "請問登機時間是什麼時候？", en: "What is the boarding time?", kw: [{en:"Boarding", zh:"登機"}] },
+                { zh: "請問哪裡可以領取行李？", en: "Where can I claim my luggage?", kw: [{en:"Claim", zh:"領取"}] }
+            ],
+            'Entertainment': [
+                { zh: "這個週末要不要去看電影？", en: "Do you want to see a movie this weekend?", kw: [{en:"Movie", zh:"電影"}, {en:"Weekend", zh:"週末"}] },
+                { zh: "你想一起去唱卡拉OK嗎？", en: "Do you want to go to Karaoke together?", kw: [{en:"Karaoke", zh:"卡拉OK"}, {en:"Together", zh:"一起"}] },
+                { zh: "那家酒吧的氣氛很好", en: "That bar has a great atmosphere.", kw: [{en:"Bar", zh:"酒吧"}, {en:"Atmosphere", zh:"氣氛"}] },
+                { zh: "最近有什麼推薦的影集嗎？", en: "Any recommended TV series lately?", kw: [{en:"Recommended", zh:"推薦"}, {en:"Series", zh:"影集"}] }
+            ],
+            'Medical': [
+                { zh: "我昨晚開始發燒", en: "I started having a fever last night.", kw: [{en:"Fever", zh:"發燒"}, {en:"Last night", zh:"昨晚"}] },
+                { zh: "我的胃很不舒服", en: "My stomach feels very uncomfortable.", kw: [{en:"Stomach", zh:"胃"}, {en:"Uncomfortable", zh:"不舒服"}] },
+                { zh: "這個藥會有副作用嗎？", en: "Does this medicine have any side effects?", kw: [{en:"Medicine", zh:"藥"}, {en:"Side effects", zh:"副作用"}] },
+                { zh: "我有藥物過敏", en: "I have drug allergies.", kw: [{en:"Allergy", zh:"過敏"}] }
+            ],
+            'Farewell': [
+                { zh: "保持聯絡！", en: "Keep in touch!", kw: [{en:"Keep", zh:"保持"}, {en:"Touch", zh:"聯絡"}] },
+                { zh: "祝你旅途愉快", en: "Have a nice trip!", kw: [{en:"Nice", zh:"愉快"}, {en:"Trip", zh:"旅途"}] },
+                { zh: "希望很快能再見到你", en: "Hope to see you again soon.", kw: [{en:"Soon", zh:"很快"}] },
+                { zh: "週末愉快！", en: "Have a nice weekend!", kw: [{en:"Weekend", zh:"週末"}] }
+            ]
+        };
+
+        const initialScenarios = [
+            // 1. Greetings (日常招呼語)
+            { category: 'Greetings', title: '問候 1', goldenSentence: "How is it going?", chinese: "最近還行嗎？", keywords: [{en:'Going', zh:'進展'}, {en:'Lately', zh:'最近'}] },
+            { category: 'Greetings', title: '問候 2', goldenSentence: "How’s your day?", chinese: "今天過得如何？", keywords: [{en:'Day', zh:'日子'}, {en:'Feeling', zh:'感覺'}] },
+            { category: 'Greetings', title: '問候 3', goldenSentence: "What’s new?", chinese: "最近有什麼新鮮事嗎？", keywords: [{en:'New', zh:'新鮮事'}, {en:'Update', zh:'近況'}] },
+            { category: 'Greetings', title: '問候 4', goldenSentence: "Good to see you!", chinese: "很高興見到你！", keywords: [{en:'See', zh:'見面'}, {en:'Glad', zh:'高興'}] },
+
+            // 2. Shopping (逛街購物)
+            { category: 'Shopping', title: '購物 1', goldenSentence: "I’m just looking around.", chinese: "我只是隨便看看。", keywords: [{en:'Looking', zh:'看'}, {en:'Browsing', zh:'瀏覽'}] },
+            { category: 'Shopping', title: '購物 2', goldenSentence: "Excuse me, I’m looking for...", chinese: "不好意思，我在找...", keywords: [{en:'Looking for', zh:'尋找'}, {en:'Item', zh:'物品'}] },
+            { category: 'Shopping', title: '購物 3', goldenSentence: "How much is this?", chinese: "這個多少錢？", keywords: [{en:'Price', zh:'價格'}, {en:'Cost', zh:'費用'}] },
+            { category: 'Shopping', title: '購物 4', goldenSentence: "Do you have any other colors for this?", chinese: "這個有其他顏色嗎？", keywords: [{en:'Color', zh:'顏色'}, {en:'Stock', zh:'庫存'}] },
+
+            // 3. Dining (用餐訂位)
+            { category: 'Dining', title: '用餐 1', goldenSentence: "I would like to make a reservation, please.", chinese: "我想要訂位。", keywords: [{en:'Reservation', zh:'預約'}, {en:'Table', zh:'桌子'}] },
+            { category: 'Dining', title: '用餐 2', goldenSentence: "We’re ready to order.", chinese: "我們準備好要點餐了。", keywords: [{en:'Order', zh:'點餐'}, {en:'Ready', zh:'準備好'}] },
+            { category: 'Dining', title: '用餐 3', goldenSentence: "Could I please have an extra spoon?", chinese: "可以再多給我們一支湯匙嗎？", keywords: [{en:'Spoon', zh:'湯匙'}, {en:'Extra', zh:'額外'}] },
+            { category: 'Dining', title: '用餐 4', goldenSentence: "Can we have our check please?", chinese: "我們想要結帳了。", keywords: [{en:'Check', zh:'帳單'}, {en:'Bill', zh:'費用'}] },
+
+            // 4. Housing (租屋住宿)
+            { category: 'Housing', title: '住宿 1', goldenSentence: "I need to do my laundry today.", chinese: "我今天要洗衣服。", keywords: [{en:'Laundry', zh:'洗衣'}, {en:'Wash', zh:'清洗'}] },
+            { category: 'Housing', title: '住宿 2', goldenSentence: "How much are the electricity bills for a year?", chinese: "電費一年要多少錢？", keywords: [{en:'Electricity', zh:'電力'}, {en:'Bill', zh:'帳單'}] },
+            { category: 'Housing', title: '住宿 3', goldenSentence: "Which city do you live in?", chinese: "你家住在哪個城市？", keywords: [{en:'City', zh:'城市'}, {en:'Live', zh:'居住'}] },
+            { category: 'Housing', title: '住宿 4', goldenSentence: "I’ll stay at Sheraton Hotel tomorrow.", chinese: "我明天會住在喜來登酒店。", keywords: [{en:'Stay', zh:'停留'}, {en:'Hotel', zh:'飯店'}] },
+
+            // 5. Transport (通勤交通)
+            { category: 'Transport', title: '交通 1', goldenSentence: "Please take me to Grand Hotel. Thank you.", chinese: "請載我到圓山大飯店，謝謝。", keywords: [{en:'Take', zh:'載送'}, {en:'Destination', zh:'目的地'}] },
+            { category: 'Transport', title: '交通 2', goldenSentence: "I’ll drive you home.", chinese: "我等等載你回家。", keywords: [{en:'Drive', zh:'開車'}, {en:'Ride', zh:'搭便車'}] },
+            { category: 'Transport', title: '交通 3', goldenSentence: "How far is your office from your home?", chinese: "你的辦公室距離家裡有多遠？", keywords: [{en:'Far', zh:'遠'}, {en:'Distance', zh:'距離'}] },
+            { category: 'Transport', title: '交通 4', goldenSentence: "The traffic was really bad.", chinese: "交通狀況很差。", keywords: [{en:'Traffic', zh:'交通'}, {en:'Jam', zh:'塞車'}] },
+
+            // 6. Directions (街上問路)
+            { category: 'Directions', title: '問路 1', goldenSentence: "Where is the bus stop?", chinese: "公車站在哪裏？", keywords: [{en:'Bus stop', zh:'公車站'}, {en:'Where', zh:'哪裡'}] },
+            { category: 'Directions', title: '問路 2', goldenSentence: "Where is the nearest MRT station?", chinese: "最近的捷運站在哪？", keywords: [{en:'MRT', zh:'捷運'}, {en:'Nearest', zh:'最近'}] },
+            { category: 'Directions', title: '問路 3', goldenSentence: "How can I get to your place?", chinese: "我要怎麼去你家？", keywords: [{en:'Get to', zh:'抵達'}, {en:'Route', zh:'路線'}] },
+            { category: 'Directions', title: '問路 4', goldenSentence: "You can take a bus to get there.", chinese: "你可以搭公車到那邊。", keywords: [{en:'Take', zh:'搭乘'}, {en:'Bus', zh:'公車'}] },
+
+            // 7. Airport (機場出國)
+            { category: 'Airport', title: '機場 1', goldenSentence: "Is this the right counter to check in for this flight?", chinese: "請問這個航班是在這個櫃檯辦登機嗎？", keywords: [{en:'Counter', zh:'櫃檯'}, {en:'Check-in', zh:'報到'}] },
+            { category: 'Airport', title: '機場 2', goldenSentence: "Can I have an aisle seat, please?", chinese: "我可以坐走道旁邊嗎？", keywords: [{en:'Aisle seat', zh:'走道位'}, {en:'Window', zh:'靠窗'}] },
+            { category: 'Airport', title: '機場 3', goldenSentence: "Can I take this through security?", chinese: "這個可以過安檢嗎？", keywords: [{en:'Security', zh:'安檢'}, {en:'Allowed', zh:'允許'}] },
+            { category: 'Airport', title: '機場 4', goldenSentence: "Which gate should I get on board?", chinese: "請問我要到哪一個登機門？", keywords: [{en:'Gate', zh:'登機門'}, {en:'Board', zh:'登機'}] },
+
+            // 8. Entertainment (假日娛樂)
+            { category: 'Entertainment', title: '娛樂 1', goldenSentence: "It’s my round.", chinese: "換我請大家喝酒了。", keywords: [{en:'My round', zh:'我請客'}, {en:'Treat', zh:'招待'}] },
+            { category: 'Entertainment', title: '娛樂 2', goldenSentence: "I was blackout last night. I can’t remember anything.", chinese: "我昨天喝到斷片，完全不記得發生什麼事了。", keywords: [{en:'Blackout', zh:'斷片'}, {en:'Drunk', zh:'醉'}] },
+            { category: 'Entertainment', title: '娛樂 3', goldenSentence: "Can you show me some exercise for abs?", chinese: "你能教我一些腹肌運動嗎？", keywords: [{en:'Exercise', zh:'運動'}, {en:'Abs', zh:'腹肌'}] },
+            { category: 'Entertainment', title: '娛樂 4', goldenSentence: "What are your hobbies?", chinese: "你有什麼興趣？", keywords: [{en:'Hobbies', zh:'興趣'}, {en:'Interest', zh:'愛好'}] },
+
+            // 9. Medical (就醫應答)
+            { category: 'Medical', title: '就醫 1', goldenSentence: "What brings you here today?", chinese: "你哪裡不舒服？(醫生問診)", keywords: [{en:'Brings here', zh:'來看診原因'}, {en:'Symptom', zh:'症狀'}] },
+            { category: 'Medical', title: '就醫 2', goldenSentence: "I have a sore throat.", chinese: "我喉嚨痛。", keywords: [{en:'Sore throat', zh:'喉嚨痛'}, {en:'Pain', zh:'疼痛'}] },
+            { category: 'Medical', title: '就醫 3', goldenSentence: "Do you take any medicines or supplements?", chinese: "你目前有服用藥物或保健食品嗎？", keywords: [{en:'Medicine', zh:'藥物'}, {en:'Supplement', zh:'保健品'}] },
+            { category: 'Medical', title: '就醫 4', goldenSentence: "How long have you been sick?", chinese: "你生病多久了？", keywords: [{en:'How long', zh:'多久'}, {en:'Sick', zh:'生病'}] },
+
+            // 10. Farewell (道別祝賀)
+            { category: 'Farewell', title: '道別 1', goldenSentence: "See you!", chinese: "再見！", keywords: [{en:'See you', zh:'再見'}, {en:'Later', zh:'待會'}] },
+            { category: 'Farewell', title: '道別 2', goldenSentence: "It was a pleasure to meet you.", chinese: "很高興認識你。", keywords: [{en:'Pleasure', zh:'榮幸'}, {en:'Meet', zh:'認識'}] },
+            { category: 'Farewell', title: '道別 3', goldenSentence: "Until we meet again.", chinese: "後會有期。", keywords: [{en:'Until', zh:'直到'}, {en:'Meet again', zh:'再次相遇'}] },
+            { category: 'Farewell', title: '道別 4', goldenSentence: "Take care.", chinese: "保重。", keywords: [{en:'Take care', zh:'保重'}, {en:'Safe', zh:'安全'}] }
+        ];
+
+        // State
+        let activeCategory = null;
+        let currentScenarios = [...initialScenarios];
+        // Store custom cards globally mapped by category to allow persistence
+        const allCustomCards = {}; 
+
+        // DOM Elements
+        const viewHome = document.getElementById('view-home');
+        const viewScenario = document.getElementById('view-scenario');
+        const navContainer = document.getElementById('filter-container');
+        const gridContainer = document.getElementById('scenarios-grid');
+        const sceneTitleEl = document.getElementById('scene-title');
+        const sceneDescEl = document.getElementById('scene-desc');
+        const suggestionAreaEl = document.getElementById('suggestion-area');
+        
+        // New DOM Elements
+        const customCardsContainer = document.getElementById('custom-cards-container');
+        const customListEl = document.getElementById('custom-list');
+
+        // --- View Management ---
+        function goHome() {
+            activeCategory = null;
+            updateView();
+            renderNav();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function setCategory(cat) {
+            activeCategory = cat;
+            
+            // Initialize array for category if not exists
+            if (!allCustomCards[cat]) {
+                allCustomCards[cat] = [];
+            }
+            
+            updateView();
+            renderNav();
+            renderHeader();
+            renderGrid();
+            renderSuggestions();
+            renderCustomList(); // Render existing cards for this category
+            
+            // Force scroll to top regardless of device width
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function updateView() {
+            if (activeCategory === null) {
+                viewHome.classList.remove('hidden-content');
+                viewScenario.classList.add('hidden-content');
+                viewHome.classList.add('fade-enter-active');
+            } else {
+                viewHome.classList.add('hidden-content');
+                viewScenario.classList.remove('hidden-content');
+                viewScenario.classList.add('fade-enter-active');
+            }
+        }
+
+        // --- Rendering ---
+
+        function renderNav() {
+            const categories = Object.keys(categorySettings);
+            navContainer.innerHTML = categories.map(cat => {
+                const isActive = cat === activeCategory;
+                const setting = categorySettings[cat];
+                return `
+                    <button 
+                        onclick="setCategory('${cat}')"
+                        class="snap-start flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 whitespace-nowrap border btn-click
+                        ${isActive 
+                            ? 'bg-gray-900 text-white border-gray-900 shadow-md' 
+                            : 'bg-white text-gray-500 border-gray-200 hover:border-gray-300 hover:text-gray-700'
+                        }"
+                    >
+                        <i class="ph-bold ${setting.icon}"></i>
+                        ${setting.display}
+                    </button>
+                `;
+            }).join('');
+        }
+
+        function renderHeader() {
+            if(!activeCategory) return;
+            const setting = categorySettings[activeCategory];
+            sceneTitleEl.innerText = setting.display;
+            // Updated text as requested
+            sceneDescEl.innerText = `AI 將會扮演 a native English speaker。點擊下方按鈕複製角色設定，貼給 ChatGPT 或 Gemini 即可開始對話。`;
+        }
+
+        function renderSuggestions() {
+            if(!activeCategory) return;
+            
+            // Get rich objects
+            const pool = suggestionsDB[activeCategory] || [];
+            
+            // Pick 3 random items
+            const shuffled = [...pool].sort(() => 0.5 - Math.random());
+            const selected = shuffled.slice(0, 3);
+
+            suggestionAreaEl.innerHTML = selected.map((item, index) => `
+                <button 
+                    onclick="addSuggestionCard('${item.zh}')"
+                    class="px-3 py-1.5 bg-white border border-indigo-100 text-indigo-600 rounded-full text-xs font-medium hover:bg-indigo-50 transition-colors animate-fade-in"
+                    style="animation-delay: ${index * 100}ms"
+                >
+                    ✨ ${item.zh}
+                </button>
+            `).join('');
+        }
+
+        function renderGrid() {
+            if(!activeCategory) return;
+            const filtered = currentScenarios.filter(s => s.category === activeCategory);
+            gridContainer.innerHTML = '';
+            
+            filtered.forEach(item => {
+                gridContainer.appendChild(createCardElement(item));
+            });
+        }
+
+        // Helper to create card HTML
+        function createCardElement(item, isCustom = false) {
+            const card = document.createElement('div');
+            card.className = "bg-white rounded-2xl p-6 border border-gray-100 card-anim flex flex-col h-full relative group" + (isCustom ? " animate-fade-in" : "");
+            
+            const keywordHTML = item.keywords && item.keywords.length > 0 
+                ? item.keywords.map(k => `
+                    <span class="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-gray-50 text-gray-500 border border-gray-100 zh-font">
+                        <span class="en-font font-semibold mr-1">${k.en}</span> <span class="text-gray-400">|</span> <span class="ml-1">${k.zh}</span>
+                    </span>`).join('')
+                : '';
+
+            // Card HTML
+            card.innerHTML = `
+                <div class="flex-grow">
+                    <div class="flex justify-between items-start mb-3">
+                        <span class="text-[10px] font-bold tracking-widest text-gray-300 uppercase en-font">
+                            ${isCustom ? 'MY PRACTICE' : 'SENTENCE'}
+                        </span>
+                    </div>
+                    <h3 class="text-xl md:text-2xl font-bold text-gray-800 mb-2 leading-snug en-font">
+                        "${item.goldenSentence}"
+                    </h3>
+                    <p class="text-gray-500 text-base mb-6 font-medium zh-font">
+                        ${item.chinese}
+                    </p>
+                </div>
+                
+                ${keywordHTML ? `
+                <div class="pt-4 border-t border-dashed border-gray-100 mb-4">
+                    <div class="flex flex-wrap gap-2">
+                        ${keywordHTML}
+                    </div>
+                </div>` : ''}
+            `;
+            return card;
+        }
+
+        // --- Custom Card Logic ---
+
+        function handleCustomInput() {
+            const input = document.getElementById('custom-zh');
+            const text = input.value.trim();
+            if(!text) return;
+            
+            // Show loading state
+            const btn = document.getElementById('add-btn');
+            const originalBtnContent = btn.innerHTML;
+            btn.innerHTML = `<div class="loader"></div>`;
+            btn.disabled = true;
+
+            // Start Logic
+            addSuggestionCard(text, () => {
+                // Callback when done
+                btn.innerHTML = originalBtnContent;
+                btn.disabled = false;
+                input.value = '';
+                input.focus();
+            });
+        }
+
+        function addSuggestionCard(zhText, callback) {
+            const pool = suggestionsDB[activeCategory] || [];
+            const match = pool.find(item => item.zh === zhText);
+
+            if (match) {
+                const newCardData = {
+                    goldenSentence: match.en,
+                    chinese: match.zh,
+                    keywords: match.kw
+                };
+                addCardToCustomList(newCardData);
+                if(callback) callback();
+            } else {
+                // API Translation
+                fetchTranslation(zhText).then(translatedText => {
+                    // Extract cleaned keywords
+                    const extractedWords = extractKeywords(translatedText);
+                    
+                    // Async translate keywords
+                    Promise.all(extractedWords.map(async (word) => {
+                         try {
+                             const trans = await fetchTranslation(word, true); 
+                             return { en: word, zh: trans };
+                         } catch (e) {
+                             return { en: word, zh: "" };
+                         }
+                    })).then(finalKeywords => {
+                        const newCardData = {
+                            goldenSentence: translatedText, 
+                            chinese: zhText,
+                            keywords: finalKeywords
+                        };
+                        addCardToCustomList(newCardData);
+                        if(callback) callback();
+                    });
+
+                }).catch(err => {
+                    console.error("Translation failed", err);
+                    const newCardData = {
+                        goldenSentence: "Translation unavailable",
+                        chinese: zhText,
+                        keywords: []
+                    };
+                    addCardToCustomList(newCardData);
+                    if(callback) callback();
+                });
+            }
+        }
+
+        // CLEANER KEYWORD EXTRACTION regex
+        function extractKeywords(sentence) {
+            if (!sentence) return [];
+            // Remove all punctuation except spaces, then split
+            // Regex to remove any character that is NOT a letter or whitespace
+            // Also removing numbers if needed, but keeping simple for now
+            const clean = sentence.replace(/[^\w\s]|_/g, "").replace(/\s+/g, " ");
+            const words = clean.split(" ");
+            const stopWords = ["a", "an", "the", "is", "are", "was", "were", "to", "in", "on", "at", "for", "of", "my", "your", "his", "her", "it", "that", "this", "i", "you", "he", "she", "we", "they", "me", "him", "us", "them", "not", "do", "does", "did", "will", "would", "can", "could", "so"];
+            
+            const candidates = words
+                .filter(w => !stopWords.includes(w.toLowerCase()) && w.length > 2)
+                .sort((a, b) => b.length - a.length); 
+
+            return [...new Set(candidates)].slice(0, 2); 
+        }
+
+        async function fetchTranslation(text, isWord = false) {
+            try {
+                const pair = isWord ? 'en|zh-TW' : 'zh-TW|en';
+                const response = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${pair}`);
+                const data = await response.json();
+                if (data && data.responseData && data.responseData.translatedText) {
+                    // Remove potential trailing punctuation for keywords
+                    let resText = data.responseData.translatedText;
+                    if(isWord) {
+                        resText = resText.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()。，？！]/g,"");
+                    }
+                    return resText;
+                }
+                return text;
+            } catch (e) {
+                return text;
+            }
+        }
+
+        function addCardToCustomList(data) {
+            // Add to specific category list
+            if (activeCategory) {
+                allCustomCards[activeCategory].push(data);
+                renderCustomList();
+            }
+        }
+
+        function renderCustomList() {
+            customListEl.innerHTML = '';
+            
+            // Get cards for current category
+            const currentList = allCustomCards[activeCategory] || [];
+            
+            if (currentList.length > 0) {
+                customCardsContainer.classList.remove('hidden');
+                currentList.forEach(item => {
+                    const card = createCardElement(item, true);
+                    customListEl.appendChild(card);
+                });
+                
+                setTimeout(() => {
+                   customListEl.lastElementChild.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 100);
+            } else {
+                customCardsContainer.classList.add('hidden');
+            }
+        }
+
+        function downloadStudyImage() {
+            const captureArea = document.getElementById('custom-list-capture');
+            
+            if (!captureArea || !allCustomCards[activeCategory] || allCustomCards[activeCategory].length === 0) {
+                alert("沒有內容可以下載！");
+                return;
+            }
+
+            document.body.style.cursor = 'wait';
+
+            html2canvas(captureArea, {
+                scale: 3,
+                backgroundColor: '#ffffff', // Force White Background
+                useCORS: true,
+                logging: false,
+                onclone: (clonedDoc) => {
+                    const element = clonedDoc.getElementById('custom-list-capture');
+                    element.style.display = 'block';
+                    element.style.backgroundColor = '#ffffff';
+                    
+                    // FORCE ALL TEXT TO BLACK
+                    const allElements = element.getElementsByTagName('*');
+                    for (let i = 0; i < allElements.length; i++) {
+                        const el = allElements[i];
+                        // Force solid colors
+                        el.style.color = '#000000'; 
+                        el.style.opacity = '1';
+                        el.style.textShadow = 'none';
+                        
+                        // Specifically handle gray text which usually disappears
+                        if (el.classList.contains('text-gray-400') || el.classList.contains('text-gray-500')) {
+                             el.style.color = '#333333'; 
+                        }
+                        
+                        // Fix Card Backgrounds
+                        if (el.classList.contains('bg-white')) {
+                            el.style.backgroundColor = '#ffffff';
+                            el.style.boxShadow = 'none'; // Remove shadow for cleaner print
+                            el.style.border = '1px solid #000000'; // Add border to make cards pop
+                        }
+                    }
+                }
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `Daily_Conversation_${new Date().toISOString().slice(0,10)}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                document.body.style.cursor = 'default';
+            }).catch(err => {
+                console.error("Image generation failed", err);
+                alert("圖片下載失敗，請稍後再試。");
+                document.body.style.cursor = 'default';
+            });
+        }
+
+        function copyScenePrompt(btn) {
+            const prompt = categorySettings[activeCategory].prompt;
+            const textarea = document.createElement('textarea');
+            textarea.value = prompt;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+
+            const originalContent = btn.innerHTML;
+            btn.innerHTML = `<i class="ph-bold ph-check"></i> <span>已複製角色設定！</span>`;
+            setTimeout(() => { btn.innerHTML = originalContent; }, 2000);
+        }
+        
+        // Global Mobile Menu Toggle
+        document.getElementById('global-mobile-menu-btn').addEventListener('click', () => {
+            document.getElementById('global-mobile-menu').classList.toggle('hidden');
+        });
+
+        // --- Init ---
+        window.addEventListener('DOMContentLoaded', () => {
+            renderNav();
+            updateView();
+        });
+
+    </script>
+</body>
+</html>
