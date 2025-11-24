@@ -1,619 +1,691 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { BookOpen, AlertCircle, Lightbulb, PenTool, Hash, GraduationCap, Eye, EyeOff, CheckCircle, XCircle, HelpCircle, RefreshCw, BrainCircuit } from 'lucide-react';
-
-const VocabularyApp = () => {
-  const [activeTab, setActiveTab] = useState('verbs');
-  const [isMasked, setIsMasked] = useState(false); // 控制是否全域遮住中文
-
-  // ==========================================
-  // Data Section (Based on Analysis)
-  // ==========================================
-
-  const verbsData = [
-    { word: "acquire", level: 4, meaning: "獲得；習得", note: "acquire knowledge/skills (習得知識/技能)。常考與 require (要求) 的辨析。" },
-    { word: "adapt", level: 4, meaning: "適應；改編", note: "adapt to (適應環境)。111年考過生物適應環境的議題。注意與 adopt (採用/領養) 區分。" },
-    { word: "alter", level: 3, meaning: "改變", note: "alter slightly (稍作改變)。常替換 change, modify。" },
-    { word: "anticipate", level: 4, meaning: "預期；期望", note: "anticipate changes。常用於描述科技或社會趨勢的預測。" },
-    { word: "associate", level: 4, meaning: "聯想；與...有關", note: "be associated with (與...有關連)。閱讀題常考因果關係或相關性。" },
-    { word: "attribute", level: 4, meaning: "把...歸因於", note: "attribute A to B (把A歸因於B)。寫作與閱讀的高頻字。" },
-    { word: "decline", level: 4, meaning: "下降；婉拒", note: "sharp decline (急遽下降)。圖表題必備單字。" },
-    { word: "demonstrate", level: 4, meaning: "示範；顯示；示威", note: "實驗結果顯示 (studies demonstrate...)。" },
-    { word: "encounter", level: 4, meaning: "遭遇；遇到", note: "encounter difficulties (遇到困難)。常出現於記敘文或人物傳記。" },
-    { word: "establish", level: 3, meaning: "建立", note: "establish a connection。同義詞：set up, found。" },
-    { word: "evaluate", level: 4, meaning: "評估", note: "evaluate the performance。混合題常問作者如何「評估」某個現象。" },
-    { word: "expose", level: 3, meaning: "暴露；接觸", note: "be exposed to (暴露於/接觸到)。常考陽光曝曬或孩童接觸媒體暴力。" },
-    { word: "indicate", level: 3, meaning: "指出；顯示", note: "研究指出 (research indicates)。閱讀測驗細節題關鍵字。" },
-    { word: "maintain", level: 3, meaning: "維持；主張", note: "maintain a balance (維持平衡)。" },
-    { word: "observe", level: 3, meaning: "觀察；遵守", note: "observe the rules (遵守規則) 是易錯點。" },
-    { word: "overcome", level: 3, meaning: "克服", note: "overcome obstacles/challenges (克服障礙/挑戰)。" },
-    { word: "preserve", level: 4, meaning: "保存；維護", note: "preserve cultural heritage (保存文化遺產)。環境與文化題型常客。" },
-    { word: "promote", level: 3, meaning: "促進；推銷；升遷", note: "promote health (促進健康)。" },
-    { word: "recommend", level: 3, meaning: "推薦；建議", note: "strongly recommend。" },
-    { word: "reinforce", level: 4, meaning: "強化；加強", note: "reinforce the idea (強化這個觀點)。" },
-    { word: "reveal", level: 3, meaning: "揭露", note: "reveal the truth。同義詞：disclose, unveil。" },
-    { word: "transfer", level: 3, meaning: "轉移；轉乘", note: "file transfer (檔案傳輸)；transfer to another train。" },
-    { word: "transform", level: 4, meaning: "轉變", note: "transform A into B。科技改變生活或是能源轉換的題型。" }
-  ];
-
-  const adjectivesData = [
-    { word: "accessible", level: 4, meaning: "可存取的；易接近的", note: "accessible to the public。常用於網路資源或無障礙空間話題。" },
-    { word: "alternative", level: 4, meaning: "替代的；另類的", note: "alternative energy (替代能源)。環保議題必考。" },
-    { word: "annual", level: 3, meaning: "每年的", note: "annual income/report。" },
-    { word: "anxious", level: 4, meaning: "焦慮的；渴望的", note: "anxious about (對...感到焦慮)。心理健康議題常見。" },
-    { word: "appropriate", level: 4, meaning: "適當的", note: "take appropriate action。同義詞：proper, suitable。" },
-    { word: "artificial", level: 4, meaning: "人造的", note: "Artificial Intelligence (AI)；artificial flavors (人工香料)。" },
-    { word: "available", level: 3, meaning: "可取得的；有空的", note: "最基礎但最高頻，聽力與閱讀都常出現。" },
-    { word: "aware", level: 3, meaning: "意識到的", note: "be aware of。環保意識 (environmental awareness) 常考名詞形。" },
-    { word: "confused", level: 3, meaning: "困惑的", note: "常用於情緒題。注意 confusing (令人困惑的) 的區別。" },
-    { word: "conservative", level: 4, meaning: "保守的", note: "conservative estimate (保守估計)。" },
-    { word: "consistent", level: 4, meaning: "一致的；始終如一的", note: "consistent with (與...一致)。邏輯連貫性的關鍵字。" },
-    { word: "considerable", level: 4, meaning: "相當大的；重要的", note: "considerable amount。注意與 considerate (體貼的) 區分。" },
-    { word: "crucial", level: 4, meaning: "決定性的；關鍵的", note: "play a crucial role (扮演關鍵角色)。寫作加分字。" },
-    { word: "current", level: 3, meaning: "目前的；現行的", note: "current trends (目前趨勢)。" },
-    { word: "diverse", level: 4, meaning: "多樣的", note: "culturally diverse。多樣性 (Diversity) 是近年社會題主流。" },
-    { word: "domestic", level: 4, meaning: "國內的；家庭的", note: "domestic violence (家暴)；domestic market (國內市場)。" },
-    { word: "efficient", level: 4, meaning: "有效率的", note: "energy-efficient (節能的)。" },
-    { word: "essential", level: 4, meaning: "必要的；本質的", note: "It is essential that...。同義詞：vital, necessary。" },
-    { word: "financial", level: 4, meaning: "財務的", note: "financial crisis (金融危機)。" },
-    { word: "gradual", level: 4, meaning: "逐漸的", note: "gradual change。氣候變遷常用字。" },
-    { word: "mental", level: 3, meaning: "心理的；心智的", note: "mental health (心理健康)。近年超高頻。" },
-    { word: "negative", level: 3, meaning: "負面的", note: "negative impact。" },
-    { word: "obvious", level: 3, meaning: "明顯的", note: "It is obvious that...。同義詞：apparent, evident。" },
-    { word: "potential", level: 4, meaning: "潛在的；可能的", note: "potential customers/risks。" },
-    { word: "precise", level: 4, meaning: "精確的", note: "precise measurements。科學題型常用。" },
-    { word: "psychological", level: 4, meaning: "心理(學)的", note: "psychological effects。" },
-    { word: "reluctant", level: 5, meaning: "不情願的", note: "be reluctant to V。形容人物態度的關鍵字。" },
-    { word: "significant", level: 4, meaning: "重要的；顯著的", note: "significant improvement。圖表分析寫作必備。" },
-    { word: "specific", level: 3, meaning: "特定的；具體的", note: "be specific about。" },
-    { word: "sustainable", level: 5, meaning: "永續的", note: "sustainable development (永續發展)。108課綱核心關鍵字。" },
-    { word: "unique", level: 3, meaning: "獨特的", note: "unique to (某地特有的)。" },
-    { word: "vulnerable", level: 5, meaning: "易受傷的；脆弱的", note: "be vulnerable to (易受...影響)。常考老年人易受疾病感染，或地區易受災害影響。" }
-  ];
-
-  const nounsData = [
-    { word: "access", level: 4, meaning: "途徑；使用權", note: "have access to (得以使用/進入)。" },
-    { word: "application", level: 3, meaning: "申請；應用", note: "mobile apps (應用程式)；job application。" },
-    { word: "aspect", level: 3, meaning: "方面；層面", note: "every aspect of life。" },
-    { word: "barrier", level: 3, meaning: "障礙", note: "language barrier (語言隔閡)。" },
-    { word: "campaign", level: 4, meaning: "活動(社會/政治)", note: "launch a campaign (發起活動)。" },
-    { word: "characteristic", level: 4, meaning: "特徵", note: "defining characteristic。同義詞：feature, trait。" },
-    { word: "circumstance", level: 4, meaning: "情況；環境", note: "under no circumstances (絕不) — 倒裝句考點。" },
-    { word: "consequence", level: 4, meaning: "後果", note: "as a consequence (因此)。" },
-    { word: "convention", level: 4, meaning: "慣例；大會；習俗", note: "social conventions。打破傳統 (break conventions) 常考。" },
-    { word: "decline", level: 4, meaning: "下降；衰退", note: "既是動詞也是名詞。in decline。" },
-    { word: "disaster", level: 3, meaning: "災難", note: "natural disaster。" },
-    { word: "emphasis", level: 4, meaning: "強調", note: "put emphasis on。" },
-    { word: "evidence", level: 3, meaning: "證據", note: "scientific evidence。" },
-    { word: "factor", level: 3, meaning: "因素", note: "key factor。" },
-    { word: "impact", level: 4, meaning: "衝擊；影響", note: "have a huge impact on。寫作萬用字。" },
-    { word: "infection", level: 4, meaning: "感染", note: "viral infection。疫情相關文章必備。" },
-    { word: "innovation", level: 5, meaning: "創新", note: "technological innovation。" },
-    { word: "interaction", level: 4, meaning: "互動", note: "social interaction。" },
-    { word: "measure", level: 3, meaning: "措施；測量", note: "take measures to V (採取措施去...)。" },
-    { word: "phenomenon", level: 4, meaning: "現象", note: "natural phenomenon。複數形是 phenomena。" },
-    { word: "priority", level: 4, meaning: "優先事項", note: "top priority。" },
-    { word: "reduction", level: 4, meaning: "減少", note: "carbon reduction (減碳)。" },
-    { word: "resident", level: 4, meaning: "居民", note: "local residents。" },
-    { word: "resource", level: 3, meaning: "資源", note: "natural resources。" },
-    { word: "solution", level: 3, meaning: "解決方法", note: "solution to the problem (介系詞用 to)。" },
-    { word: "strategy", level: 4, meaning: "策略", note: "adopt a strategy。" },
-    { word: "survey", level: 3, meaning: "調查", note: "conduct a survey。" },
-    { word: "technology", level: 3, meaning: "科技", note: "及其變化形：technological, technician。" },
-    { word: "trend", level: 3, meaning: "趨勢", note: "current trend。" },
-    { word: "victim", level: 3, meaning: "受害者", note: "fall victim to (成為...的受害者)。" }
-  ];
-
-  const adverbsData = [
-    { word: "approximately", desc: "大約 (圖表數據題)" },
-    { word: "automatically", desc: "自動地" },
-    { word: "constantly", desc: "不斷地 (Level 4, 常用於強調習慣或持續的現象)" },
-    { word: "currently", desc: "目前地" },
-    { word: "deliberately", desc: "故意地 (Level 5, 同義：intentionally)" },
-    { word: "eventually", desc: "最終 (強調經過長時間後的結果)" },
-    { word: "frequently", desc: "頻繁地" },
-    { word: "gradually", desc: "逐漸地 (描述改變過程)" },
-    { word: "relatively", desc: "相對地 (be relatively cheap/easy)" },
-    { word: "temporarily", desc: "暫時地" }
-  ];
-
-  const confusingPairs = [
-    { pair: "adapt / adopt / adept", desc: "適應(改編) / 採用(領養) / 熟練的" },
-    { pair: "affect / effect", desc: "影響(v.) / 效果(n.)" },
-    { pair: "considerable / considerate", desc: "相當大的 / 體貼的" },
-    { pair: "economic / economical", desc: "經濟上的 / 節約的" },
-    { pair: "respectful / respective / respectable", desc: "恭敬的 / 分別的 / 值得尊敬的" }
-  ];
-
-  const tipsData = [
-    { title: "情境記憶", content: "不要死背中文。例如背 accessible 時，想著「WIFI is accessible here」或「Wheelchair accessible」。" },
-    { title: "注意多義字", content: "學測愛考熟詞生義。例如 observe (慶祝/遵守)、consume (吃喝)、address (演說/處理)。" },
-    { title: "關鍵 Level 5", content: "若目標是前標或頂標，vulnerable, reluctant, innovation, sustainable 這類字是閱讀測驗的分水嶺。" }
-  ];
-
-  // ==========================================
-  // AI Question Bank (Simulation)
-  // ==========================================
-  
-  // Expanded pool of questions generated based on the high-freq vocab list
-  const fullQuestionBank = [
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>歷屆學測英文高頻單字與試題分析</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script type="importmap">
     {
-      id: 1,
-      question: "The government has decided to _____ new measures to combat climate change, focusing on reducing carbon emissions.",
-      options: ["A) acquire", "B) adopt", "C) adapt", "D) associate"],
-      answer: "B",
-      explanation: "解析：(B) adopt 採用(措施/方法)。語意為「政府決定採取新措施...」。(A)獲得 (C)適應/改編 (D)聯想，皆不合語意。注意 adapt (適應) 與 adopt (採用) 的區別。"
-    },
-    {
-      id: 2,
-      question: "Elderly people are particularly _____ to the flu, so it is recommended that they get vaccinated every year.",
-      options: ["A) reluctant", "B) sustainable", "C) vulnerable", "D) efficient"],
-      answer: "C",
-      explanation: "解析：(C) vulnerable 易受傷害/影響的。be vulnerable to 是慣用法，意指「易受流感感染」。(A)不情願的 (B)永續的 (D)有效率的。"
-    },
-    {
-      id: 3,
-      question: "It is _____ that all students attend the orientation to understand the school regulations.",
-      options: ["A) essential", "B) diverse", "C) artificial", "D) vague"],
-      answer: "A",
-      explanation: "解析：(A) essential 必要的。句型 It is essential that ... (某事是必要的)。(B)多樣的 (C)人造的 (D)模糊的。"
-    },
-    {
-      id: 4,
-      question: "Despite the bad weather, the athlete _____ his training routine to prepare for the upcoming Olympics.",
-      options: ["A) observed", "B) maintained", "C) estimated", "D) collapsed"],
-      answer: "B",
-      explanation: "解析：(B) maintained 維持。maintain one's routine 維持慣例。(A)觀察/遵守 (C)估計 (D)倒塌。"
-    },
-    {
-      id: 5,
-      question: "Technological _____ has changed the way we communicate, making it much faster and more convenient.",
-      options: ["A) convention", "B) innovation", "C) barrier", "D) victim"],
-      answer: "B",
-      explanation: "解析：(B) innovation 創新。Technological innovation (科技創新) 是高頻搭配詞。(A)慣例/大會 (C)障礙 (D)受害者。"
-    },
-    {
-      id: 6,
-      question: "Before making a decision, we need to _____ all possible risks and benefits carefully.",
-      options: ["A) evaluate", "B) promote", "C) encounter", "D) expose"],
-      answer: "A",
-      explanation: "解析：(A) evaluate 評估。語意為「我們需要仔細評估所有可能的風險與利益」。(B)促進 (C)遭遇 (D)暴露。"
-    },
-    {
-      id: 7,
-      question: "The company's profits have been in _____ for three consecutive years due to the economic recession.",
-      options: ["A) priority", "B) decline", "C) access", "D) survey"],
-      answer: "B",
-      explanation: "解析：(B) decline 下降/衰退。in decline 為片語，意指「處於衰退中」。(A)優先事項 (C)途徑 (D)調查。"
-    },
-    {
-      id: 8,
-      question: "To protect the environment, many countries are looking for _____ energy sources like solar and wind power.",
-      options: ["A) alternative", "B) anxious", "C) reluctant", "D) obvious"],
-      answer: "A",
-      explanation: "解析：(A) alternative 替代的。alternative energy (替代能源) 為高頻搭配詞。(B)焦慮的 (C)不情願的 (D)明顯的。"
-    },
-    {
-      id: 9,
-      question: "The study _____ a strong link between lack of sleep and poor academic performance.",
-      options: ["A) transfers", "B) reveals", "C) acquires", "D) preserves"],
-      answer: "B",
-      explanation: "解析：(B) reveals 揭露/顯示。研究(study)顯示結果，常用 reveal 或 indicate。(A)轉移 (C)獲得 (D)保存。"
-    },
-    {
-      id: 10,
-      question: "It is important to be _____ of your surroundings when walking alone at night.",
-      options: ["A) aware", "B) consistent", "C) mental", "D) domestic"],
-      answer: "A",
-      explanation: "解析：(A) aware 意識到的。be aware of 為慣用語。(B)一致的 (C)心理的 (D)國內的/家庭的。"
-    },
-    {
-      id: 11,
-      question: "The new policy aims to _____ gender equality in the workplace.",
-      options: ["A) promote", "B) decline", "C) overcome", "D) anticipate"],
-      answer: "A",
-      explanation: "解析：(A) promote 促進。促進性別平等 (promote equality)。(B)下降 (C)克服 (D)預期。"
-    },
-    {
-      id: 12,
-      question: "Since the evidence was not _____, the judge could not make a final decision immediately.",
-      options: ["A) consistent", "B) reluctant", "C) artificial", "D) annual"],
-      answer: "A",
-      explanation: "解析：(A) consistent 一致的。指證據前後不一或與事實不符。(B)不情願的 (C)人造的 (D)每年的。"
-    },
-    {
-      id: 13,
-      question: "Many students feel _____ about their future careers because of the rapidly changing job market.",
-      options: ["A) efficient", "B) anxious", "C) specific", "D) potential"],
-      answer: "B",
-      explanation: "解析：(B) anxious 焦慮的。feel anxious about 對...感到焦慮。(A)有效率的 (C)具體的 (D)潛在的。"
-    },
-    {
-      id: 14,
-      question: "Without a common language, the two groups faced a significant _____ to communication.",
-      options: ["A) barrier", "B) resource", "C) strategy", "D) convention"],
-      answer: "A",
-      explanation: "解析：(A) barrier 障礙。language barrier (語言隔閡)。(B)資源 (C)策略 (D)慣例。"
-    },
-    {
-      id: 15,
-      question: "We need to find a _____ solution to the problem, rather than just a temporary fix.",
-      options: ["A) sustainable", "B) gradual", "C) psychological", "D) negative"],
-      answer: "A",
-      explanation: "解析：(A) sustainable 永續的/可持續的。與 temporary (暫時的) 形成對比。(B)逐漸的 (C)心理的 (D)負面的。"
+        "imports": {
+            "react": "https://esm.sh/react@18.2.0",
+            "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
+            "lucide-react": "https://esm.sh/lucide-react@0.263.1"
+        }
     }
-  ];
+    </script>
+    
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-  // Helper to shuffle and pick N items
-  const getRandomQuestions = (n) => {
-    const shuffled = [...fullQuestionBank].sort(() => 0.5 - Math.random());
-    return shuffled.slice(0, n);
-  };
-
-  // ==========================================
-  // Components
-  // ==========================================
-
-  const RevealableText = ({ text, isMasked }) => {
-    const [isRevealed, setIsRevealed] = useState(false);
-
-    // 當全域遮蔽狀態改變(重置)時，將個別顯示狀態設為 false
-    useEffect(() => {
-      setIsRevealed(false);
-    }, [isMasked]);
-
-    const show = !isMasked || isRevealed;
-
-    return (
-      <div 
-        onClick={() => isMasked && setIsRevealed(!isRevealed)}
-        className={`transition-all duration-300 relative rounded px-2 py-1 -ml-2 select-none ${isMasked ? 'cursor-pointer hover:bg-slate-100' : ''}`}
-      >
-        <div className={`transition-all duration-300 ${!show ? 'blur-sm bg-slate-200 text-slate-200' : 'text-slate-600'}`}>
-          {text}
-        </div>
-        {!show && (
-          <div className="absolute inset-0 flex items-center justify-center text-slate-500 text-xs font-bold pointer-events-none">
-            <EyeOff size={14} className="mr-1" /> 點擊顯示
-          </div>
-        )}
-      </div>
-    );
-  };
-
-  const TableView = ({ data }) => {
-    return (
-      <div className="overflow-x-auto rounded-lg border border-slate-200 shadow-sm bg-white">
-        <table className="w-full text-left text-sm">
-          <thead className="bg-slate-100 text-slate-700 font-semibold">
-            <tr>
-              <th className="p-4 w-1/4">單字 (Word)</th>
-              <th className="p-4 w-20 text-center">級別</th>
-              <th className="p-4 w-1/4">
-                <div className="flex items-center gap-2">
-                  中文釋義
-                  {isMasked && <span className="text-xs font-normal text-amber-600 bg-amber-100 px-2 py-0.5 rounded-full">點擊查看</span>}
-                </div>
-              </th>
-              <th className="p-4">歷屆考點與搭配</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-100 bg-white">
-            {data.map((item, idx) => (
-              <tr key={idx} className="hover:bg-slate-50 transition-colors">
-                <td className="p-4 font-bold text-slate-800 text-lg">{item.word}</td>
-                <td className="p-4 text-center">
-                  <span className={`inline-block px-2 py-1 rounded text-xs font-bold ${item.level >= 5 ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700'}`}>
-                    L{item.level}
-                  </span>
-                </td>
-                <td className="p-4">
-                  <RevealableText text={item.meaning} isMasked={isMasked} />
-                </td>
-                <td className="p-4 text-slate-600 leading-relaxed text-sm">{item.note}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    );
-  };
-
-  const PracticeMode = () => {
-    const [questions, setQuestions] = useState([]);
-    const [selectedAnswers, setSelectedAnswers] = useState({});
-    const [showResults, setShowResults] = useState({});
-    const [loading, setLoading] = useState(false);
-
-    // Initial load
-    useEffect(() => {
-      generateNewTest();
-    }, []);
-
-    const generateNewTest = () => {
-      setLoading(true);
-      // Simulate AI thinking time
-      setTimeout(() => {
-        setQuestions(getRandomQuestions(5));
-        setSelectedAnswers({});
-        setShowResults({});
-        setLoading(false);
-      }, 600);
-    };
-
-    const handleSelect = (qId, optionPrefix) => {
-      if (showResults[qId]) return;
-      setSelectedAnswers(prev => ({...prev, [qId]: optionPrefix}));
-    };
-
-    const checkAnswer = (qId) => {
-      setShowResults(prev => ({...prev, [qId]: true}));
-    };
-
-    return (
-      <div className="space-y-6 max-w-4xl mx-auto">
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <div>
-              <h2 className="text-xl font-bold text-slate-800 mb-2 flex items-center gap-2">
-                <BrainCircuit className="text-indigo-600" />
-                AI 仿真學測題庫 (詞彙題)
-              </h2>
-              <p className="text-slate-600 text-sm">
-                系統已從核心單字庫中隨機生成試卷。
-              </p>
+    <style>
+        /* 隱藏捲軸但保留功能 */
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        /* 淡入動畫 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        .animate-fade-in-up {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="bg-slate-50">
+  <nav class="bg-gray-900 text-white shadow-lg sticky top-0 z-[60]">
+    <div class="max-w-6xl mx-auto px-4">
+        <div class="flex justify-between items-center h-16">
+            <a href="index.html" class="font-bold text-xl tracking-wider hover:text-blue-400 transition">李仲恩英文</a>
+            <div class="hidden md:flex space-x-8">
+                <a href="index.html" class="hover:text-blue-400 transition duration-300">GSAT 滿級分系統</a>
+                <a href="vocab.html" class="text-yellow-400 font-bold border-b-2 border-yellow-400">歷屆高頻單字神器</a>
+                <a href="conversation.html" class="hover:text-green-400 transition duration-300">實用生活英文</a>
+                <a href="tutoring.html" class="hover:text-purple-400 transition duration-300">關於我 / 家教課程</a>
             </div>
-            <button 
-              onClick={generateNewTest}
-              className="flex items-center gap-2 px-5 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors shadow-md active:scale-95"
-            >
-              <RefreshCw size={18} className={loading ? 'animate-spin' : ''} />
-              {loading ? '生成中...' : '生成新試卷'}
-            </button>
-          </div>
+            <div class="md:hidden flex items-center">
+                <button onclick="document.getElementById('mobile-menu').classList.toggle('hidden')" class="outline-none hover:text-blue-400">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                </button>
+            </div>
         </div>
+    </div>
+    <div id="mobile-menu" class="hidden md:hidden bg-gray-800 absolute w-full">
+        <a href="index.html" class="block py-3 px-4 text-sm hover:bg-gray-700 border-b border-gray-700">GSAT 滿級分系統</a>
+        <a href="vocab.html" class="block py-3 px-4 text-sm text-yellow-400 font-bold border-b border-gray-700">歷屆高頻單字神器</a>
+        <a href="conversation.html" class="block py-3 px-4 text-sm hover:bg-gray-700 border-b border-gray-700">實用生活英文</a>
+        <a href="tutoring.html" class="block py-3 px-4 text-sm hover:bg-gray-700">關於我 / 家教課程</a>
+    </div>
+</nav>
 
-        {questions.map((q, index) => {
-          const userAns = selectedAnswers[q.id];
-          const isChecked = showResults[q.id];
-          const isCorrect = userAns === q.answer;
+    <div id="root"></div>
 
-          return (
-            <div key={q.id} className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 transition-all hover:shadow-md animate-fade-in-up">
-              <div className="flex gap-3 mb-4">
-                <span className="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-indigo-100 text-indigo-700 font-bold rounded-full">
-                  {index + 1}
-                </span>
-                <p className="text-lg text-slate-800 font-medium leading-relaxed">
-                  {q.question.split('_____').map((part, i, arr) => (
-                    <React.Fragment key={i}>
-                      {part}
-                      {i < arr.length - 1 && (
-                        <span className={`inline-block border-b-2 w-20 mx-1 text-center font-bold transition-colors ${isChecked ? (isCorrect ? 'border-green-500 text-green-600' : 'border-red-500 text-red-600') : 'border-slate-300 text-blue-600'}`}>
-                           {isChecked ? (q.answer === userAns ? userAns : (userAns || '')) : (userAns || '')}
-                        </span>
-                      )}
-                    </React.Fragment>
-                  ))}
-                </p>
-              </div>
+    <script type="text/babel" data-type="module">
+        import React, { useState, useEffect, useMemo } from 'react';
+        import { createRoot } from 'react-dom/client';
+        import { BookOpen, AlertCircle, Lightbulb, PenTool, Hash, GraduationCap, Eye, EyeOff, CheckCircle, XCircle, HelpCircle, RefreshCw, BrainCircuit } from 'lucide-react';
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 ml-11">
-                {q.options.map(opt => {
-                  const optPrefix = opt.charAt(0);
-                  let btnClass = "border-slate-200 hover:bg-slate-50 text-slate-600";
-                  
-                  if (userAns === optPrefix) {
-                    btnClass = "border-indigo-500 bg-indigo-50 text-indigo-700 font-semibold ring-1 ring-indigo-500";
-                  }
+        // --- 以下完全是您的原始程式碼 ---
 
-                  if (isChecked) {
-                    if (optPrefix === q.answer) {
-                      btnClass = "border-green-500 bg-green-50 text-green-700 font-bold ring-1 ring-green-500";
-                    } else if (userAns === optPrefix && userAns !== q.answer) {
-                      btnClass = "border-red-300 bg-red-50 text-red-600 opacity-60";
-                    } else {
-                      btnClass = "opacity-50 grayscale border-slate-100";
-                    }
-                  }
+        const VocabularyApp = () => {
+          const [activeTab, setActiveTab] = useState('verbs');
+          const [isMasked, setIsMasked] = useState(false);
+          // 控制是否全域遮住中文
 
-                  return (
-                    <button
-                      key={opt}
-                      onClick={() => handleSelect(q.id, optPrefix)}
-                      disabled={isChecked}
-                      className={`text-left px-4 py-3 rounded-lg border transition-all flex items-center justify-between ${btnClass}`}
-                    >
-                      <span>{opt}</span>
-                      {isChecked && optPrefix === q.answer && <CheckCircle size={18} className="text-green-600" />}
-                      {isChecked && userAns === optPrefix && userAns !== q.answer && <XCircle size={18} className="text-red-500" />}
-                    </button>
-                  );
-                })}
-              </div>
+          // ==========================================
+          // Data Section (Based on Analysis)
+          // ==========================================
 
-              <div className="mt-6 ml-11 flex items-center justify-between">
-                {!isChecked ? (
-                   <button
-                    onClick={() => checkAnswer(q.id)}
-                    disabled={!userAns}
-                    className={`px-6 py-2 rounded-lg font-bold text-white transition-all ${userAns ? 'bg-indigo-600 hover:bg-indigo-700 shadow-md hover:shadow-lg' : 'bg-slate-300 cursor-not-allowed'}`}
-                   >
-                     檢查答案
-                   </button>
-                ) : (
-                  <div className={`p-4 rounded-lg w-full ${isCorrect ? 'bg-green-50 border border-green-100' : 'bg-red-50 border border-red-100'}`}>
-                    <div className="flex items-center gap-2 font-bold mb-2">
-                      {isCorrect ? (
-                        <span className="text-green-700 flex items-center gap-1"><CheckCircle size={20}/> Correct!</span>
-                      ) : (
-                        <span className="text-red-700 flex items-center gap-1"><XCircle size={20}/> Wrong. Answer: {q.answer}</span>
-                      )}
-                    </div>
-                    <p className="text-slate-700 text-sm leading-relaxed">
-                      {q.explanation}
-                    </p>
+          const verbsData = [
+            { word: "acquire", level: 4, meaning: "獲得；習得", note: "acquire knowledge/skills (習得知識/技能)。常考與 require (要求) 的辨析。" },
+            { word: "adapt", level: 4, meaning: "適應；改編", note: "adapt to (適應環境)。111年考過生物適應環境的議題。注意與 adopt (採用/領養) 區分。" },
+            { word: "alter", level: 3, meaning: "改變", note: "alter slightly (稍作改變)。常替換 change, modify。" },
+            { word: "anticipate", level: 4, meaning: "預期；期望", note: "anticipate changes。常用於描述科技或社會趨勢的預測。" },
+            { word: "associate", level: 4, meaning: "聯想；與...有關", note: "be associated with (與...有關連)。閱讀題常考因果關係或相關性。" },
+            { word: "attribute", level: 4, meaning: "把...歸因於", note: "attribute A to B (把A歸因於B)。寫作與閱讀的高頻字。" },
+            { word: "decline", level: 4, meaning: "下降；婉拒", note: "sharp decline (急遽下降)。圖表題必備單字。" },
+            { word: "demonstrate", level: 4, meaning: "示範；顯示；示威", note: "實驗結果顯示 (studies demonstrate...)。" },
+            { word: "encounter", level: 4, meaning: "遭遇；遇到", note: "encounter difficulties (遇到困難)。常出現於記敘文或人物傳記。" },
+            { word: "establish", level: 3, meaning: "建立", note: "establish a connection。同義詞：set up, found。" },
+            { word: "evaluate", level: 4, meaning: "評估", note: "evaluate the performance。混合題常問作者如何「評估」某個現象。" },
+            { word: "expose", level: 3, meaning: "暴露；接觸", note: "be exposed to (暴露於/接觸到)。常考陽光曝曬或孩童接觸媒體暴力。" },
+            { word: "indicate", level: 3, meaning: "指出；顯示", note: "研究指出 (research indicates)。閱讀測驗細節題關鍵字。" },
+            { word: "maintain", level: 3, meaning: "維持；主張", note: "maintain a balance (維持平衡)。" },
+            { word: "observe", level: 3, meaning: "觀察；遵守", note: "observe the rules (遵守規則) 是易錯點。" },
+            { word: "overcome", level: 3, meaning: "克服", note: "overcome obstacles/challenges (克服障礙/挑戰)。" },
+            { word: "preserve", level: 4, meaning: "保存；維護", note: "preserve cultural heritage (保存文化遺產)。環境與文化題型常客。" },
+            { word: "promote", level: 3, meaning: "促進；推銷；升遷", note: "promote health (促進健康)。" },
+            { word: "recommend", level: 3, meaning: "推薦；建議", note: "strongly recommend。" },
+            { word: "reinforce", level: 4, meaning: "強化；加強", note: "reinforce the idea (強化這個觀點)。" },
+            { word: "reveal", level: 3, meaning: "揭露", note: "reveal the truth。同義詞：disclose, unveil。" },
+            { word: "transfer", level: 3, meaning: "轉移；轉乘", note: "file transfer (檔案傳輸)；transfer to another train。" },
+            { word: "transform", level: 4, meaning: "轉變", note: "transform A into B。科技改變生活或是能源轉換的題型。" }
+          ];
+          const adjectivesData = [
+            { word: "accessible", level: 4, meaning: "可存取的；易接近的", note: "accessible to the public。常用於網路資源或無障礙空間話題。" },
+            { word: "alternative", level: 4, meaning: "替代的；另類的", note: "alternative energy (替代能源)。環保議題必考。" },
+            { word: "annual", level: 3, meaning: "每年的", note: "annual income/report。" },
+            { word: "anxious", level: 4, meaning: "焦慮的；渴望的", note: "anxious about (對...感到焦慮)。心理健康議題常見。" },
+            { word: "appropriate", level: 4, meaning: "適當的", note: "take appropriate action。同義詞：proper, suitable。" },
+            { word: "artificial", level: 4, meaning: "人造的", note: "Artificial Intelligence (AI)；artificial flavors (人工香料)。" },
+            { word: "available", level: 3, meaning: "可取得的；有空的", note: "最基礎但最高頻，聽力與閱讀都常出現。" },
+            { word: "aware", level: 3, meaning: "意識到的", note: "be aware of。環保意識 (environmental awareness) 常考名詞形。" },
+            { word: "confused", level: 3, meaning: "困惑的", note: "常用於情緒題。注意 confusing (令人困惑的) 的區別。" },
+            { word: "conservative", level: 4, meaning: "保守的", note: "conservative estimate (保守估計)。" },
+            { word: "consistent", level: 4, meaning: "一致的；始終如一的", note: "consistent with (與...一致)。邏輯連貫性的關鍵字。" },
+            { word: "considerable", level: 4, meaning: "相當大的；重要的", note: "considerable amount。注意與 considerate (體貼的) 區分。" },
+            { word: "crucial", level: 4, meaning: "決定性的；關鍵的", note: "play a crucial role (扮演關鍵角色)。寫作加分字。" },
+            { word: "current", level: 3, meaning: "目前的；現行的", note: "current trends (目前趨勢)。" },
+            { word: "diverse", level: 4, meaning: "多樣的", note: "culturally diverse。多樣性 (Diversity) 是近年社會題主流。" },
+            { word: "domestic", level: 4, meaning: "國內的；家庭的", note: "domestic violence (家暴)；domestic market (國內市場)。" },
+            { word: "efficient", level: 4, meaning: "有效率的", note: "energy-efficient (節能的)。" },
+            { word: "essential", level: 4, meaning: "必要的；本質的", note: "It is essential that...。同義詞：vital, necessary。" },
+            { word: "financial", level: 4, meaning: "財務的", note: "financial crisis (金融危機)。" },
+            { word: "gradual", level: 4, meaning: "逐漸的", note: "gradual change。氣候變遷常用字。" },
+            { word: "mental", level: 3, meaning: "心理的；心智的", note: "mental health (心理健康)。近年超高頻。" },
+            { word: "negative", level: 3, meaning: "負面的", note: "negative impact。" },
+            { word: "obvious", level: 3, meaning: "明顯的", note: "It is obvious that...。同義詞：apparent, evident。" },
+            { word: "potential", level: 4, meaning: "潛在的；可能的", note: "potential customers/risks。" },
+            { word: "precise", level: 4, meaning: "精確的", note: "precise measurements。科學題型常用。" },
+            { word: "psychological", level: 4, meaning: "心理(學)的", note: "psychological effects。" },
+            { word: "reluctant", level: 5, meaning: "不情願的", note: "be reluctant to V。形容人物態度的關鍵字。" },
+            { word: "significant", level: 4, meaning: "重要的；顯著的", note: "significant improvement。圖表分析寫作必備。" },
+            { word: "specific", level: 3, meaning: "特定的；具體的", note: "be specific about。" },
+            { word: "sustainable", level: 5, meaning: "永續的", note: "sustainable development (永續發展)。108課綱核心關鍵字。" },
+            { word: "unique", level: 3, meaning: "獨特的", note: "unique to (某地特有的)。" },
+            { word: "vulnerable", level: 5, meaning: "易受傷的；脆弱的", note: "be vulnerable to (易受...影響)。常考老年人易受疾病感染，或地區易受災害影響。" }
+          ];
+          const nounsData = [
+            { word: "access", level: 4, meaning: "途徑；使用權", note: "have access to (得以使用/進入)。" },
+            { word: "application", level: 3, meaning: "申請；應用", note: "mobile apps (應用程式)；job application。" },
+            { word: "aspect", level: 3, meaning: "方面；層面", note: "every aspect of life。" },
+            { word: "barrier", level: 3, meaning: "障礙", note: "language barrier (語言隔閡)。" },
+            { word: "campaign", level: 4, meaning: "活動(社會/政治)", note: "launch a campaign (發起活動)。" },
+            { word: "characteristic", level: 4, meaning: "特徵", note: "defining characteristic。同義詞：feature, trait。" },
+            { word: "circumstance", level: 4, meaning: "情況；環境", note: "under no circumstances (絕不) — 倒裝句考點。" },
+            { word: "consequence", level: 4, meaning: "後果", note: "as a consequence (因此)。" },
+            { word: "convention", level: 4, meaning: "慣例；大會；習俗", note: "social conventions。打破傳統 (break conventions) 常考。" },
+            { word: "decline", level: 4, meaning: "下降；衰退", note: "既是動詞也是名詞。in decline。" },
+            { word: "disaster", level: 3, meaning: "災難", note: "natural disaster。" },
+            { word: "emphasis", level: 4, meaning: "強調", note: "put emphasis on。" },
+            { word: "evidence", level: 3, meaning: "證據", note: "scientific evidence。" },
+            { word: "factor", level: 3, meaning: "因素", note: "key factor。" },
+            { word: "impact", level: 4, meaning: "衝擊；影響", note: "have a huge impact on。寫作萬用字。" },
+            { word: "infection", level: 4, meaning: "感染", note: "viral infection。疫情相關文章必備。" },
+            { word: "innovation", level: 5, meaning: "創新", note: "technological innovation。" },
+            { word: "interaction", level: 4, meaning: "互動", note: "social interaction。" },
+            { word: "measure", level: 3, meaning: "措施；測量", note: "take measures to V (採取措施去...)。" },
+            { word: "phenomenon", level: 4, meaning: "現象", note: "natural phenomenon。複數形是 phenomena。" },
+            { word: "priority", level: 4, meaning: "優先事項", note: "top priority。" },
+            { word: "reduction", level: 4, meaning: "減少", note: "carbon reduction (減碳)。" },
+            { word: "resident", level: 4, meaning: "居民", note: "local residents。" },
+            { word: "resource", level: 3, meaning: "資源", note: "natural resources。" },
+            { word: "solution", level: 3, meaning: "解決方法", note: "solution to the problem (介系詞用 to)。" },
+            { word: "strategy", level: 4, meaning: "策略", note: "adopt a strategy。" },
+            { word: "survey", level: 3, meaning: "調查", note: "conduct a survey。" },
+            { word: "technology", level: 3, meaning: "科技", note: "及其變化形：technological, technician。" },
+            { word: "trend", level: 3, meaning: "趨勢", note: "current trend。" },
+            { word: "victim", level: 3, meaning: "受害者", note: "fall victim to (成為...的受害者)。" }
+          ];
+          const adverbsData = [
+            { word: "approximately", desc: "大約 (圖表數據題)" },
+            { word: "automatically", desc: "自動地" },
+            { word: "constantly", desc: "不斷地 (Level 4, 常用於強調習慣或持續的現象)" },
+            { word: "currently", desc: "目前地" },
+            { word: "deliberately", desc: "故意地 (Level 5, 同義：intentionally)" },
+            { word: "eventually", desc: "最終 (強調經過長時間後的結果)" },
+            { word: "frequently", desc: "頻繁地" },
+            { word: "gradually", desc: "逐漸地 (描述改變過程)" },
+            { word: "relatively", desc: "相對地 (be relatively cheap/easy)" },
+            { word: "temporarily", desc: "暫時地" }
+          ];
+
+          const confusingPairs = [
+            { pair: "adapt / adopt / adept", desc: "適應(改編) / 採用(領養) / 熟練的" },
+            { pair: "affect / effect", desc: "影響(v.) / 效果(n.)" },
+            { pair: "considerable / considerate", desc: "相當大的 / 體貼的" },
+            { pair: "economic / economical", desc: "經濟上的 / 節約的" },
+            { pair: "respectful / respective / respectable", desc: "恭敬的 / 分別的 / 值得尊敬的" }
+          ];
+          const tipsData = [
+            { title: "情境記憶", content: "不要死背中文。例如背 accessible 時，想著「WIFI is accessible here」或「Wheelchair accessible」。" },
+            { title: "注意多義字", content: "學測愛考熟詞生義。例如 observe (慶祝/遵守)、consume (吃喝)、address (演說/處理)。" },
+            { title: "關鍵 Level 5", content: "若目標是前標或頂標，vulnerable, reluctant, innovation, sustainable 這類字是閱讀測驗的分水嶺。" }
+          ];
+          // ==========================================
+          // AI Question Bank (Simulation)
+          // ==========================================
+          
+          // Expanded pool of questions generated based on the high-freq vocab list
+          const fullQuestionBank = [
+            {
+              id: 1,
+              question: "The government has decided to _____ new measures to combat climate change, focusing on reducing carbon emissions.",
+              options: ["A) acquire", "B) adopt", "C) adapt", "D) associate"],
+              answer: "B",
+              explanation: "解析：(B) adopt 採用(措施/方法)。語意為「政府決定採取新措施...」。(A)獲得 (C)適應/改編 (D)聯想，皆不合語意。注意 adapt (適應) 與 adopt (採用) 的區別。"
+            },
+            {
+              id: 2,
+              question: "Elderly people are particularly _____ to the flu, so it is recommended that they get vaccinated every year.",
+              options: ["A) reluctant", "B) sustainable", "C) vulnerable", "D) efficient"],
+              answer: "C",
+              explanation: "解析：(C) vulnerable 易受傷害/影響的。be vulnerable to 是慣用法，意指「易受流感感染」。(A)不情願的 (B)永續的 (D)有效率的。"
+            },
+            {
+              id: 3,
+              question: "It is _____ that all students attend the orientation to understand the school regulations.",
+              options: ["A) essential", "B) diverse", "C) artificial", "D) vague"],
+              answer: "A",
+              explanation: "解析：(A) essential 必要的。句型 It is essential that ... (某事是必要的)。(B)多樣的 (C)人造的 (D)模糊的。"
+            },
+            {
+              id: 4,
+              question: "Despite the bad weather, the athlete _____ his training routine to prepare for the upcoming Olympics.",
+              options: ["A) observed", "B) maintained", "C) estimated", "D) collapsed"],
+              answer: "B",
+              explanation: "解析：(B) maintained 維持。maintain one's routine 維持慣例。(A)觀察/遵守 (C)估計 (D)倒塌。"
+            },
+            {
+              id: 5,
+              question: "Technological _____ has changed the way we communicate, making it much faster and more convenient.",
+              options: ["A) convention", "B) innovation", "C) barrier", "D) victim"],
+              answer: "B",
+              explanation: "解析：(B) innovation 創新。Technological innovation (科技創新) 是高頻搭配詞。(A)慣例/大會 (C)障礙 (D)受害者。"
+            },
+            {
+              id: 6,
+              question: "Before making a decision, we need to _____ all possible risks and benefits carefully.",
+              options: ["A) evaluate", "B) promote", "C) encounter", "D) expose"],
+              answer: "A",
+              explanation: "解析：(A) evaluate 評估。語意為「我們需要仔細評估所有可能的風險與利益」。(B)促進 (C)遭遇 (D)暴露。"
+            },
+            {
+              id: 7,
+              question: "The company's profits have been in _____ for three consecutive years due to the economic recession.",
+              options: ["A) priority", "B) decline", "C) access", "D) survey"],
+              answer: "B",
+              explanation: "解析：(B) decline 下降/衰退。in decline 為片語，意指「處於衰退中」。(A)優先事項 (C)途徑 (D)調查。"
+            },
+            {
+              id: 8,
+              question: "To protect the environment, many countries are looking for _____ energy sources like solar and wind power.",
+              options: ["A) alternative", "B) anxious", "C) reluctant", "D) obvious"],
+              answer: "A",
+              explanation: "解析：(A) alternative 替代的。alternative energy (替代能源) 為高頻搭配詞。(B)焦慮的 (C)不情願的 (D)明顯的。"
+            },
+            {
+              id: 9,
+              question: "The study _____ a strong link between lack of sleep and poor academic performance.",
+              options: ["A) transfers", "B) reveals", "C) acquires", "D) preserves"],
+              answer: "B",
+              explanation: "解析：(B) reveals 揭露/顯示。研究(study)顯示結果，常用 reveal 或 indicate。(A)轉移 (C)獲得 (D)保存。"
+            },
+            {
+              id: 10,
+              question: "It is important to be _____ of your surroundings when walking alone at night.",
+              options: ["A) aware", "B) consistent", "C) mental", "D) domestic"],
+              answer: "A",
+              explanation: "解析：(A) aware 意識到的。be aware of 為慣用語。(B)一致的 (C)心理的 (D)國內的/家庭的。"
+            },
+            {
+              id: 11,
+              question: "The new policy aims to _____ gender equality in the workplace.",
+              options: ["A) promote", "B) decline", "C) overcome", "D) anticipate"],
+              answer: "A",
+              explanation: "解析：(A) promote 促進。促進性別平等 (promote equality)。(B)下降 (C)克服 (D)預期。"
+            },
+            {
+              id: 12,
+              question: "Since the evidence was not _____, the judge could not make a final decision immediately.",
+              options: ["A) consistent", "B) reluctant", "C) artificial", "D) annual"],
+              answer: "A",
+              explanation: "解析：(A) consistent 一致的。指證據前後不一或與事實不符。(B)不情願的 (C)人造的 (D)每年的。"
+            },
+            {
+              id: 13,
+              question: "Many students feel _____ about their future careers because of the rapidly changing job market.",
+              options: ["A) efficient", "B) anxious", "C) specific", "D) potential"],
+              answer: "B",
+              explanation: "解析：(B) anxious 焦慮的。feel anxious about 對...感到焦慮。(A)有效率的 (C)具體的 (D)潛在的。"
+            },
+            {
+              id: 14,
+              question: "Without a common language, the two groups faced a significant _____ to communication.",
+              options: ["A) barrier", "B) resource", "C) strategy", "D) convention"],
+              answer: "A",
+              explanation: "解析：(A) barrier 障礙。language barrier (語言隔閡)。(B)資源 (C)策略 (D)慣例。"
+            },
+            {
+              id: 15,
+              question: "We need to find a _____ solution to the problem, rather than just a temporary fix.",
+              options: ["A) sustainable", "B) gradual", "C) psychological", "D) negative"],
+              answer: "A",
+              explanation: "解析：(A) sustainable 永續的/可持續的。與 temporary (暫時的) 形成對比。(B)逐漸的 (C)心理的 (D)負面的。"
+            }
+          ];
+          // Helper to shuffle and pick N items
+          const getRandomQuestions = (n) => {
+            const shuffled = [...fullQuestionBank].sort(() => 0.5 - Math.random());
+            return shuffled.slice(0, n);
+          };
+
+          // ==========================================
+          // Components
+          // ==========================================
+
+          const RevealableText = ({ text, isMasked }) => {
+            const [isRevealed, setIsRevealed] = useState(false);
+            // 當全域遮蔽狀態改變(重置)時，將個別顯示狀態設為 false
+            useEffect(() => {
+              setIsRevealed(false);
+            }, [isMasked]);
+            const show = !isMasked || isRevealed;
+
+            return (
+              <div 
+                onClick={() => isMasked && setIsRevealed(!isRevealed)}
+                className={`transition-all duration-300 relative rounded px-2 py-1 -ml-2 select-none ${isMasked ? 'cursor-pointer hover:bg-slate-100' : ''}`}
+              >
+                <div className={`transition-all duration-300 ${!show ? 'blur-sm bg-slate-200 text-slate-200' : 'text-slate-600'}`}>
+                  {text}
+                </div>
+                {!show && (
+                  <div className="absolute inset-0 flex items-center justify-center text-slate-500 text-xs font-bold pointer-events-none">
+                    <EyeOff size={14} className="mr-1" /> 點擊顯示
                   </div>
                 )}
               </div>
+            );
+          };
+
+          const TableView = ({ data }) => {
+            return (
+              <div className="overflow-x-auto rounded-lg border border-slate-200 shadow-sm bg-white">
+                <table className="w-full text-left text-sm">
+                  <thead className="bg-slate-100 text-slate-700 font-semibold">
+                    <tr>
+                      <th className="p-4 w-1/4">單字 (Word)</th>
+                      <th className="p-4 w-20 text-center">級別</th>
+                      <th className="p-4 w-1/4">
+                        <div className="flex items-center gap-2">
+                          中文釋義
+                          {isMasked && <span className="text-xs font-normal text-amber-600 bg-amber-100 px-2 py-0.5 rounded-full">點擊查看</span>}
+                        </div>
+                      </th>
+                      <th className="p-4">歷屆考點與搭配</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 bg-white">
+                    {data.map((item, idx) => (
+                      <tr key={idx} className="hover:bg-slate-50 transition-colors">
+                        <td className="p-4 font-bold text-slate-800 text-lg">{item.word}</td>
+                        <td className="p-4 text-center">
+                          <span className={`inline-block px-2 py-1 rounded text-xs font-bold ${item.level >= 5 ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700'}`}>
+                            L{item.level}
+                          </span>
+                        </td>
+                        <td className="p-4">
+                          <RevealableText text={item.meaning} isMasked={isMasked} />
+                        </td>
+                        <td className="p-4 text-slate-600 leading-relaxed text-sm">{item.note}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            );
+          };
+
+          const PracticeMode = () => {
+            const [questions, setQuestions] = useState([]);
+            const [selectedAnswers, setSelectedAnswers] = useState({});
+            const [showResults, setShowResults] = useState({});
+            const [loading, setLoading] = useState(false);
+            // Initial load
+            useEffect(() => {
+              generateNewTest();
+            }, []);
+            const generateNewTest = () => {
+              setLoading(true);
+              // Simulate AI thinking time
+              setTimeout(() => {
+                setQuestions(getRandomQuestions(5));
+                setSelectedAnswers({});
+                setShowResults({});
+                setLoading(false);
+              }, 600);
+            };
+
+            const handleSelect = (qId, optionPrefix) => {
+              if (showResults[qId]) return;
+              setSelectedAnswers(prev => ({...prev, [qId]: optionPrefix}));
+            };
+
+            const checkAnswer = (qId) => {
+              setShowResults(prev => ({...prev, [qId]: true}));
+            };
+
+            return (
+              <div className="space-y-6 max-w-4xl mx-auto">
+                <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                  <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div>
+                      <h2 className="text-xl font-bold text-slate-800 mb-2 flex items-center gap-2">
+                        <BrainCircuit className="text-indigo-600" />
+                        AI 仿真學測題庫 (詞彙題)
+                      </h2>
+                      <p className="text-slate-600 text-sm">
+                        系統已從核心單字庫中隨機生成試卷。
+                      </p>
+                    </div>
+                    <button 
+                      onClick={generateNewTest}
+                      className="flex items-center gap-2 px-5 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors shadow-md active:scale-95"
+                    >
+                      <RefreshCw size={18} className={loading ? 'animate-spin' : ''} />
+                      {loading ? '生成中...' : '生成新試卷'}
+                    </button>
+                  </div>
+                </div>
+
+                {questions.map((q, index) => {
+                  const userAns = selectedAnswers[q.id];
+                  const isChecked = showResults[q.id];
+                  const isCorrect = userAns === q.answer;
+                  return (
+                    <div key={q.id} className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 transition-all hover:shadow-md animate-fade-in-up">
+                      <div className="flex gap-3 mb-4">
+                        <span className="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-indigo-100 text-indigo-700 font-bold rounded-full">
+                          {index + 1}
+                        </span>
+                        <p className="text-lg text-slate-800 font-medium leading-relaxed">
+                          {q.question.split('_____').map((part, i, arr) => (
+                            <React.Fragment key={i}>
+                              {part}
+                              {i < arr.length - 1 && (
+                                <span className={`inline-block border-b-2 w-20 mx-1 text-center font-bold transition-colors ${isChecked ? (isCorrect ? 'border-green-500 text-green-600' : 'border-red-500 text-red-600') : 'border-slate-300 text-blue-600'}`}>
+                                   {isChecked ? (q.answer === userAns ? userAns : (userAns || '')) : (userAns || '')}
+                                </span>
+                              )}
+                            </React.Fragment>
+                          ))}
+                        </p>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 ml-11">
+                        {q.options.map(opt => {
+                          const optPrefix = opt.charAt(0);
+                          let btnClass = "border-slate-200 hover:bg-slate-50 text-slate-600";
+                          
+                          if (userAns === optPrefix) {
+                            btnClass = "border-indigo-500 bg-indigo-50 text-indigo-700 font-semibold ring-1 ring-indigo-500";
+                          }
+
+                          if (isChecked) {
+                            if (optPrefix === q.answer) {
+                              btnClass = "border-green-500 bg-green-50 text-green-700 font-bold ring-1 ring-green-500";
+                            } else if (userAns === optPrefix && userAns !== q.answer) {
+                              btnClass = "border-red-300 bg-red-50 text-red-600 opacity-60";
+                            } else {
+                              btnClass = "opacity-50 grayscale border-slate-100";
+                            }
+                          }
+
+                          return (
+                            <button
+                              key={opt}
+                              onClick={() => handleSelect(q.id, optPrefix)}
+                              disabled={isChecked}
+                              className={`text-left px-4 py-3 rounded-lg border transition-all flex items-center justify-between ${btnClass}`}
+                            >
+                              <span>{opt}</span>
+                              {isChecked && optPrefix === q.answer && <CheckCircle size={18} className="text-green-600" />}
+                              {isChecked && userAns === optPrefix && userAns !== q.answer && <XCircle size={18} className="text-red-500" />}
+                            </button>
+                          );
+                        })}
+                      </div>
+
+                      <div className="mt-6 ml-11 flex items-center justify-between">
+                        {!isChecked ? (
+                           <button
+                            onClick={() => checkAnswer(q.id)}
+                            disabled={!userAns}
+                            className={`px-6 py-2 rounded-lg font-bold text-white transition-all ${userAns ? 'bg-indigo-600 hover:bg-indigo-700 shadow-md hover:shadow-lg' : 'bg-slate-300 cursor-not-allowed'}`}
+                          >
+                             檢查答案
+                           </button>
+                        ) : (
+                          <div className={`p-4 rounded-lg w-full ${isCorrect ? 'bg-green-50 border border-green-100' : 'bg-red-50 border border-red-100'}`}>
+                            <div className="flex items-center gap-2 font-bold mb-2">
+                              {isCorrect ? (
+                                <span className="text-green-700 flex items-center gap-1"><CheckCircle size={20}/> Correct!</span>
+                              ) : (
+                                <span className="text-red-700 flex items-center gap-1"><XCircle size={20}/> Wrong. Answer: {q.answer}</span>
+                              )}
+                            </div>
+                            <p className="text-slate-700 text-sm leading-relaxed">
+                              {q.explanation}
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            );
+          };
+          // ==========================================
+          // Render
+          // ==========================================
+
+          return (
+            <div className="min-h-screen bg-slate-50 text-slate-800 font-sans selection:bg-indigo-200">
+              
+              {/* Header */}
+              <header className="bg-gradient-to-r from-blue-700 to-indigo-800 text-white pt-12 pb-24 px-6 relative overflow-hidden">
+                <div className="max-w-5xl mx-auto relative z-10">
+                  <div className="flex items-center gap-3 mb-4 opacity-80">
+                    <GraduationCap size={24} />
+                    <span className="text-sm font-bold tracking-wider uppercase">學測英文備考專區</span>
+                  </div>
+                  <h1 className="text-3xl md:text-5xl font-extrabold mb-4 leading-tight">
+                    歷屆學測英文高頻單字與試題分析
+                  </h1>
+                </div>
+                <div className="absolute top-0 right-0 w-64 h-64 bg-white opacity-5 rounded-full -mr-16 -mt-16 blur-3xl"></div>
+                <div className="absolute bottom-0 left-10 w-48 h-48 bg-blue-400 opacity-10 rounded-full blur-2xl"></div>
+              </header>
+
+              <main className="max-w-5xl mx-auto px-4 -mt-16 relative z-20 pb-20">
+                
+                {/* Controls */}
+                <div className="bg-white rounded-xl shadow-lg p-4 mb-8">
+                  <div className="flex flex-col lg:flex-row gap-4 justify-between items-center">
+                    
+                    {/* Tabs */}
+                    <div className="flex overflow-x-auto w-full lg:w-auto gap-2 pb-2 lg:pb-0 scrollbar-hide">
+                      {[
+                        { id: 'verbs', label: '核心動詞', icon: PenTool },
+                        { id: 'adj', label: '關鍵形容詞', icon: Hash },
+                        { id: 'nouns', label: '抽象名詞', icon: BookOpen },
+                        { id: 'adv', label: '副詞與辨析', icon: AlertCircle },
+                        { id: 'practice', label: '實戰模考', icon: BrainCircuit },
+                        { id: 'tips', label: '給考生的話', icon: Lightbulb },
+                      ].map(tab => (
+                        <button
+                          key={tab.id}
+                          onClick={() => setActiveTab(tab.id)}
+                          className={`flex items-center gap-2 px-4 py-2.5 rounded-lg whitespace-nowrap transition-all font-medium text-sm border ${
+                            activeTab === tab.id 
+                              ? 'bg-indigo-600 text-white border-indigo-600 shadow-md transform scale-105' 
+                              : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50 hover:border-slate-300'
+                          }`}
+                        >
+                          <tab.icon size={16} />
+                          {tab.label}
+                        </button>
+                      ))}
+                    </div>
+
+                    {/* Mask Toggle (Visible for list views) */}
+                    {(activeTab !== 'practice' && activeTab !== 'tips') && (
+                      <button 
+                        onClick={() => setIsMasked(!isMasked)}
+                        className={`flex items-center gap-2 px-4 py-2.5 rounded-lg font-bold text-sm transition-all shadow-sm border ${
+                            isMasked 
+                            ? 'bg-amber-100 text-amber-800 border-amber-300 ring-2 ring-amber-200' 
+                              : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
+                        }`}
+                      >
+                        {isMasked ? <EyeOff size={18} /> : <Eye size={18} />}
+                        {isMasked ? '背單字模式：開啟' : '背單字模式：關閉'}
+                      </button>
+                    )}
+                  </div>
+                </div>
+
+                {/* Content Area */}
+                <div className="animate-fade-in">
+                  
+                  {/* Section Description */}
+                  <div className="mb-6">
+                    {activeTab === 'verbs' && <div className="text-slate-600 font-medium border-l-4 border-blue-500 pl-4 py-1"> Part 1. 必考核心動詞：常出現於詞彙題選項或閱讀測驗的關鍵動作。</div>}
+                    {activeTab === 'adj' && <div className="text-slate-600 font-medium border-l-4 border-purple-500 pl-4 py-1"> Part 2. 高頻關鍵形容詞：決定語氣與態度，是判斷「作者立場」的關鍵。</div>}
+                    {activeTab === 'nouns' && <div className="text-slate-600 font-medium border-l-4 border-emerald-500 pl-4 py-1"> Part 3. 抽象與學術名詞：閱讀測驗中若看不懂，往往會導致整段大意抓不到。</div>}
+                    {activeTab === 'adv' && <div className="text-slate-600 font-medium border-l-4 border-amber-500 pl-4 py-1"> Part 4. 易混淆與高頻副詞：掌握語氣轉折與程度，對克漏字拿分至關重要。</div>}
+                    {activeTab === 'practice' && <div className="text-slate-600 font-medium border-l-4 border-indigo-500 pl-4 py-1"> Part 5. 實戰練習：AI 隨機生成題目，請多加利用「生成新試卷」功能。</div>}
+                  </div>
+
+                  {/* Tables with Masking */}
+                  {activeTab === 'verbs' && <TableView data={verbsData} />}
+                  {activeTab === 'adj' && <TableView data={adjectivesData} />}
+                  {activeTab === 'nouns' && <TableView data={nounsData} />}
+
+                  {/* Practice Mode */}
+                  {activeTab === 'practice' && <PracticeMode />}
+
+                  {/* Adverbs & Confusing Pairs View (Updated with Masking) */}
+                  {activeTab === 'adv' && (
+                    <div className="grid md:grid-cols-2 gap-6">
+                      
+                      {/* Adverbs List */}
+                      <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                        <h3 className="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
+                          <span className="w-2 h-6 bg-amber-500 rounded-full"></span>
+                          高頻副詞
+                        </h3>
+                        <ul className="space-y-3">
+                          {adverbsData.map((item, idx) => (
+                            <li key={idx} className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between border-b border-slate-50 pb-2 last:border-0 hover:bg-slate-50 p-2 rounded transition-colors">
+                              <span className="font-bold text-blue-700 font-mono text-lg mr-2">{item.word}</span>
+                              <span className="flex-1 text-right sm:text-left">
+                                <RevealableText text={item.desc} isMasked={isMasked} />
+                              </span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      {/* Confusing Pairs */}
+                      <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                        <h3 className="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
+                          <span className="w-2 h-6 bg-red-500 rounded-full"></span>
+                          重點辨析 (必背)
+                        </h3>
+                        <div className="space-y-4">
+                          {confusingPairs.map((item, idx) => (
+                            <div key={idx} className="bg-slate-50 p-4 rounded-lg border border-slate-100">
+                              <div className="font-bold text-slate-800 mb-2 font-mono">{item.pair}</div>
+                              <RevealableText text={item.desc} isMasked={isMasked} />
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Tips View */}
+                  {activeTab === 'tips' && (
+                    <div className="grid md:grid-cols-3 gap-6">
+                      {tipsData.map((tip, idx) => (
+                        <div key={idx} className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition-shadow relative overflow-hidden group">
+                          <div className="absolute top-0 right-0 w-24 h-24 bg-blue-100 rounded-full -mr-12 -mt-12 opacity-50 group-hover:scale-110 transition-transform"></div>
+                          <h3 className="text-xl font-bold text-slate-800 mb-4 relative z-10">{tip.title}</h3>
+                          <p className="text-slate-600 leading-relaxed relative z-10">{tip.content}</p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                </div>
+              </main>
+
+              <footer className="bg-slate-800 text-slate-400 py-8 text-center text-sm">
+                <p>歷屆學測英文高頻單字與試題分析</p>
+                <p className="mt-2 text-slate-500">Based on GSAT English Exam Trends</p>
+              </footer>
             </div>
           );
-        })}
-      </div>
-    );
-  };
+        };
 
-  // ==========================================
-  // Render
-  // ==========================================
+        // export default VocabularyApp; // 瀏覽器不需要這行，改用下方掛載
 
-  return (
-    <div className="min-h-screen bg-slate-50 text-slate-800 font-sans selection:bg-indigo-200">
-      
-      {/* Header */}
-      <header className="bg-gradient-to-r from-blue-700 to-indigo-800 text-white pt-12 pb-24 px-6 relative overflow-hidden">
-        <div className="max-w-5xl mx-auto relative z-10">
-          <div className="flex items-center gap-3 mb-4 opacity-80">
-            <GraduationCap size={24} />
-            <span className="text-sm font-bold tracking-wider uppercase">學測英文備考專區</span>
-          </div>
-          <h1 className="text-3xl md:text-5xl font-extrabold mb-4 leading-tight">
-            歷屆學測英文高頻單字與試題分析
-          </h1>
-        </div>
-        <div className="absolute top-0 right-0 w-64 h-64 bg-white opacity-5 rounded-full -mr-16 -mt-16 blur-3xl"></div>
-        <div className="absolute bottom-0 left-10 w-48 h-48 bg-blue-400 opacity-10 rounded-full blur-2xl"></div>
-      </header>
-
-      <main className="max-w-5xl mx-auto px-4 -mt-16 relative z-20 pb-20">
-        
-        {/* Controls */}
-        <div className="bg-white rounded-xl shadow-lg p-4 mb-8">
-          <div className="flex flex-col lg:flex-row gap-4 justify-between items-center">
-            
-            {/* Tabs */}
-            <div className="flex overflow-x-auto w-full lg:w-auto gap-2 pb-2 lg:pb-0 scrollbar-hide">
-              {[
-                { id: 'verbs', label: '核心動詞', icon: PenTool },
-                { id: 'adj', label: '關鍵形容詞', icon: Hash },
-                { id: 'nouns', label: '抽象名詞', icon: BookOpen },
-                { id: 'adv', label: '副詞與辨析', icon: AlertCircle },
-                { id: 'practice', label: '實戰模考', icon: BrainCircuit },
-                { id: 'tips', label: '給考生的話', icon: Lightbulb },
-              ].map(tab => (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center gap-2 px-4 py-2.5 rounded-lg whitespace-nowrap transition-all font-medium text-sm border ${
-                    activeTab === tab.id 
-                    ? 'bg-indigo-600 text-white border-indigo-600 shadow-md transform scale-105' 
-                    : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50 hover:border-slate-300'
-                  }`}
-                >
-                  <tab.icon size={16} />
-                  {tab.label}
-                </button>
-              ))}
-            </div>
-
-            {/* Mask Toggle (Visible for list views) */}
-            {(activeTab !== 'practice' && activeTab !== 'tips') && (
-              <button 
-                onClick={() => setIsMasked(!isMasked)}
-                className={`flex items-center gap-2 px-4 py-2.5 rounded-lg font-bold text-sm transition-all shadow-sm border ${
-                    isMasked 
-                    ? 'bg-amber-100 text-amber-800 border-amber-300 ring-2 ring-amber-200' 
-                    : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
-                }`}
-              >
-                {isMasked ? <EyeOff size={18} /> : <Eye size={18} />}
-                {isMasked ? '背單字模式：開啟' : '背單字模式：關閉'}
-              </button>
-            )}
-          </div>
-        </div>
-
-        {/* Content Area */}
-        <div className="animate-fade-in">
-          
-          {/* Section Description */}
-          <div className="mb-6">
-            {activeTab === 'verbs' && <div className="text-slate-600 font-medium border-l-4 border-blue-500 pl-4 py-1"> Part 1. 必考核心動詞：常出現於詞彙題選項或閱讀測驗的關鍵動作。</div>}
-            {activeTab === 'adj' && <div className="text-slate-600 font-medium border-l-4 border-purple-500 pl-4 py-1"> Part 2. 高頻關鍵形容詞：決定語氣與態度，是判斷「作者立場」的關鍵。</div>}
-            {activeTab === 'nouns' && <div className="text-slate-600 font-medium border-l-4 border-emerald-500 pl-4 py-1"> Part 3. 抽象與學術名詞：閱讀測驗中若看不懂，往往會導致整段大意抓不到。</div>}
-            {activeTab === 'adv' && <div className="text-slate-600 font-medium border-l-4 border-amber-500 pl-4 py-1"> Part 4. 易混淆與高頻副詞：掌握語氣轉折與程度，對克漏字拿分至關重要。</div>}
-            {activeTab === 'practice' && <div className="text-slate-600 font-medium border-l-4 border-indigo-500 pl-4 py-1"> Part 5. 實戰練習：AI 隨機生成題目，請多加利用「生成新試卷」功能。</div>}
-          </div>
-
-          {/* Tables with Masking */}
-          {activeTab === 'verbs' && <TableView data={verbsData} />}
-          {activeTab === 'adj' && <TableView data={adjectivesData} />}
-          {activeTab === 'nouns' && <TableView data={nounsData} />}
-
-          {/* Practice Mode */}
-          {activeTab === 'practice' && <PracticeMode />}
-
-          {/* Adverbs & Confusing Pairs View (Updated with Masking) */}
-          {activeTab === 'adv' && (
-            <div className="grid md:grid-cols-2 gap-6">
-              
-              {/* Adverbs List */}
-              <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
-                <h3 className="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
-                  <span className="w-2 h-6 bg-amber-500 rounded-full"></span>
-                  高頻副詞
-                </h3>
-                <ul className="space-y-3">
-                  {adverbsData.map((item, idx) => (
-                    <li key={idx} className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between border-b border-slate-50 pb-2 last:border-0 hover:bg-slate-50 p-2 rounded transition-colors">
-                      <span className="font-bold text-blue-700 font-mono text-lg mr-2">{item.word}</span>
-                      <span className="flex-1 text-right sm:text-left">
-                        <RevealableText text={item.desc} isMasked={isMasked} />
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Confusing Pairs */}
-              <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
-                <h3 className="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
-                  <span className="w-2 h-6 bg-red-500 rounded-full"></span>
-                  重點辨析 (必背)
-                </h3>
-                <div className="space-y-4">
-                  {confusingPairs.map((item, idx) => (
-                    <div key={idx} className="bg-slate-50 p-4 rounded-lg border border-slate-100">
-                      <div className="font-bold text-slate-800 mb-2 font-mono">{item.pair}</div>
-                      <RevealableText text={item.desc} isMasked={isMasked} />
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Tips View */}
-          {activeTab === 'tips' && (
-            <div className="grid md:grid-cols-3 gap-6">
-              {tipsData.map((tip, idx) => (
-                <div key={idx} className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition-shadow relative overflow-hidden group">
-                  <div className="absolute top-0 right-0 w-24 h-24 bg-blue-100 rounded-full -mr-12 -mt-12 opacity-50 group-hover:scale-110 transition-transform"></div>
-                  <h3 className="text-xl font-bold text-slate-800 mb-4 relative z-10">{tip.title}</h3>
-                  <p className="text-slate-600 leading-relaxed relative z-10">{tip.content}</p>
-                </div>
-              ))}
-            </div>
-          )}
-
-        </div>
-      </main>
-
-      <footer className="bg-slate-800 text-slate-400 py-8 text-center text-sm">
-        <p>歷屆學測英文高頻單字與試題分析</p>
-        <p className="mt-2 text-slate-500">Based on GSAT English Exam Trends</p>
-      </footer>
-    </div>
-  );
-};
-
-export default VocabularyApp;
+        // --- 掛載應用程式 ---
+        const container = document.getElementById('root');
+        const root = createRoot(container);
+        root.render(<VocabularyApp />);
+    </script>
+</body>
+</html>
