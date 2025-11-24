@@ -4,11 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>實用生活英文 | Daily Conversation</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- html2canvas for Image Download -->
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 
     <style>
@@ -18,74 +22,110 @@
             color: #1F2937;
             -webkit-font-smoothing: antialiased;
         }
-        .en-font { font-family: 'Inter', sans-serif !important; letter-spacing: -0.01em; }
-        .zh-font { font-family: 'Noto Sans TC', sans-serif !important; }
+        
+        /* Enforce English Font for sentences to fix apostrophe spacing */
+        .en-font {
+            font-family: 'Inter', sans-serif !important;
+            letter-spacing: -0.01em; /* Make English text tighter and neater */
+        }
+
+        /* Enforce Chinese Font */
+        .zh-font {
+            font-family: 'Noto Sans TC', sans-serif !important;
+        }
+        
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #E5E7EB; border-radius: 3px; }
         ::-webkit-scrollbar-thumb:hover { background: #D1D5DB; }
+
         .card-anim { transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); }
         .card-anim:hover { transform: translateY(-4px); box-shadow: 0 12px 24px -6px rgba(0, 0, 0, 0.08); }
+        
         .btn-click:active { transform: scale(0.96); }
+
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        .input-focus:focus { outline: none; box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15); border-color: #6366F1; }
+        
+        .input-focus:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+            border-color: #6366F1;
+        }
+
         .fade-enter { opacity: 0; transform: translateY(10px); }
         .fade-enter-active { opacity: 1; transform: translateY(0); transition: opacity 0.3s, transform 0.3s; }
         .hidden-content { display: none; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
-        .loader { border: 3px solid #f3f3f3; border-radius: 50%; border-top: 3px solid #4f46e5; width: 20px; height: 20px; animation: spin 1s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+        
+        /* Loading Spinner */
+        .loader {
+            border: 3px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 3px solid #4f46e5;
+            width: 20px;
+            height: 20px;
+            -webkit-animation: spin 1s linear infinite; /* Safari */
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col bg-slate-50">
-
-    <nav class="bg-gray-900 text-white shadow-lg sticky top-0 z-[60]">
-        <div class="max-w-6xl mx-auto px-4">
-            <div class="flex justify-between items-center h-16">
-                <a href="index.html" class="font-bold text-xl tracking-wider hover:text-blue-400 transition">
-                    李仲恩英文
-                </a>
-                <div class="hidden md:flex space-x-8">
-                    <a href="index.html" class="hover:text-blue-400 transition duration-300">GSAT 滿級分系統</a>
-                    <a href="vocab.html" class="hover:text-yellow-400 transition duration-300">歷屆高頻單字神器</a>
-                    <a href="conversation.html" class="text-green-400 font-bold border-b-2 border-green-400">實用生活英文</a>
-                    <a href="tutoring.html" class="hover:text-blue-400 transition duration-300">關於我 / 家教課程</a>
-                </div>
-                <div class="md:hidden flex items-center">
-                    <button id="global-mobile-menu-btn" class="outline-none mobile-menu-button">
-                        <svg class="w-6 h-6 hover:text-blue-400" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
-                            <path d="M4 6h16M4 12h16M4 18h16"></path>
-                        </svg>
-                    </button>
-                </div>
+    <nav class="bg-gray-900 text-white shadow-lg sticky top-0 z-[60] mb-0">
+    <div class="max-w-6xl mx-auto px-4">
+        <div class="flex justify-between items-center h-16">
+            <a href="index.html" class="font-bold text-xl tracking-wider hover:text-blue-400 transition">李仲恩英文</a>
+            <div class="hidden md:flex space-x-8">
+                <a href="index.html" class="hover:text-blue-400 transition duration-300">GSAT 滿級分系統</a>
+                <a href="vocab.html" class="hover:text-yellow-400 transition duration-300">歷屆高頻單字神器</a>
+                <a href="conversation.html" class="text-green-400 font-bold border-b-2 border-green-400">實用生活英文</a>
+                <a href="tutoring.html" class="hover:text-purple-400 transition duration-300">關於我 / 家教課程</a>
+            </div>
+            <div class="md:hidden flex items-center">
+                <button onclick="document.getElementById('mobile-menu').classList.toggle('hidden')" class="outline-none hover:text-blue-400">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                </button>
             </div>
         </div>
-        <div id="global-mobile-menu" class="hidden md:hidden bg-gray-800">
-            <a href="index.html" class="block py-3 px-4 text-sm hover:bg-gray-700 border-b border-gray-700">GSAT 滿級分系統</a>
-            <a href="vocab.html" class="block py-3 px-4 text-sm hover:bg-gray-700 border-b border-gray-700">歷屆高頻單字神器</a>
-            <a href="conversation.html" class="block py-3 px-4 text-sm text-green-400 font-bold border-b border-gray-700">實用生活英文</a>
-            <a href="tutoring.html" class="block py-3 px-4 text-sm hover:bg-gray-700">關於我 / 家教課程</a>
-        </div>
-    </nav>
+    </div>
+    <div id="mobile-menu" class="hidden md:hidden bg-gray-800 absolute w-full">
+        <a href="index.html" class="block py-3 px-4 text-sm hover:bg-gray-700 border-b border-gray-700">GSAT 滿級分系統</a>
+        <a href="vocab.html" class="block py-3 px-4 text-sm hover:bg-gray-700 border-b border-gray-700">歷屆高頻單字神器</a>
+        <a href="conversation.html" class="block py-3 px-4 text-sm text-green-400 font-bold border-b border-gray-700">實用生活英文</a>
+        <a href="tutoring.html" class="block py-3 px-4 text-sm hover:bg-gray-700">關於我 / 家教課程</a>
+    </div>
+</nav>
 
-    <nav class="sticky top-16 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100 shadow-sm">
+    <!-- Navigation (Sticky) -->
+    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100">
         <div class="max-w-6xl mx-auto px-4">
             <div class="flex items-center justify-between h-16 gap-4">
-                <button onclick="goHome()" class="font-bold text-gray-900 text-lg tracking-tight btn-click hover:opacity-60 transition-opacity whitespace-nowrap flex items-center gap-2">
-                    <i class="ph-fill ph-chats-teardrop text-indigo-600"></i>
-                    Daily Conversation
+                <button onclick="goHome()" class="font-bold text-gray-900 text-lg tracking-tight btn-click hover:opacity-60 transition-opacity whitespace-nowrap">
+                    Daily conversation
                 </button>
 
                 <div id="filter-container" class="flex-1 flex overflow-x-auto px-2 gap-2 justify-start items-center no-scrollbar mask-linear">
-                    </div>
+                    <!-- Generated by JS -->
+                </div>
             </div>
         </div>
     </nav>
 
+    <!-- Main Content Area -->
     <main id="main-container" class="flex-grow max-w-5xl mx-auto w-full px-4 py-8 transition-all duration-300">
         
+        <!-- VIEW 1: HOME / INTRO (Default) -->
         <div id="view-home" class="fade-enter-active">
             <div class="text-center py-12 md:py-20">
                 <span class="inline-block py-1 px-3 rounded-full bg-indigo-50 text-indigo-600 text-sm font-medium mb-6">
@@ -98,6 +138,7 @@
                     精選 10 大生活主題、40 個實用範例。<br class="hidden md:block">立即開始最真實的對話練習。
                 </p>
 
+                <!-- Feature Steps -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto text-left">
                     <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:border-indigo-100 transition-colors group">
                         <div class="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600 mb-4 group-hover:scale-110 transition-transform">
@@ -136,8 +177,10 @@
             </div>
         </div>
 
+        <!-- VIEW 2: SCENARIO CONTENT (Hidden by default) -->
         <div id="view-scenario" class="hidden-content">
             
+            <!-- Scene Header -->
             <section id="scene-header" class="mb-10 bg-white border border-gray-200 rounded-3xl p-6 md:p-8 shadow-sm relative overflow-hidden group">
                 <div class="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-indigo-50 to-transparent rounded-bl-full -mr-16 -mt-16 opacity-50 transition-transform group-hover:scale-110"></div>
                 
@@ -149,7 +192,8 @@
                         </div>
                         <h2 id="scene-title" class="text-3xl md:text-4xl font-bold text-gray-900 mb-3">情境標題</h2>
                         <p id="scene-desc" class="text-gray-500 text-base max-w-xl leading-relaxed">
-                            </p>
+                            <!-- JS will inject text here -->
+                        </p>
                     </div>
                     <button onclick="copyScenePrompt(this)" class="w-full md:w-auto flex items-center justify-center gap-2 bg-gray-900 text-white px-6 py-3.5 rounded-xl font-bold shadow-lg shadow-gray-200 hover:bg-gray-800 hover:-translate-y-0.5 transition-all btn-click">
                         <i class="ph-bold ph-copy text-lg"></i>
@@ -158,15 +202,19 @@
                 </div>
             </section>
 
+            <!-- Pre-defined Cards Grid -->
             <div id="scenarios-grid" class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-16">
-                </div>
+                <!-- Cards Generated by JS -->
+            </div>
 
+            <!-- Divider -->
             <div class="relative flex py-5 items-center mb-10">
                 <div class="flex-grow border-t border-gray-200"></div>
                 <span class="flex-shrink-0 mx-4 text-gray-400 text-sm font-medium tracking-widest uppercase">Custom Practice</span>
                 <div class="flex-grow border-t border-gray-200"></div>
             </div>
 
+            <!-- Custom Card Generator Section -->
             <section class="max-w-2xl mx-auto mb-16">
                 <div class="bg-white rounded-2xl p-1 shadow-sm border border-indigo-100 ring-4 ring-indigo-50/50">
                     <div class="p-6 md:p-8">
@@ -196,27 +244,34 @@
                             </button>
                         </div>
 
+                        <!-- Dynamic Suggestions Area -->
                         <div id="suggestion-area" class="flex flex-wrap justify-center gap-2">
-                            </div>
+                            <!-- Suggestions injected by JS -->
+                        </div>
 
                     </div>
                 </div>
             </section>
 
+            <!-- New: Custom Cards List Area -->
             <div id="custom-cards-container" class="max-w-4xl mx-auto space-y-4 mb-12 hidden">
                 <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
                     <i class="ph-fill ph-notebook text-indigo-600"></i>
                     我的練習清單
                 </h3>
                 
+                <!-- This div will be captured for image -->
                 <div id="custom-list-capture" class="bg-slate-50 p-6 rounded-2xl border border-gray-100">
                     <div id="custom-list" class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                        </div>
+                        <!-- Custom cards will appear here -->
+                    </div>
+                    <!-- Footer Text -->
                     <div class="text-center mt-8 text-gray-400 text-xs font-medium tracking-widest">
                         Daily Conversation Practice by Chungen
                     </div>
                 </div>
                 
+                <!-- Download Button -->
                 <div class="text-center pt-6">
                     <button onclick="downloadStudyImage()" class="inline-flex items-center gap-2 px-6 py-3 bg-white border border-gray-300 shadow-sm text-gray-700 font-medium rounded-xl hover:bg-gray-50 transition-colors btn-click">
                         <i class="ph-bold ph-image"></i>
@@ -229,10 +284,12 @@
 
     </main>
 
+    <!-- Footer -->
     <footer class="py-8 text-center text-gray-300 text-xs">
         <p>© 2025 Chungen English.</p>
     </footer>
 
+    <!-- Logic -->
     <script>
         // --- Configuration with Updated Prompt ---
         const categorySettings = {
@@ -314,7 +371,7 @@
         };
 
         const initialScenarios = [
-            // 1. Greetings (日常招呼語)
+             // 1. Greetings (日常招呼語)
             { category: 'Greetings', title: '問候 1', goldenSentence: "How is it going?", chinese: "最近還行嗎？", keywords: [{en:'Going', zh:'進展'}, {en:'Lately', zh:'最近'}] },
             { category: 'Greetings', title: '問候 2', goldenSentence: "How’s your day?", chinese: "今天過得如何？", keywords: [{en:'Day', zh:'日子'}, {en:'Feeling', zh:'感覺'}] },
             { category: 'Greetings', title: '問候 3', goldenSentence: "What’s new?", chinese: "最近有什麼新鮮事嗎？", keywords: [{en:'New', zh:'新鮮事'}, {en:'Update', zh:'近況'}] },
@@ -631,7 +688,7 @@
                     // Remove potential trailing punctuation for keywords
                     let resText = data.responseData.translatedText;
                     if(isWord) {
-                        resText = resText.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()。，？！]/g,"");
+                       resText = resText.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()。，？！]/g,"");
                     }
                     return resText;
                 }
@@ -738,11 +795,6 @@
             btn.innerHTML = `<i class="ph-bold ph-check"></i> <span>已複製角色設定！</span>`;
             setTimeout(() => { btn.innerHTML = originalContent; }, 2000);
         }
-        
-        // Global Mobile Menu Toggle
-        document.getElementById('global-mobile-menu-btn').addEventListener('click', () => {
-            document.getElementById('global-mobile-menu').classList.toggle('hidden');
-        });
 
         // --- Init ---
         window.addEventListener('DOMContentLoaded', () => {
