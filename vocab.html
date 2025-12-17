@@ -12,9 +12,7 @@
         
         /* 動畫設定 */
         .animate-fade-in { animation: fadeIn 0.4s ease-out; }
-        .animate-fade-in-up { animation: fadeInUp 0.5s ease-out; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         /* 分頁按鈕激活樣式 */
         .tab-btn.active {
@@ -25,16 +23,27 @@
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
-        /* 遮罩效果核心 CSS (仿照 React 邏輯) */
+        /* 隱藏滾動條但保留功能 */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+
+        /* 遮罩效果核心 CSS */
         .reveal-wrapper {
             position: relative;
-            transition: all 0.3s;
-            border-radius: 0.25rem;
+            transition: all 0.2s;
+            border-radius: 0.375rem; /* rounded-md */
             padding: 0.25rem 0.5rem;
             margin-left: -0.5rem;
-            user-select: none;
+            display: inline-block;
+            user-select: none; /* 防止選取文字 */
         }
-        /* 當遮罩開啟時，滑鼠移過去要有反應 */
+        
+        /* 當遮罩開啟時，滑鼠移過去會有淡淡灰色，但不會反白 */
         .reveal-wrapper.masked-mode {
             cursor: pointer;
         }
@@ -47,9 +56,10 @@
             transition: all 0.3s;
         }
         .reveal-text.hidden {
-            filter: blur(4px);
+            filter: blur(5px);
             background-color: #e2e8f0; /* slate-200 */
             color: transparent; 
+            border-radius: 4px;
         }
         
         /* 點擊顯示提示層 */
@@ -61,7 +71,7 @@
             justify-content: center;
             font-size: 0.75rem;
             font-weight: 700;
-            color: #64748b; /* slate-500 */
+            color: #94a3b8; /* slate-400 */
             pointer-events: none;
             opacity: 0;
             transition: opacity 0.2s;
@@ -160,10 +170,7 @@
     </footer>
 
     <script>
-        // 初始化 Lucide Icons
-        lucide.createIcons();
-
-        // 資料庫 (Data) - 完整保留
+        // 資料庫 (Data)
         const verbsData = [
             { word: "acquire", level: 4, meaning: "獲得；習得", note: "acquire knowledge/skills (習得知識/技能)。常考與 require (要求) 的辨析。" },
             { word: "adapt", level: 4, meaning: "適應；改編", note: "adapt to (適應環境)。111年考過生物適應環境的議題。注意與 adopt (採用/領養) 區分。" },
@@ -304,7 +311,10 @@
         let userAnswers = {};
         let resultsChecked = {};
 
-        // 渲染主函式
+        // 啟動 Lucide 圖標
+        lucide.createIcons();
+
+        // 渲染函式
         function render() {
             const contentArea = document.getElementById('content-area');
             const maskBtn = document.getElementById('mask-toggle');
@@ -319,7 +329,7 @@
                 maskBtn.classList.add('bg-white', 'text-slate-600', 'border-slate-200', 'hover:bg-slate-50');
                 maskBtn.innerHTML = `<i data-lucide="eye" class="w-4 h-4"></i> <span>背單字模式：關閉</span>`;
             }
-            lucide.createIcons(); // 刷新圖標
+            lucide.createIcons();
 
             // 隱藏/顯示遮罩按鈕
             if (currentTab === 'practice' || currentTab === 'tips') {
@@ -350,10 +360,10 @@
             }
 
             contentArea.innerHTML = html;
-            lucide.createIcons(); // 刷新動態生成的內容圖標
+            lucide.createIcons(); // 重新渲染後要再次呼叫圖標
         }
 
-        // 核心渲染：表格模式 (處理遮罩邏輯)
+        // 表格渲染 (處理遮罩)
         function renderTable(data) {
             return `
             <div class="overflow-x-auto rounded-lg border border-slate-200 shadow-sm bg-white">
@@ -367,7 +377,7 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100 bg-white">
-                        ${data.map((item, index) => `
+                        ${data.map(item => `
                             <tr class="hover:bg-slate-50 transition-colors">
                                 <td class="p-4 font-bold text-slate-800 text-lg">${item.word}</td>
                                 <td class="p-4 text-center">
@@ -387,7 +397,7 @@
             </div>`;
         }
 
-        // 核心渲染：副詞頁面
+        // 副詞頁面渲染
         function renderAdvPage() {
             return `
             <div class="grid md:grid-cols-2 gap-6">
@@ -515,7 +525,7 @@
             return html;
         }
 
-        // 邏輯控制函式
+        // 邏輯控制
         function switchTab(tabId) {
             currentTab = tabId;
             document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -533,21 +543,16 @@
             render();
         }
 
-        // 單獨切換某個單字的顯示/隱藏
         function toggleSingleReveal(el) {
-            if (!isMasked) return; // 如果沒開遮罩模式，點擊無效
-            
+            if (!isMasked) return;
             const textEl = el.querySelector('.reveal-text');
             const overlayEl = el.querySelector('.reveal-overlay');
-            
             if (textEl.classList.contains('hidden')) {
-                // 顯示
                 textEl.classList.remove('hidden');
-                if (overlayEl) overlayEl.style.opacity = '0';
+                if(overlayEl) overlayEl.style.opacity = '0';
             } else {
-                // 隱藏 (如果你希望點擊再次隱藏)
                 textEl.classList.add('hidden');
-                if (overlayEl) overlayEl.style.opacity = '1';
+                if(overlayEl) overlayEl.style.opacity = '1';
             }
         }
 
