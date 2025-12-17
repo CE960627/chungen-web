@@ -9,12 +9,66 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', 'Noto Sans TC', sans-serif; background-color: #f8fafc; color: #334155; }
-        .tab-btn.active { background-color: #4f46e5; color: white; border-color: #4f46e5; transform: scale(1.05); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
-        .reveal-box { transition: all 0.3s; cursor: pointer; }
-        .reveal-box.masked { filter: blur(4px); background-color: #e2e8f0; color: transparent; user-select: none; }
-        .reveal-box.masked:hover { background-color: #cbd5e1; }
-        .animate-fade-in { animation: fadeIn 0.5s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* 動畫設定 */
+        .animate-fade-in { animation: fadeIn 0.4s ease-out; }
+        .animate-fade-in-up { animation: fadeInUp 0.5s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* 分頁按鈕激活樣式 */
+        .tab-btn.active {
+            background-color: #4f46e5; /* indigo-600 */
+            color: white;
+            border-color: #4f46e5;
+            transform: scale(1.05);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 遮罩效果核心 CSS (仿照 React 邏輯) */
+        .reveal-wrapper {
+            position: relative;
+            transition: all 0.3s;
+            border-radius: 0.25rem;
+            padding: 0.25rem 0.5rem;
+            margin-left: -0.5rem;
+            user-select: none;
+        }
+        /* 當遮罩開啟時，滑鼠移過去要有反應 */
+        .reveal-wrapper.masked-mode {
+            cursor: pointer;
+        }
+        .reveal-wrapper.masked-mode:hover {
+            background-color: #f1f5f9; /* slate-100 */
+        }
+
+        /* 文字模糊狀態 */
+        .reveal-text {
+            transition: all 0.3s;
+        }
+        .reveal-text.hidden {
+            filter: blur(4px);
+            background-color: #e2e8f0; /* slate-200 */
+            color: transparent; 
+        }
+        
+        /* 點擊顯示提示層 */
+        .reveal-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #64748b; /* slate-500 */
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        .reveal-text.hidden + .reveal-overlay {
+            opacity: 1;
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -109,7 +163,7 @@
         // 初始化 Lucide Icons
         lucide.createIcons();
 
-        // 資料庫 (Data)
+        // 資料庫 (Data) - 完整保留
         const verbsData = [
             { word: "acquire", level: 4, meaning: "獲得；習得", note: "acquire knowledge/skills (習得知識/技能)。常考與 require (要求) 的辨析。" },
             { word: "adapt", level: 4, meaning: "適應；改編", note: "adapt to (適應環境)。111年考過生物適應環境的議題。注意與 adopt (採用/領養) 區分。" },
@@ -257,12 +311,12 @@
             
             // 更新遮罩按鈕樣式
             if(isMasked) {
-                maskBtn.classList.add('bg-amber-100', 'text-amber-800', 'border-amber-300');
-                maskBtn.classList.remove('bg-white', 'text-slate-600', 'border-slate-200');
+                maskBtn.classList.add('bg-amber-100', 'text-amber-800', 'border-amber-300', 'ring-2', 'ring-amber-200');
+                maskBtn.classList.remove('bg-white', 'text-slate-600', 'border-slate-200', 'hover:bg-slate-50');
                 maskBtn.innerHTML = `<i data-lucide="eye-off" class="w-4 h-4"></i> <span>背單字模式：開啟</span>`;
             } else {
-                maskBtn.classList.remove('bg-amber-100', 'text-amber-800', 'border-amber-300');
-                maskBtn.classList.add('bg-white', 'text-slate-600', 'border-slate-200');
+                maskBtn.classList.remove('bg-amber-100', 'text-amber-800', 'border-amber-300', 'ring-2', 'ring-amber-200');
+                maskBtn.classList.add('bg-white', 'text-slate-600', 'border-slate-200', 'hover:bg-slate-50');
                 maskBtn.innerHTML = `<i data-lucide="eye" class="w-4 h-4"></i> <span>背單字模式：關閉</span>`;
             }
             lucide.createIcons(); // 刷新圖標
@@ -299,6 +353,7 @@
             lucide.createIcons(); // 刷新動態生成的內容圖標
         }
 
+        // 核心渲染：表格模式 (處理遮罩邏輯)
         function renderTable(data) {
             return `
             <div class="overflow-x-auto rounded-lg border border-slate-200 shadow-sm bg-white">
@@ -312,14 +367,17 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100 bg-white">
-                        ${data.map(item => `
+                        ${data.map((item, index) => `
                             <tr class="hover:bg-slate-50 transition-colors">
                                 <td class="p-4 font-bold text-slate-800 text-lg">${item.word}</td>
                                 <td class="p-4 text-center">
                                     <span class="inline-block px-2 py-1 rounded text-xs font-bold ${item.level >= 5 ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700'}">L${item.level}</span>
                                 </td>
                                 <td class="p-4">
-                                    <div class="reveal-box rounded px-2 py-1 inline-block ${isMasked ? 'masked' : ''}" onclick="this.classList.remove('masked')">${item.meaning}</div>
+                                    <div class="reveal-wrapper ${isMasked ? 'masked-mode' : ''}" onclick="toggleSingleReveal(this)">
+                                        <div class="reveal-text ${isMasked ? 'hidden' : ''} text-slate-600 font-medium">${item.meaning}</div>
+                                        ${isMasked ? '<div class="reveal-overlay"><i data-lucide="eye-off" class="w-3 h-3 mr-1"></i> 點擊顯示</div>' : ''}
+                                    </div>
                                 </td>
                                 <td class="p-4 text-slate-600 leading-relaxed text-sm">${item.note}</td>
                             </tr>
@@ -329,6 +387,7 @@
             </div>`;
         }
 
+        // 核心渲染：副詞頁面
         function renderAdvPage() {
             return `
             <div class="grid md:grid-cols-2 gap-6">
@@ -341,7 +400,10 @@
                             <li class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between border-b border-slate-50 pb-2 last:border-0 hover:bg-slate-50 p-2 rounded transition-colors">
                                 <span class="font-bold text-blue-700 font-mono text-lg mr-2">${item.word}</span>
                                 <span class="flex-1 text-right sm:text-left">
-                                    <div class="reveal-box rounded px-2 py-1 inline-block ${isMasked ? 'masked' : ''}" onclick="this.classList.remove('masked')">${item.desc}</div>
+                                    <div class="reveal-wrapper ${isMasked ? 'masked-mode' : ''} inline-block" onclick="toggleSingleReveal(this)">
+                                        <div class="reveal-text ${isMasked ? 'hidden' : ''} text-slate-600">${item.desc}</div>
+                                        ${isMasked ? '<div class="reveal-overlay"><i data-lucide="eye-off" class="w-3 h-3 mr-1"></i> 點擊顯示</div>' : ''}
+                                    </div>
                                 </span>
                             </li>
                         `).join('')}
@@ -355,7 +417,10 @@
                         ${confusingPairs.map(item => `
                             <div class="bg-slate-50 p-4 rounded-lg border border-slate-100">
                                 <div class="font-bold text-slate-800 mb-2 font-mono">${item.pair}</div>
-                                <div class="reveal-box rounded px-2 py-1 inline-block ${isMasked ? 'masked' : ''}" onclick="this.classList.remove('masked')">${item.desc}</div>
+                                <div class="reveal-wrapper ${isMasked ? 'masked-mode' : ''} inline-block w-full" onclick="toggleSingleReveal(this)">
+                                    <div class="reveal-text ${isMasked ? 'hidden' : ''} text-slate-600">${item.desc}</div>
+                                    ${isMasked ? '<div class="reveal-overlay"><i data-lucide="eye-off" class="w-3 h-3 mr-1"></i> 點擊顯示</div>' : ''}
+                                </div>
                             </div>
                         `).join('')}
                     </div>
@@ -410,7 +475,7 @@
                 );
 
                 html += `
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 transition-all hover:shadow-md">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 transition-all hover:shadow-md animate-fade-in-up">
                     <div class="flex gap-3 mb-4">
                         <span class="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-indigo-100 text-indigo-700 font-bold rounded-full">${idx + 1}</span>
                         <p class="text-lg text-slate-800 font-medium leading-relaxed">${questionText}</p>
@@ -466,6 +531,24 @@
         function toggleMask() {
             isMasked = !isMasked;
             render();
+        }
+
+        // 單獨切換某個單字的顯示/隱藏
+        function toggleSingleReveal(el) {
+            if (!isMasked) return; // 如果沒開遮罩模式，點擊無效
+            
+            const textEl = el.querySelector('.reveal-text');
+            const overlayEl = el.querySelector('.reveal-overlay');
+            
+            if (textEl.classList.contains('hidden')) {
+                // 顯示
+                textEl.classList.remove('hidden');
+                if (overlayEl) overlayEl.style.opacity = '0';
+            } else {
+                // 隱藏 (如果你希望點擊再次隱藏)
+                textEl.classList.add('hidden');
+                if (overlayEl) overlayEl.style.opacity = '1';
+            }
         }
 
         function generateQuestions() {
