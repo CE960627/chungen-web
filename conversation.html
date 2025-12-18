@@ -20,6 +20,8 @@
         }
         
         .en-font { font-family: 'Inter', sans-serif; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         
         /* 自訂細捲軸 (Sidebar專用) */
         .thin-scrollbar::-webkit-scrollbar { width: 4px; }
@@ -53,6 +55,11 @@
             100% { opacity: 1; transform: translateY(0); }
         }
         .new-card-anim { animation: slideDown 0.3s ease-out forwards; }
+        
+        @keyframes fadeOut {
+            to { opacity: 0; transform: scale(0.9); }
+        }
+        .delete-anim { animation: fadeOut 0.3s ease-in forwards; }
 
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         .fade-in { animation: fadeIn 0.4s ease-out; }
@@ -177,8 +184,7 @@
 
             <div class="flex-1 overflow-y-auto p-4 md:p-6" id="scroll-container">
                 
-                <div id="home-view" class="max-w-4xl mx-auto py-4 fade-in">
-                    
+                <div id="home-view" class="max-w-4xl mx-auto py-4 fade-in px-2 md:px-0">
                     <div class="text-center mb-10">
                         <span class="inline-block px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 font-bold text-xs mb-3 border border-indigo-100">
                             ✨ Chungen English 仲恩英文
@@ -222,8 +228,7 @@
                         <div class="h-px bg-gray-200 flex-1"></div>
                     </div>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3" id="home-categories">
-                        </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3" id="home-categories"></div>
                 </div>
 
                 <div id="category-view" class="hidden fade-in max-w-5xl mx-auto">
@@ -275,9 +280,7 @@
             "home": { icon: "ph-house", label: "居家生活", title: "Daily Life & Home", desc: "家事、日常請求與家庭對話。", prompt: "你現在是我的英文教練。請跟我進行「居家生活」的角色扮演。", sentences: [{ en: "Can you help me with the chores?", ch: "你能幫我做家事嗎？", tag: "Chores" }, { en: "We're running out of milk.", ch: "我們的牛奶快喝完了。", tag: "Grocery" }, { en: "Make yourself at home.", ch: "當作自己家，別客氣。", tag: "Guest" }, { en: "The trash needs to be taken out.", ch: "垃圾該拿出去倒了。", tag: "Trash" }, { en: "Could you turn down the volume?", ch: "可以把音量調小聲一點嗎？", tag: "Noise" }, { en: "I'm going to do the laundry.", ch: "我要去洗衣服。", tag: "Washing" }, { en: "What's for dinner tonight?", ch: "今晚晚餐吃什麼？", tag: "Dinner" }, { en: "Don't forget to lock the door.", ch: "別忘了鎖門。", tag: "Safety" }, { en: "I need to tidy up my room.", ch: "我需要整理我的房間。", tag: "Cleaning" }] }
         };
 
-        let activeCategory = "home"; // Default to home view
-
-        // --- Functions ---
+        let activeCategory = "home"; 
 
         function renderNav() {
             const list = document.getElementById('category-list');
@@ -355,13 +358,11 @@
 
                 const data = categorySettings[activeCategory];
                 
-                // Update Header
                 document.getElementById('current-title').innerHTML = `
                     <i class="ph-duotone ${data.icon} text-indigo-600"></i> ${data.title}
                 `;
                 document.getElementById('current-desc').textContent = data.desc;
 
-                // Render Standard Cards
                 const container = document.getElementById('cards-container');
                 container.innerHTML = '';
 
@@ -370,19 +371,26 @@
                     container.appendChild(card);
                 });
 
-                // Load Custom Cards
                 loadCustomCards();
             }
         }
 
-        function createCardElement(en, ch, tag, isCustom) {
+        function createCardElement(en, ch, tag, isCustom, timestamp) {
             const card = document.createElement('div');
             const bgClass = isCustom ? "bg-yellow-50 border-yellow-200 ring-2 ring-yellow-100" : "bg-white border-gray-100";
             const tagClass = isCustom ? "bg-yellow-200 text-yellow-800" : "bg-gray-100 text-gray-500";
             
-            card.className = `${bgClass} p-5 rounded-xl border card-shadow relative group`;
+            // Add Delete button if Custom
+            const deleteBtn = isCustom ? `
+                <button onclick="deleteCustomCard(${timestamp})" class="p-1.5 bg-red-50 text-red-500 rounded-full hover:bg-red-100 transition mr-2" title="刪除卡片">
+                    <i class="ph-bold ph-trash text-lg"></i>
+                </button>
+            ` : '';
+
+            card.className = `${bgClass} p-5 rounded-xl border card-shadow relative group ${isCustom ? 'delete-anim-enter' : ''}`;
             card.innerHTML = `
-                <div class="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                <div class="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity flex items-center">
+                    ${deleteBtn}
                     <button onclick="speak('${en.replace(/'/g, "\\'")}')" class="p-1.5 bg-indigo-50 text-indigo-600 rounded-full hover:bg-indigo-100 transition">
                         <i class="ph-bold ph-speaker-high text-lg"></i>
                     </button>
@@ -407,7 +415,7 @@
             if (storedCards.length > 0) {
                 section.classList.remove('hidden');
                 storedCards.slice().reverse().forEach(cardData => {
-                    const card = createCardElement(cardData.en, cardData.ch, "自訂句型", true);
+                    const card = createCardElement(cardData.en, cardData.ch, "自訂句型", true, cardData.date);
                     container.appendChild(card);
                 });
             } else {
@@ -426,11 +434,9 @@
                 return;
             }
 
-            // UI Loading
             btn.innerHTML = `<i class="ph-bold ph-spinner loading-spin"></i> 翻譯中...`;
             btn.disabled = true;
 
-            // Timeout Logic (8秒強制重置)
             const timeout = setTimeout(() => {
                 if (btn.disabled) {
                     btn.innerHTML = originalBtnContent;
@@ -443,7 +449,7 @@
                 const response = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(chText)}&langpair=zh|en`);
                 const data = await response.json();
                 
-                clearTimeout(timeout); // Clear timeout
+                clearTimeout(timeout); 
 
                 if (data && data.responseData) {
                     const enText = data.responseData.translatedText;
@@ -463,10 +469,20 @@
                 console.error("Translation error:", error);
                 showToast("連線錯誤，請檢查網路。", "error");
             } finally {
-                // FORCE RESET: This executes no matter what happens above
                 btn.innerHTML = originalBtnContent;
                 btn.disabled = false;
             }
+        }
+
+        function deleteCustomCard(timestamp) {
+            if (!confirm("確定要刪除這張學習卡嗎？")) return;
+
+            const storedCards = JSON.parse(localStorage.getItem('myCustomCards')) || [];
+            const newCards = storedCards.filter(card => card.date !== timestamp);
+            localStorage.setItem('myCustomCards', JSON.stringify(newCards));
+            
+            loadCustomCards();
+            showToast("🗑️ 卡片已刪除", "success");
         }
 
         function speak(text) {
@@ -477,14 +493,12 @@
             window.speechSynthesis.speak(utterance);
         }
 
-        // Fixed Image Generator (Full Capture)
         function generateImage() {
             document.body.style.cursor = 'wait';
             const captureArea = document.getElementById('capture-wrapper');
             
-            // Temporary expand height to ensure full capture if scrollbar exists
+            // Temporary expand height to ensure full capture
             const originalHeight = captureArea.style.height;
-            const originalOverflow = captureArea.style.overflow;
             
             html2canvas(captureArea, {
                 scale: 2,
@@ -542,7 +556,7 @@
         // --- Init ---
         window.addEventListener('DOMContentLoaded', () => {
             renderNav();
-            updateView(); // Will default to home
+            updateView();
         });
 
     </script>
