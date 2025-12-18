@@ -20,39 +20,33 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-        /* 遮罩效果核心 CSS (修正版：文字置中 + 填滿) */
+        /* 遮罩效果核心 CSS */
         .reveal-wrapper {
             position: relative;
             transition: all 0.2s;
             border-radius: 0.5rem;
             padding: 0.5rem 0.75rem;
             margin: -0.25rem;
-            display: flex;       /* 使用 Flexbox */
-            align-items: center; /* 垂直置中 */
-            justify-content: center; /* 水平置中 (你的需求) */
-            width: 100%;         /* 強制填滿 */
-            min-height: 2.75rem; /* 增加高度讓點擊更容易 */
+            display: flex;       
+            align-items: center; 
+            justify-content: center; 
+            width: 100%;         
+            min-height: 2.75rem; 
             user-select: none;
         }
-        
-        /* 遮罩開啟時的樣式 */
         .reveal-wrapper.masked-mode {
             cursor: pointer;
             background-color: #f8fafc;
             border: 1px solid transparent;
         }
-        
-        /* 滑鼠移過去的效果 */
         .reveal-wrapper.masked-mode:hover {
             background-color: #f1f5f9;
             border-color: #cbd5e1;
         }
-
-        /* 文字模糊狀態 */
         .reveal-text {
             transition: all 0.3s;
             width: 100%;
-            text-align: center; /* 文字置中 */
+            text-align: center;
         }
         .reveal-text.hidden {
             filter: blur(6px);
@@ -61,8 +55,6 @@
             border-radius: 4px;
             user-select: none;
         }
-        
-        /* 點擊顯示提示層 */
         .reveal-overlay {
             position: absolute;
             inset: 0;
@@ -76,8 +68,44 @@
             opacity: 0;
             transition: opacity 0.2s;
         }
-        .reveal-text.hidden + .reveal-overlay {
-            opacity: 1;
+        .reveal-text.hidden + .reveal-overlay { opacity: 1; }
+
+        /* 練習模式專用樣式 (解決跳動問題) */
+        .option-btn {
+            transition: all 0.2s;
+            border-width: 1px;
+        }
+        /* 選中狀態 */
+        .option-btn.selected {
+            background-color: #eff6ff; /* blue-50 */
+            border-color: #4f46e5; /* indigo-600 */
+            color: #4338ca; /* indigo-700 */
+            font-weight: 600;
+            box-shadow: 0 0 0 1px #4f46e5;
+        }
+        /* 正確答案 */
+        .option-btn.correct {
+            background-color: #f0fdf4; /* green-50 */
+            border-color: #22c55e; /* green-500 */
+            color: #15803d; /* green-700 */
+            font-weight: 700;
+        }
+        /* 錯誤答案 */
+        .option-btn.wrong {
+            background-color: #fef2f2; /* red-50 */
+            border-color: #fca5a5; /* red-300 */
+            color: #b91c1c; /* red-700 */
+            opacity: 0.8;
+        }
+        /* 禁用狀態 */
+        .option-btn.disabled {
+            pointer-events: none;
+        }
+        /* 未選中的其他選項變淡 */
+        .option-btn.muted {
+            opacity: 0.5;
+            filter: grayscale(100%);
+            border-color: #f1f5f9;
         }
     </style>
 </head>
@@ -170,7 +198,8 @@
     </footer>
 
     <script>
-        // 資料庫 (Data)
+        // --- 1. 資料庫 (Data) ---
+        // (保持你的原始單字資料不變)
         const verbsData = [
             { word: "acquire", level: 4, meaning: "獲得；習得", note: "acquire knowledge/skills (習得知識/技能)。常考與 require (要求) 的辨析。" },
             { word: "adapt", level: 4, meaning: "適應；改編", note: "adapt to (適應環境)。111年考過生物適應環境的議題。注意與 adopt (採用/領養) 區分。" },
@@ -329,14 +358,14 @@
             { id: 33, question: "The government conducted a nationwide _____ to gather data on the current employment trends among fresh graduates.", options: ["A) strategy", "B) victim", "C) survey", "D) technology"], answer: "C", explanation: "解析：(C) conduct a survey (進行調查)。<br>中譯: 政府進行了一項全國性的調查，以收集關於應屆畢業生目前就業趨勢的數據。<br><br>選項中譯：<br>(A) 策略<br>(B) 受害者<br>(D) 科技" }
         ];
 
-        // 狀態管理
+        // --- 2. 狀態管理 ---
         let currentTab = 'verbs';
         let isMasked = false;
         
-        // 題庫管理變數
-        let shuffledQuestions = []; 
-        let currentQuestionIndex = 0; 
-        let currentQuestions = []; 
+        // 題庫管理
+        let shuffledQuestions = [];
+        let currentQuestionIndex = 0;
+        let currentQuestions = [];
         let userAnswers = {};
         let resultsChecked = {};
 
@@ -352,7 +381,7 @@
         // 頁面載入時先洗牌一次
         initQuestions();
 
-        // 渲染函式
+        // --- 3. 渲染主函式 ---
         function render() {
             const contentArea = document.getElementById('content-area');
             const maskBtn = document.getElementById('mask-toggle');
@@ -378,14 +407,14 @@
 
             let html = '';
 
-            // Section Description
+            // Section Description (說明區塊)
             if (currentTab === 'verbs') html += `<div class="mb-6 text-slate-600 font-medium border-l-4 border-blue-500 pl-4 py-1"> Part 1. 必考核心動詞：常出現於詞彙題選項或閱讀測驗的關鍵動作。</div>`;
             if (currentTab === 'adj') html += `<div class="mb-6 text-slate-600 font-medium border-l-4 border-purple-500 pl-4 py-1"> Part 2. 高頻關鍵形容詞：決定語氣與態度，是判斷「作者立場」的關鍵。</div>`;
             if (currentTab === 'nouns') html += `<div class="mb-6 text-slate-600 font-medium border-l-4 border-emerald-500 pl-4 py-1"> Part 3. 抽象與學術名詞：閱讀測驗中若看不懂，往往會導致整段大意抓不到。</div>`;
             if (currentTab === 'adv') html += `<div class="mb-6 text-slate-600 font-medium border-l-4 border-amber-500 pl-4 py-1"> Part 4. 易混淆與高頻副詞：掌握語氣轉折與程度，對克漏字拿分至關重要。</div>`;
             if (currentTab === 'practice') html += `<div class="mb-6 text-slate-600 font-medium border-l-4 border-indigo-500 pl-4 py-1"> Part 5. 實戰練習：精選歷屆高頻單字擬真試題庫。</div>`;
 
-            // Render content based on tab
+            // Render Content
             if (['verbs', 'adj', 'nouns'].includes(currentTab)) {
                 const data = currentTab === 'verbs' ? verbsData : currentTab === 'adj' ? adjectivesData : nounsData;
                 html += renderTable(data);
@@ -394,14 +423,20 @@
             } else if (currentTab === 'tips') {
                 html += renderTips();
             } else if (currentTab === 'practice') {
-                html += renderPractice();
+                html += renderPracticeHTML(); // 只生成初始HTML結構
             }
 
             contentArea.innerHTML = html;
-            lucide.createIcons(); // 重新渲染後要再次呼叫圖標
+            lucide.createIcons(); // 刷新 Icon
+
+            // 如果是練習模式，需要綁定事件和狀態，而不是每次重繪
+            if (currentTab === 'practice') {
+                updatePracticeUI(); // 根據當前狀態更新 DOM，不重繪 HTML
+            }
         }
 
-        // 表格渲染 (處理遮罩邏輯) - 修正：強制橫向排列
+        // --- 4. 渲染子函式 ---
+
         function renderTable(data) {
             return `
             <div class="overflow-x-auto rounded-lg border border-slate-200 shadow-sm bg-white">
@@ -420,7 +455,7 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100 bg-white">
-                        ${data.map((item, index) => `
+                        ${data.map((item) => `
                             <tr class="hover:bg-slate-50 transition-colors">
                                 <td class="p-4 font-bold text-slate-800 text-lg">${item.word}</td>
                                 <td class="p-4 text-center">
@@ -440,7 +475,6 @@
             </div>`;
         }
 
-        // 副詞頁面渲染 - 修正：強制橫向排列 + 垂直置中
         function renderAdvPage() {
             return `
             <div class="grid md:grid-cols-2 gap-6">
@@ -481,39 +515,53 @@
             </div>`;
         }
 
-        // 修改後的 Tip Section (給考生的話)
+        // 行銷導向的 Tips Section
         function renderTips() {
             const tips = [
                 { 
-                    title: "精準鎖定：80/20法則", 
-                    content: "學測英文單字多達數千，但真正決定勝負的往往是那 20% 的「核心高頻字」。本站只收錄歷屆試題中反覆出現的關鍵字，讓你的備考效率最大化。" 
+                    title: "大數據精準命中", 
+                    icon: "target",
+                    color: "text-red-500",
+                    content: "不必背7000單字海！我們透過分析歷屆十年學測真題，為你篩選出最常出現的「核心20%單字」，這些字掌握了，考試分數就穩拿80%。" 
                 },
                 { 
-                    title: "語塊學習：擺脫死背", 
-                    content: "單字不該孤立存在。背誦時請務必搭配「歷屆考點與搭配詞 (Collocation)」，例如學到 'emphasis' 就要立刻聯想到 'put emphasis on'，這樣寫作才能道地。" 
+                    title: "慣用搭配語塊", 
+                    icon: "puzzle",
+                    color: "text-blue-500",
+                    content: "單字不能只背中文意思，考試考的是「搭配詞 (Collocation)」。本站整理了每個高頻字的必考用法，讓你看到題目就能產生「語感直覺」，秒殺克漏字。" 
                 },
                 { 
-                    title: "主動回想：大腦健身", 
-                    content: "「遮罩模式」不是為了好玩，而是為了強迫大腦進行「主動檢索 (Active Recall)」。看得到中文不算會，遮住中文還能秒答才是真懂。請反覆利用此功能自我檢測。" 
+                    title: "擬真刷題實戰", 
+                    icon: "zap",
+                    color: "text-yellow-500",
+                    content: "「看得懂」不代表「會寫」。透過實戰模考功能，強迫大腦進行「主動回想 (Active Recall)」，這才是記憶定型的關鍵。反覆刷題，直到看到題目不再需要思考。" 
                 }
             ];
             return `
             <div class="grid md:grid-cols-3 gap-6">
                 ${tips.map(tip => `
-                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition-shadow relative overflow-hidden group">
-                        <div class="absolute top-0 right-0 w-24 h-24 bg-blue-100 rounded-full -mr-12 -mt-12 opacity-50 group-hover:scale-110 transition-transform"></div>
-                        <h3 class="text-xl font-bold text-slate-800 mb-4 relative z-10 flex items-center gap-2">
-                            <i data-lucide="zap" class="w-5 h-5 text-yellow-500"></i> ${tip.title}
+                    <div class="bg-white p-8 rounded-xl shadow-md border border-slate-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-slate-50 rounded-full -mr-10 -mt-10 opacity-50 group-hover:scale-110 transition-transform"></div>
+                        <h3 class="text-2xl font-bold text-slate-800 mb-4 relative z-10 flex items-center gap-2">
+                            <i data-lucide="${tip.icon}" class="w-6 h-6 ${tip.color}"></i> ${tip.title}
                         </h3>
-                        <p class="text-slate-600 leading-relaxed relative z-10 text-justify">${tip.content}</p>
+                        <p class="text-slate-600 leading-relaxed relative z-10 text-justify font-medium">${tip.content}</p>
                     </div>
                 `).join('')}
+            </div>
+            <div class="mt-8 text-center bg-indigo-50 p-6 rounded-xl border border-indigo-100">
+                <p class="text-indigo-800 font-bold text-lg mb-2">準備好開始了嗎？</p>
+                <button onclick="switchTab('practice')" class="bg-indigo-600 text-white px-8 py-3 rounded-full font-bold shadow-lg hover:bg-indigo-700 hover:shadow-xl transition-all transform hover:scale-105 flex items-center gap-2 mx-auto">
+                    <i data-lucide="play-circle" class="w-5 h-5"></i> 立即進入實戰模考
+                </button>
             </div>`;
         }
 
-        function renderPractice() {
-            // 如果當前沒有題目，就生成一次
-            if (currentQuestions.length === 0) generateQuestions();
+        // --- 5. 實戰練習模式邏輯 (解決跳動問題的核心) ---
+
+        function renderPracticeHTML() {
+            // 如果還沒有題目，先生成
+            if (currentQuestions.length === 0) generateQuestionsLogic();
 
             let html = `
             <div class="space-y-6 max-w-4xl mx-auto">
@@ -525,66 +573,222 @@
                             </h2>
                             <p class="text-slate-600 text-sm">系統已從核心單字庫中隨機生成試卷。</p>
                         </div>
-                        <button onclick="generateQuestions()" class="flex items-center gap-2 px-5 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors shadow-md active:scale-95">
+                        <button onclick="generateNewQuestions()" class="flex items-center gap-2 px-5 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors shadow-md active:scale-95">
                             <i data-lucide="refresh-cw" class="w-4 h-4"></i> 生成新試卷
                         </button>
                     </div>
-                </div>`;
-
-            currentQuestions.forEach((q, idx) => {
-                const userAns = userAnswers[q.id];
-                const isChecked = resultsChecked[q.id];
-                const isCorrect = userAns === q.answer;
-
-                const questionText = q.question.split('_____').join(
-                    `<span class="inline-block border-b-2 w-20 mx-1 text-center font-bold ${isChecked ? (isCorrect ? 'border-green-500 text-green-600' : 'border-red-500 text-red-600') : 'border-slate-300 text-blue-600'}">${isChecked ? (q.answer === userAns ? userAns : (userAns || '')) : (userAns || '')}</span>`
-                );
-
-                html += `
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 transition-all hover:shadow-md animate-fade-in-up">
-                    <div class="flex gap-3 mb-4">
-                        <span class="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-indigo-100 text-indigo-700 font-bold rounded-full">${idx + 1}</span>
-                        <p class="text-lg text-slate-800 font-medium leading-relaxed">${questionText}</p>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 ml-11">
-                        ${q.options.map(opt => {
-                            const prefix = opt.charAt(0);
-                            let btnClass = "border-slate-200 hover:bg-slate-50 text-slate-600";
-                            if (userAns === prefix) btnClass = "border-indigo-500 bg-indigo-50 text-indigo-700 font-semibold ring-1 ring-indigo-500";
-                            if (isChecked) {
-                                if (prefix === q.answer) btnClass = "border-green-500 bg-green-50 text-green-700 font-bold ring-1 ring-green-500";
-                                else if (userAns === prefix && prefix !== q.answer) btnClass = "border-red-300 bg-red-50 text-red-600 opacity-60";
-                                else btnClass = "opacity-50 grayscale border-slate-100";
-                            }
-                            return `<button onclick="handleSelect(${q.id}, '${prefix}')" ${isChecked ? 'disabled' : ''} class="text-left px-4 py-3 rounded-lg border transition-all flex items-center justify-between ${btnClass}">
-                                <span>${opt}</span>
-                                ${isChecked && prefix === q.answer ? '<i data-lucide="check-circle" class="w-5 h-5 text-green-600"></i>' : ''}
-                                ${isChecked && userAns === prefix && prefix !== q.answer ? '<i data-lucide="x-circle" class="w-5 h-5 text-red-500"></i>' : ''}
-                            </button>`;
-                        }).join('')}
-                    </div>
-                    <div class="mt-6 ml-11">
-                        ${!isChecked ? 
-                            `<button onclick="checkResult(${q.id})" ${!userAns ? 'disabled' : ''} class="px-6 py-2 rounded-lg font-bold text-white transition-all ${userAns ? 'bg-indigo-600 hover:bg-indigo-700 shadow-md' : 'bg-slate-300 cursor-not-allowed'}">檢查答案</button>` :
-                            `<div class="p-4 rounded-lg w-full ${isCorrect ? 'bg-green-50 border border-green-100' : 'bg-red-50 border border-red-100'}">
-                                <div class="flex items-center gap-2 font-bold mb-2">
-                                    ${isCorrect ? '<span class="text-green-700 flex items-center gap-1"><i data-lucide="check-circle" class="w-5 h-5"></i> Correct!</span>' : `<span class="text-red-700 flex items-center gap-1"><i data-lucide="x-circle" class="w-5 h-5"></i> Wrong. Answer: ${q.answer}</span>`}
-                                </div>
-                                <p class="text-slate-700 text-sm leading-relaxed">${q.explanation}</p>
-                            </div>`
-                        }
-                    </div>
-                </div>`;
-            });
-
-            html += `</div>`;
+                </div>
+                <div id="questions-container"></div>
+            </div>`;
             return html;
         }
 
-        // 邏輯控制
+        // 更新練習模式 UI (DOM操作，不重繪整個畫面)
+        function updatePracticeUI() {
+            const container = document.getElementById('questions-container');
+            if (!container) return;
+
+            // 只有當容器是空的時候，才生成 HTML (第一次載入)
+            // 或者當題目改變時，清空重建 (切換試卷)
+            if (container.innerHTML === '' || container.dataset.qid !== String(currentQuestions[0].id)) {
+                let questionsHTML = '';
+                currentQuestions.forEach((q, idx) => {
+                    const questionText = q.question.split('_____').join(
+                        `<span id="blank-${q.id}" class="inline-block border-b-2 w-20 mx-1 text-center font-bold text-blue-600 border-slate-300"></span>`
+                    );
+
+                    questionsHTML += `
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 transition-all hover:shadow-md animate-fade-in-up mb-6" id="q-card-${q.id}">
+                        <div class="flex gap-3 mb-4">
+                            <span class="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-indigo-100 text-indigo-700 font-bold rounded-full">${idx + 1}</span>
+                            <p class="text-lg text-slate-800 font-medium leading-relaxed">${questionText}</p>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 ml-11">
+                            ${q.options.map(opt => {
+                                const prefix = opt.charAt(0);
+                                return `<button onclick="handleSelect(this, ${q.id}, '${prefix}')" id="btn-${q.id}-${prefix}" class="option-btn text-left px-4 py-3 rounded-lg border flex items-center justify-between border-slate-200 hover:bg-slate-50 text-slate-600">
+                                    <span>${opt}</span>
+                                    <i id="icon-${q.id}-${prefix}" class="w-5 h-5"></i>
+                                </button>`;
+                            }).join('')}
+                        </div>
+                        <div class="mt-6 ml-11" id="action-area-${q.id}">
+                            <button onclick="checkResult(${q.id})" id="check-btn-${q.id}" class="px-6 py-2 rounded-lg font-bold text-white transition-all bg-slate-300 cursor-not-allowed" disabled>檢查答案</button>
+                            <div id="explanation-${q.id}" class="hidden p-4 rounded-lg w-full border mt-4">
+                                <div class="flex items-center gap-2 font-bold mb-2" id="result-header-${q.id}"></div>
+                                <p class="text-slate-700 text-sm leading-relaxed">${q.explanation}</p>
+                            </div>
+                        </div>
+                    </div>`;
+                });
+                container.innerHTML = questionsHTML;
+                container.dataset.qid = String(currentQuestions[0].id); // 標記當前題目ID
+                lucide.createIcons(); // 新生成的 HTML 需要初始化圖標
+            }
+
+            // 恢復使用者的選擇狀態 (如果是切換 Tab 回來)
+            currentQuestions.forEach(q => {
+                const prefix = userAnswers[q.id];
+                if (prefix) {
+                    const btn = document.getElementById(`btn-${q.id}-${prefix}`);
+                    if (btn) updateSelectionVisuals(btn, q.id, prefix);
+                }
+                if (resultsChecked[q.id]) {
+                    showResultVisuals(q.id);
+                }
+            });
+        }
+
+        // 邏輯: 生成題目數據
+        function generateQuestionsLogic() {
+            if (currentQuestionIndex >= shuffledQuestions.length) {
+                alert("恭喜！你已經做完所有題目了。系統將重新洗牌，開始新的一輪練習！");
+                initQuestions();
+            }
+            const nextQuestions = shuffledQuestions.slice(currentQuestionIndex, currentQuestionIndex + 5);
+            currentQuestionIndex += 5;
+            currentQuestions = nextQuestions;
+            userAnswers = {};
+            resultsChecked = {};
+        }
+
+        // 觸發: 生成新試卷
+        function generateNewQuestions() {
+            generateQuestionsLogic();
+            const container = document.getElementById('questions-container');
+            if(container) container.innerHTML = ''; // 強制清空以觸發重繪
+            updatePracticeUI();
+            
+            // 捲動到頂部
+            setTimeout(() => {
+               document.getElementById('content-area').scrollIntoView({ behavior: 'smooth' });
+            }, 100);
+        }
+
+        // 處理選擇 (DOM 操作，不重繪)
+        function handleSelect(btnElement, qId, prefix) {
+            if (resultsChecked[qId]) return; // 已檢查過不能再選
+
+            userAnswers[qId] = prefix;
+            updateSelectionVisuals(btnElement, qId, prefix);
+        }
+
+        function updateSelectionVisuals(btnElement, qId, prefix) {
+            // 1. 清除該題所有按鈕的選中狀態
+            const allBtns = document.querySelectorAll(`#q-card-${qId} .option-btn`);
+            allBtns.forEach(btn => {
+                btn.classList.remove('selected', 'bg-indigo-50', 'border-indigo-500', 'text-indigo-700', 'ring-1', 'ring-indigo-500');
+                btn.classList.add('border-slate-200', 'text-slate-600');
+            });
+
+            // 2. 設定當前按鈕為選中
+            // 注意：因為 switchTab 切換回來時 btnElement 可能是 null (如果只傳了 ID)
+            // 所以這裡再次獲取
+            const targetBtn = document.getElementById(`btn-${qId}-${prefix}`);
+            if(targetBtn) {
+                targetBtn.classList.remove('border-slate-200', 'text-slate-600', 'hover:bg-slate-50');
+                targetBtn.classList.add('selected', 'bg-indigo-50', 'border-indigo-500', 'text-indigo-700', 'ring-1', 'ring-indigo-500');
+            }
+
+            // 3. 更新填空處文字
+            const blank = document.getElementById(`blank-${qId}`);
+            if(blank) blank.textContent = prefix;
+
+            // 4. 啟用檢查按鈕
+            const checkBtn = document.getElementById(`check-btn-${qId}`);
+            if(checkBtn) {
+                checkBtn.disabled = false;
+                checkBtn.classList.remove('bg-slate-300', 'cursor-not-allowed');
+                checkBtn.classList.add('bg-indigo-600', 'hover:bg-indigo-700', 'shadow-md');
+            }
+        }
+
+        // 檢查答案 (DOM 操作)
+        function checkResult(qId) {
+            resultsChecked[qId] = true;
+            showResultVisuals(qId);
+        }
+
+        function showResultVisuals(qId) {
+            const userAns = userAnswers[qId];
+            const correctAns = currentQuestions.find(q => q.id === qId).answer;
+            const isCorrect = userAns === correctAns;
+
+            // 1. 鎖定所有按鈕
+            const allBtns = document.querySelectorAll(`#q-card-${qId} .option-btn`);
+            allBtns.forEach(btn => {
+                btn.classList.add('disabled'); // 禁止點擊
+                btn.onclick = null; // 移除事件
+                
+                // 變淡未選中的
+                if (!btn.id.includes(userAns) && !btn.id.includes(correctAns)) {
+                    btn.classList.add('muted');
+                }
+            });
+
+            // 2. 標示正確與錯誤
+            const correctBtn = document.getElementById(`btn-${qId}-${correctAns}`);
+            if (correctBtn) {
+                correctBtn.className = "option-btn correct text-left px-4 py-3 rounded-lg border flex items-center justify-between ring-1 ring-green-500";
+                // 插入打勾圖示
+                const icon = document.getElementById(`icon-${qId}-${correctAns}`);
+                if(icon) {
+                    icon.setAttribute('data-lucide', 'check-circle');
+                    icon.classList.add('text-green-600');
+                }
+            }
+
+            if (!isCorrect && userAns) {
+                const wrongBtn = document.getElementById(`btn-${qId}-${userAns}`);
+                if (wrongBtn) {
+                    wrongBtn.className = "option-btn wrong text-left px-4 py-3 rounded-lg border flex items-center justify-between ring-1 ring-red-300";
+                    // 插入叉叉圖示
+                    const icon = document.getElementById(`icon-${qId}-${userAns}`);
+                    if(icon) {
+                        icon.setAttribute('data-lucide', 'x-circle');
+                        icon.classList.add('text-red-500');
+                    }
+                }
+            }
+
+            // 3. 更新填空處顏色
+            const blank = document.getElementById(`blank-${qId}`);
+            if(blank) {
+                blank.className = isCorrect 
+                    ? "inline-block border-b-2 w-20 mx-1 text-center font-bold text-green-600 border-green-500"
+                    : "inline-block border-b-2 w-20 mx-1 text-center font-bold text-red-600 border-red-500";
+            }
+
+            // 4. 隱藏檢查按鈕，顯示解析
+            const checkBtn = document.getElementById(`check-btn-${qId}`);
+            if(checkBtn) checkBtn.style.display = 'none';
+
+            const explanationDiv = document.getElementById(`explanation-${qId}`);
+            const resultHeader = document.getElementById(`result-header-${qId}`);
+            
+            if(explanationDiv && resultHeader) {
+                explanationDiv.classList.remove('hidden');
+                if (isCorrect) {
+                    explanationDiv.classList.add('bg-green-50', 'border-green-100');
+                    resultHeader.innerHTML = `<span class="text-green-700 flex items-center gap-1"><i data-lucide="check-circle" class="w-5 h-5"></i> Correct!</span>`;
+                } else {
+                    explanationDiv.classList.add('bg-red-50', 'border-red-100');
+                    resultHeader.innerHTML = `<span class="text-red-700 flex items-center gap-1"><i data-lucide="x-circle" class="w-5 h-5"></i> Wrong. Answer: ${correctAns}</span>`;
+                }
+                // 重要：解析區塊顯示後，重新渲染裡面的圖標
+                lucide.createIcons({ root: explanationDiv });
+            }
+            
+            // 重新渲染按鈕上的圖標
+            lucide.createIcons({ root: document.getElementById(`q-card-${qId}`) });
+        }
+
+
+        // --- 6. 通用邏輯 ---
+
         function switchTab(tabId) {
             currentTab = tabId;
-            // 先重置所有按鈕樣式 (含 Tailwind class)
+            // 視覺切換
             const inactiveClasses = ['bg-white', 'text-slate-600', 'border-slate-200', 'hover:bg-slate-50'];
             const activeClasses = ['bg-indigo-600', 'text-white', 'border-indigo-600', 'shadow-md', 'transform', 'scale-105'];
 
@@ -593,17 +797,18 @@
                 btn.classList.add(...inactiveClasses);
             });
 
-            // 設定當前按鈕樣式
             const activeBtn = document.getElementById('btn-' + tabId);
-            activeBtn.classList.remove(...inactiveClasses);
-            activeBtn.classList.add('active', ...activeClasses);
+            if(activeBtn) {
+                activeBtn.classList.remove(...inactiveClasses);
+                activeBtn.classList.add('active', ...activeClasses);
+            }
             
             render();
         }
 
         function toggleMask() {
             isMasked = !isMasked;
-            render();
+            render(); // 重新渲染以應用/移除遮罩樣式
         }
 
         function toggleSingleReveal(el) {
@@ -617,39 +822,6 @@
                 textEl.classList.add('hidden');
                 if(overlayEl) overlayEl.style.opacity = '1';
             }
-        }
-
-        // 生成題目邏輯 (修正版：不重複直到做完)
-        function generateQuestions() {
-            // 檢查是否還有題目
-            if (currentQuestionIndex >= shuffledQuestions.length) {
-                alert("恭喜！你已經做完所有題目了。系統將重新洗牌，開始新的一輪練習！");
-                initQuestions(); // 重新洗牌
-            }
-
-            // 取出接下來的 5 題 (如果剩不到 5 題，就取剩下的)
-            const nextQuestions = shuffledQuestions.slice(currentQuestionIndex, currentQuestionIndex + 5);
-            currentQuestionIndex += 5;
-
-            currentQuestions = nextQuestions;
-            userAnswers = {};
-            resultsChecked = {};
-            
-            render();
-            // 自動捲動到題目區頂部
-            const contentArea = document.getElementById('content-area');
-            if(contentArea) contentArea.scrollIntoView({ behavior: 'smooth' });
-        }
-
-        function handleSelect(qId, prefix) {
-            if (resultsChecked[qId]) return;
-            userAnswers[qId] = prefix;
-            render();
-        }
-
-        function checkResult(qId) {
-            resultsChecked[qId] = true;
-            render();
         }
 
         // 初始執行
