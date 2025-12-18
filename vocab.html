@@ -17,42 +17,48 @@
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         /* 隱藏滾動條但保留功能 */
-        .no-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-        .no-scrollbar {
-            -ms-overflow-style: none;  /* IE and Edge */
-            scrollbar-width: none;  /* Firefox */
-        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-        /* 遮罩效果核心 CSS */
+        /* 遮罩效果核心 CSS (修正版) */
         .reveal-wrapper {
             position: relative;
             transition: all 0.2s;
-            border-radius: 0.375rem;
-            padding: 0.25rem 0.5rem;
-            margin-left: -0.5rem;
-            display: inline-block;
+            border-radius: 0.5rem; /* 圓角大一點 */
+            padding: 0.5rem 0.75rem; /* 增加內距，讓點擊範圍變大 */
+            margin: -0.25rem; /* 修正因為padding造成的位移 */
+            display: block;   /* 改成區塊元素，填滿寬度 */
+            width: 100%;      /* 強制填滿 */
+            min-height: 2.5rem; /* 設定最小高度，確保好按 */
+            display: flex;
+            align-items: center; /* 文字垂直置中 */
             user-select: none;
         }
         
-        /* 當遮罩開啟時，滑鼠移過去會有淡淡灰色 */
+        /* 遮罩開啟時的樣式 */
         .reveal-wrapper.masked-mode {
             cursor: pointer;
+            background-color: #f8fafc; /* 預設給一個極淡的背景 */
+            border: 1px solid transparent;
         }
+        
+        /* 滑鼠移過去的效果 (只在遮罩模式下) */
         .reveal-wrapper.masked-mode:hover {
-            background-color: #f1f5f9;
+            background-color: #f1f5f9; /* slate-100 */
+            border-color: #cbd5e1; /* 增加邊框提示 */
         }
 
         /* 文字模糊狀態 */
         .reveal-text {
             transition: all 0.3s;
+            width: 100%;
         }
         .reveal-text.hidden {
-            filter: blur(5px);
+            filter: blur(6px); /* 模糊度加強 */
             background-color: #e2e8f0;
             color: transparent; 
             border-radius: 4px;
+            user-select: none;
         }
         
         /* 點擊顯示提示層 */
@@ -61,10 +67,10 @@
             inset: 0;
             display: flex;
             align-items: center;
-            justify-content: center;
-            font-size: 0.75rem;
-            font-weight: 700;
-            color: #94a3b8;
+            justify-content: center; /* 文字水平置中 */
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #64748b;
             pointer-events: none;
             opacity: 0;
             transition: opacity 0.2s;
@@ -163,7 +169,7 @@
     </footer>
 
     <script>
-        // 資料庫 (Data)
+        // 資料庫
         const verbsData = [
             { word: "acquire", level: 4, meaning: "獲得；習得", note: "acquire knowledge/skills (習得知識/技能)。常考與 require (要求) 的辨析。" },
             { word: "adapt", level: 4, meaning: "適應；改編", note: "adapt to (適應環境)。111年考過生物適應環境的議題。注意與 adopt (採用/領養) 區分。" },
@@ -356,7 +362,7 @@
             lucide.createIcons(); // 重新渲染後要再次呼叫圖標
         }
 
-        // 表格渲染 (處理遮罩)
+        // 表格渲染 (處理遮罩邏輯) - 修正：強制橫向排列
         function renderTable(data) {
             return `
             <div class="overflow-x-auto rounded-lg border border-slate-200 shadow-sm bg-white">
@@ -365,7 +371,12 @@
                         <tr>
                             <th class="p-4 w-1/4">單字 (Word)</th>
                             <th class="p-4 w-20 text-center">級別</th>
-                            <th class="p-4 w-1/4">中文釋義 ${isMasked ? '<span class="text-xs font-normal text-amber-600 bg-amber-100 px-2 py-0.5 rounded-full ml-2">點擊查看</span>' : ''}</th>
+                            <th class="p-4 w-1/4">
+                                <div class="flex items-center gap-2 whitespace-nowrap">
+                                    中文釋義 
+                                    ${isMasked ? '<span class="text-xs font-normal text-amber-600 bg-amber-100 px-2 py-0.5 rounded-full">點擊查看</span>' : ''}
+                                </div>
+                            </th>
                             <th class="p-4">歷屆考點與搭配</th>
                         </tr>
                     </thead>
@@ -390,7 +401,7 @@
             </div>`;
         }
 
-        // 副詞頁面渲染
+        // 副詞頁面渲染 - 修正：強制橫向排列
         function renderAdvPage() {
             return `
             <div class="grid md:grid-cols-2 gap-6">
