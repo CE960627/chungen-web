@@ -19,10 +19,8 @@
             -webkit-font-smoothing: antialiased;
         }
         
-        /* Enforce English Font for sentences */
-        .en-font {
-            font-family: 'Inter', sans-serif;
-        }
+        /* Enforce English Font */
+        .en-font { font-family: 'Inter', sans-serif; }
 
         /* Hide Scrollbar */
         .no-scrollbar::-webkit-scrollbar { display: none; }
@@ -33,7 +31,6 @@
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        
         .card-shadow:hover {
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
             transform: translateY(-2px);
@@ -46,13 +43,21 @@
             border-right: 3px solid #4F46E5;
         }
         
-        /* Custom Input Animation */
-        @keyframes popIn {
-            0% { transform: scale(0.9); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
+        /* Loading Animation */
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .loading-spin {
+            animation: spin 1s linear infinite;
+        }
+
+        /* New Card Animation */
+        @keyframes slideDown {
+            0% { opacity: 0; transform: translateY(-20px); }
+            100% { opacity: 1; transform: translateY(0); }
         }
         .new-card-anim {
-            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            animation: slideDown 0.5s ease-out forwards;
         }
     </style>
 </head>
@@ -136,26 +141,30 @@
 
             <div class="flex-1 overflow-y-auto p-4 md:p-8" id="capture-area">
                 
-                <div class="max-w-7xl mx-auto mb-8 bg-gradient-to-r from-indigo-50 to-blue-50 border border-indigo-100 rounded-2xl p-6 shadow-sm">
-                    <h3 class="text-indigo-900 font-bold mb-4 flex items-center gap-2">
-                        <i class="ph-fill ph-magic-wand text-indigo-500"></i> ✨ 自訂你的學習卡
+                <div class="max-w-7xl mx-auto mb-8 bg-gradient-to-r from-indigo-600 to-blue-600 rounded-2xl p-6 shadow-lg text-white">
+                    <h3 class="font-bold mb-4 flex items-center gap-2 text-lg">
+                        <i class="ph-fill ph-magic-wand text-yellow-300"></i> AI 翻譯生成器
                     </h3>
+                    <p class="text-indigo-100 text-sm mb-4">輸入你想學的中文句子，系統將自動翻譯成道地英文並生成專屬卡片。</p>
+                    
                     <div class="flex flex-col md:flex-row gap-4">
                         <div class="flex-1">
-                            <input type="text" id="custom-en" placeholder="請輸入英文句子 (例: Keep it up!)" 
-                                class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition font-medium en-font">
+                            <input type="text" id="custom-ch" placeholder="請輸入中文 (例如: 我想點一杯半糖少冰的珍珠奶茶)" 
+                                class="w-full px-4 py-3 rounded-xl border-none focus:ring-4 focus:ring-indigo-300 text-gray-800 placeholder-gray-400 outline-none transition shadow-inner">
                         </div>
-                        <div class="flex-1">
-                            <input type="text" id="custom-ch" placeholder="請輸入中文翻譯 (例: 繼續保持!)" 
-                                class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition">
-                        </div>
-                        <button onclick="addCustomCard()" class="bg-indigo-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-indigo-700 transition shadow-md flex items-center justify-center gap-2 min-w-[120px]">
-                            <i class="ph-bold ph-plus"></i> 生成卡片
+                        <button onclick="addCustomCard()" id="generate-btn" class="bg-yellow-400 text-indigo-900 px-6 py-3 rounded-xl font-bold hover:bg-yellow-300 transition shadow-lg flex items-center justify-center gap-2 min-w-[140px]">
+                            <i class="ph-bold ph-translate"></i> 生成卡片
                         </button>
                     </div>
-                    <p class="text-xs text-indigo-400 mt-2 ml-1">
-                        * 小技巧：你可以將 Gemini 產生的例句貼過來，製作專屬的複習卡片，且一樣支援發音喔！
-                    </p>
+                </div>
+
+                <div id="custom-cards-section" class="hidden max-w-7xl mx-auto mb-10">
+                    <h4 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                        <i class="ph-fill ph-star text-yellow-500"></i> ✨ 我的專屬學習區
+                    </h4>
+                    <div id="custom-cards-container" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                        </div>
+                    <div class="border-b border-gray-200 my-8"></div>
                 </div>
 
                 <div id="cards-container" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 max-w-7xl mx-auto pb-20">
@@ -166,14 +175,14 @@
     </div>
 
     <script>
-        // --- Data: 9 Topics x 9 Sentences ---
+        // --- Data ---
         const categorySettings = {
             "business": {
                 icon: "ph-briefcase",
                 label: "職場商務",
                 title: "Business & Workplace",
                 desc: "會議、簡報與職場社交用語。",
-                prompt: "你現在是一個英文口說教練。請跟我進行一場關於「職場商務 (Business)」的角色扮演練習。請修正我的文法錯誤，並提供更道地的說法。",
+                prompt: "你現在是我的英文教練。請跟我進行「職場商務」的角色扮演。",
                 sentences: [
                     { en: "Let's get down to business.", ch: "我們言歸正傳吧。", tag: "Meeting" },
                     { en: "I'd like to propose a new strategy.", ch: "我想提出一個新策略。", tag: "Proposal" },
@@ -191,7 +200,7 @@
                 label: "旅遊機場",
                 title: "Travel & Airport",
                 desc: "機場報到、轉機與詢問資訊。",
-                prompt: "你現在是一個英文口說教練。請跟我進行一場關於「旅遊機場 (Travel)」的角色扮演練習。",
+                prompt: "你現在是我的英文教練。請跟我進行「旅遊機場」的角色扮演。",
                 sentences: [
                     { en: "I'd like to check in for my flight.", ch: "我想辦理登機手續。", tag: "Check-in" },
                     { en: "Is there a layover for this flight?", ch: "這班飛機有轉機嗎？", tag: "Flight" },
@@ -209,7 +218,7 @@
                 label: "餐飲英文",
                 title: "Restaurant & Dining",
                 desc: "訂位、點餐與特殊飲食需求。",
-                prompt: "你現在是一個英文口說教練。請跟我進行一場關於「餐廳 (Restaurant)」的角色扮演練習。",
+                prompt: "你現在是我的英文教練。請跟我進行「餐廳點餐」的角色扮演。",
                 sentences: [
                     { en: "A table for two, please.", ch: "請給我兩位客人的位子。", tag: "Seating" },
                     { en: "May I see the menu?", ch: "可以給我看菜單嗎？", tag: "Menu" },
@@ -227,7 +236,7 @@
                 label: "社交約會",
                 title: "Dating & Romance",
                 desc: "表達好感、稱讚與約會用語。",
-                prompt: "你現在是一個英文口說教練。請跟我進行一場關於「約會 (Dating)」的角色扮演練習。",
+                prompt: "你現在是我的英文教練。請跟我進行「社交約會」的角色扮演。",
                 sentences: [
                     { en: "Would you like to grab a coffee?", ch: "想去喝杯咖啡嗎？", tag: "Invitation" },
                     { en: "I had a great time tonight.", ch: "我今晚過得很開心。", tag: "Feeling" },
@@ -245,7 +254,7 @@
                 label: "購物消費",
                 title: "Shopping & Retail",
                 desc: "殺價、退換貨與尋找商品。",
-                prompt: "你現在是一個英文口說教練。請跟我進行一場關於「購物 (Shopping)」的角色扮演練習。",
+                prompt: "你現在是我的英文教練。請跟我進行「購物消費」的角色扮演。",
                 sentences: [
                     { en: "I'm just looking, thanks.", ch: "我只是看看，謝謝。", tag: "Browsing" },
                     { en: "Does this come in another color?", ch: "這個有別的顏色嗎？", tag: "Option" },
@@ -263,7 +272,7 @@
                 label: "飯店住宿",
                 title: "Hotel & Accommodation",
                 desc: "入住退房、客房服務與設施詢問。",
-                prompt: "你現在是一個英文口說教練。請跟我進行一場關於「飯店 (Hotel)」的角色扮演練習。",
+                prompt: "你現在是我的英文教練。請跟我進行「飯店住宿」的角色扮演。",
                 sentences: [
                     { en: "I have a reservation under my name.", ch: "我有預約，名字是...", tag: "Check-in" },
                     { en: "Is there free Wi-Fi here?", ch: "這裡有免費 Wi-Fi 嗎？", tag: "Internet" },
@@ -281,7 +290,7 @@
                 label: "交通通勤",
                 title: "Transportation",
                 desc: "大眾運輸、問路與乘車用語。",
-                prompt: "你現在是一個英文口說教練。請跟我進行一場關於「交通 (Transportation)」的角色扮演練習。",
+                prompt: "你現在是我的英文教練。請跟我進行「交通通勤」的角色扮演。",
                 sentences: [
                     { en: "Where is the nearest subway station?", ch: "最近的捷運站在哪？", tag: "Direction" },
                     { en: "How much is the fare to the airport?", ch: "去機場的車資是多少？", tag: "Fare" },
@@ -299,7 +308,7 @@
                 label: "醫療健康",
                 title: "Health & Medical",
                 desc: "身體不適、看診與藥局用語。",
-                prompt: "你現在是一個英文口說教練。請跟我進行一場關於「醫療 (Health)」的角色扮演練習。",
+                prompt: "你現在是我的英文教練。請跟我進行「醫療健康」的角色扮演。",
                 sentences: [
                     { en: "I'm not feeling well.", ch: "我覺得不太舒服。", tag: "Symptom" },
                     { en: "I have a splitting headache.", ch: "我頭痛欲裂。", tag: "Pain" },
@@ -317,7 +326,7 @@
                 label: "居家生活",
                 title: "Daily Life & Home",
                 desc: "家事、日常請求與家庭對話。",
-                prompt: "你現在是一個英文口說教練。請跟我進行一場關於「居家 (Home)」的角色扮演練習。",
+                prompt: "你現在是我的英文教練。請跟我進行「居家生活」的角色扮演。",
                 sentences: [
                     { en: "Can you help me with the chores?", ch: "你能幫我做家事嗎？", tag: "Chores" },
                     { en: "We're running out of milk.", ch: "我們的牛奶快喝完了。", tag: "Grocery" },
@@ -359,9 +368,11 @@
             activeCategory = key;
             renderNav();
             updateView();
-            // Clear inputs
-            document.getElementById('custom-en').value = '';
+            // Clear input
             document.getElementById('custom-ch').value = '';
+            // Clear custom cards for new category visual clarity (optional, kept for now)
+            // document.getElementById('custom-cards-container').innerHTML = '';
+            // document.getElementById('custom-cards-section').classList.add('hidden');
         }
 
         function updateView() {
@@ -373,27 +384,31 @@
             `;
             document.getElementById('current-desc').textContent = data.desc;
 
-            // Render Cards
+            // Render Standard Cards
             const container = document.getElementById('cards-container');
             container.innerHTML = '';
 
             data.sentences.forEach(s => {
-                const card = createCardElement(s.en, s.ch, s.tag);
+                const card = createCardElement(s.en, s.ch, s.tag, false);
                 container.appendChild(card);
             });
         }
 
-        // Helper to create card DOM
-        function createCardElement(en, ch, tag) {
+        // Generate Card HTML
+        function createCardElement(en, ch, tag, isCustom) {
             const card = document.createElement('div');
-            card.className = "bg-white p-6 rounded-xl border border-gray-100 card-shadow relative group";
+            // Custom cards get Gold/Yellow style, Standard gets White
+            const bgClass = isCustom ? "bg-yellow-50 border-yellow-200 ring-2 ring-yellow-100" : "bg-white border-gray-100";
+            const tagClass = isCustom ? "bg-yellow-200 text-yellow-800" : "bg-gray-100 text-gray-500";
+            
+            card.className = `${bgClass} p-6 rounded-xl border card-shadow relative group`;
             card.innerHTML = `
                 <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
                     <button onclick="speak('${en.replace(/'/g, "\\'")}')" class="p-2 bg-indigo-50 text-indigo-600 rounded-full hover:bg-indigo-100 transition">
                         <i class="ph-bold ph-speaker-high"></i>
                     </button>
                 </div>
-                <span class="inline-block px-2 py-1 bg-gray-100 text-gray-500 text-xs font-bold rounded-md mb-3">
+                <span class="inline-block px-2 py-1 ${tagClass} text-xs font-bold rounded-md mb-3">
                     ${tag}
                 </span>
                 <h3 class="text-xl font-bold text-gray-800 mb-2 en-font leading-relaxed">${en}</h3>
@@ -402,34 +417,59 @@
             return card;
         }
 
-        // Custom Card Generator Logic
-        function addCustomCard() {
-            const enInput = document.getElementById('custom-en');
+        // --- Custom Card Logic with Auto Translation ---
+        async function addCustomCard() {
             const chInput = document.getElementById('custom-ch');
-            const enText = enInput.value.trim();
             const chText = chInput.value.trim();
+            const btn = document.getElementById('generate-btn');
 
-            if (!enText || !chText) {
-                alert("請輸入完整的英文句子與中文翻譯！");
+            if (!chText) {
+                alert("請輸入中文句子！");
                 return;
             }
 
-            const container = document.getElementById('cards-container');
-            const newCard = createCardElement(enText, chText, "Custom");
-            
-            // Add animation class
-            newCard.classList.add('new-card-anim');
-            
-            // Insert at the beginning
-            container.insertBefore(newCard, container.firstChild);
+            // UI Loading State
+            const originalBtnContent = btn.innerHTML;
+            btn.innerHTML = `<i class="ph-bold ph-spinner loading-spin"></i> 翻譯中...`;
+            btn.disabled = true;
 
-            // Clear inputs
-            enInput.value = '';
-            chInput.value = '';
+            try {
+                // Call Free Translation API (MyMemory)
+                const response = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(chText)}&langpair=zh|en`);
+                const data = await response.json();
+                
+                if (data && data.responseData) {
+                    const enText = data.responseData.translatedText;
+                    
+                    // Create and Append Card to Custom Section
+                    const container = document.getElementById('custom-cards-container');
+                    const section = document.getElementById('custom-cards-section');
+                    
+                    const newCard = createCardElement(enText, chText, "自訂句型", true);
+                    newCard.classList.add('new-card-anim');
+                    
+                    // Show section if hidden
+                    section.classList.remove('hidden');
+                    
+                    // Insert at beginning
+                    container.insertBefore(newCard, container.firstChild);
+                    
+                    // Clear input
+                    chInput.value = '';
+                } else {
+                    alert("翻譯失敗，請稍後再試。");
+                }
+            } catch (error) {
+                console.error("Translation error:", error);
+                alert("翻譯連線錯誤，請檢查網路。");
+            } finally {
+                // Restore Button
+                btn.innerHTML = originalContent;
+                btn.disabled = false;
+            }
         }
 
         function speak(text) {
-            // Cancel current speech if any
             window.speechSynthesis.cancel();
             const utterance = new SpeechSynthesisUtterance(text);
             utterance.lang = 'en-US';
@@ -446,13 +486,12 @@
                 backgroundColor: "#F9FAFB",
             }).then(canvas => {
                 const link = document.createElement('a');
-                link.download = `Chungen_English_${activeCategory}_${new Date().toISOString().slice(0,10)}.png`;
+                link.download = `Chungen_English_Review_${new Date().toISOString().slice(0,10)}.png`;
                 link.href = canvas.toDataURL('image/png');
                 link.click();
                 document.body.style.cursor = 'default';
             }).catch(err => {
-                console.error("Image generation failed", err);
-                alert("圖片下載失敗，請稍後再試。");
+                alert("圖片下載失敗");
                 document.body.style.cursor = 'default';
             });
         }
@@ -467,7 +506,7 @@
             document.body.removeChild(textarea);
 
             const originalContent = btn.innerHTML;
-            btn.innerHTML = `<i class="ph-bold ph-check"></i> <span>已複製角色設定！</span>`;
+            btn.innerHTML = `<i class="ph-bold ph-check"></i> <span>已複製設定！</span>`;
             setTimeout(() => { btn.innerHTML = originalContent; }, 2000);
         }
 
