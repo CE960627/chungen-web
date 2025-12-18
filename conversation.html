@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>實用生活英文 | Daily Conversation</title>
+    <title>實用生活英文 | Chungen English</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,20 +19,16 @@
             -webkit-font-smoothing: antialiased;
         }
         
-        /* Enforce English Font for sentences to fix apostrophe spacing */
+        /* Enforce English Font for sentences */
         .en-font {
             font-family: 'Inter', sans-serif;
         }
 
-        /* Hide Scrollbar but keep functionality */
-        .no-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-        .no-scrollbar {
-            -ms-overflow-style: none;  /* IE and Edge */
-            scrollbar-width: none;  /* Firefox */
-        }
+        /* Hide Scrollbar */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
+        /* Card Styling */
         .card-shadow {
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -48,6 +44,15 @@
             background-color: #EEF2FF;
             color: #4F46E5;
             border-right: 3px solid #4F46E5;
+        }
+        
+        /* Custom Input Animation */
+        @keyframes popIn {
+            0% { transform: scale(0.9); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .new-card-anim {
+            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
     </style>
 </head>
@@ -100,10 +105,10 @@
                 </div>
             
             <div class="p-4 border-t border-gray-100 bg-gray-50">
-                <button onclick="copyScenePrompt(this)" class="w-full bg-indigo-600 text-white py-2 px-4 rounded-lg text-sm font-bold hover:bg-indigo-700 transition flex items-center justify-center gap-2 shadow-sm">
-                    <i class="ph-bold ph-robot"></i> 複製 AI 角色設定
+                <button onclick="copyScenePrompt(this)" class="w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-3 px-4 rounded-xl text-sm font-bold hover:shadow-lg transition flex items-center justify-center gap-2 shadow-md transform hover:-translate-y-0.5">
+                    <i class="ph-bold ph-sparkle"></i> 複製 Gemini 角色設定
                 </button>
-                <p class="text-[10px] text-gray-400 mt-2 text-center">貼給 ChatGPT 即可開始對話練習</p>
+                <p class="text-[10px] text-gray-400 mt-2 text-center">貼給 Gemini 即可開始 AI 對話練習</p>
             </div>
         </aside>
 
@@ -130,6 +135,29 @@
             </header>
 
             <div class="flex-1 overflow-y-auto p-4 md:p-8" id="capture-area">
+                
+                <div class="max-w-7xl mx-auto mb-8 bg-gradient-to-r from-indigo-50 to-blue-50 border border-indigo-100 rounded-2xl p-6 shadow-sm">
+                    <h3 class="text-indigo-900 font-bold mb-4 flex items-center gap-2">
+                        <i class="ph-fill ph-magic-wand text-indigo-500"></i> ✨ 自訂你的學習卡
+                    </h3>
+                    <div class="flex flex-col md:flex-row gap-4">
+                        <div class="flex-1">
+                            <input type="text" id="custom-en" placeholder="請輸入英文句子 (例: Keep it up!)" 
+                                class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition font-medium en-font">
+                        </div>
+                        <div class="flex-1">
+                            <input type="text" id="custom-ch" placeholder="請輸入中文翻譯 (例: 繼續保持!)" 
+                                class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition">
+                        </div>
+                        <button onclick="addCustomCard()" class="bg-indigo-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-indigo-700 transition shadow-md flex items-center justify-center gap-2 min-w-[120px]">
+                            <i class="ph-bold ph-plus"></i> 生成卡片
+                        </button>
+                    </div>
+                    <p class="text-xs text-indigo-400 mt-2 ml-1">
+                        * 小技巧：你可以將 Gemini 產生的例句貼過來，製作專屬的複習卡片，且一樣支援發音喔！
+                    </p>
+                </div>
+
                 <div id="cards-container" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 max-w-7xl mx-auto pb-20">
                     </div>
             </div>
@@ -138,98 +166,173 @@
     </div>
 
     <script>
-        // --- Data ---
+        // --- Data: 9 Topics x 9 Sentences ---
         const categorySettings = {
-            "dating": {
-                icon: "ph-heart",
-                label: "Dating & Romance",
-                title: "約會與戀愛",
-                desc: "從搭訕、稱讚到表達好感的道地用語。",
-                prompt: "你現在是一個英文口說教練。請跟我進行一場關於「約會 (Dating)」的角色扮演練習。請修正我的文法錯誤，並提供更道地的說法。",
-                sentences: [
-                    { en: "I can't take my eyes off you.", ch: "我的視線無法從你身上移開。", tag: "Flirting" },
-                    { en: "We really hit it off.", ch: "我們真的很合得來。", tag: "Connection" },
-                    { en: "I'm totally into you.", ch: "我完全迷上你了。", tag: "Confession" },
-                    { en: "Do you believe in love at first sight?", ch: "你相信一見鍾情嗎？", tag: "Icebreaker" },
-                    { en: "You have a great smile.", ch: "你的笑容很迷人。", tag: "Compliment" },
-                    { en: "Are you seeing anyone lately?", ch: "你最近有交往對象嗎？", tag: "Inquiry" },
-                    { en: "I'd love to take you out for dinner.", ch: "我想帶你去吃晚餐。", tag: "Invitation" },
-                    { en: "Let's split the bill.", ch: "我們各付各的吧。", tag: "Dining" },
-                    { en: "She is playing hard to get.", ch: "她在欲擒故縱。", tag: "Status" },
-                    { en: "I think we should see other people.", ch: "我想我們應該分開（去見見別人）。", tag: "Breakup" }
-                ]
-            },
-            "travel": {
-                icon: "ph-airplane-tilt",
-                label: "Travel & Airport",
-                title: "旅遊與機場",
-                desc: "海關、飯店入住與問路的必備句型。",
-                prompt: "你現在是一個英文口說教練。請跟我進行一場關於「旅遊 (Travel)」的角色扮演練習。",
-                sentences: [
-                    { en: "I have nothing to declare.", ch: "我沒有東西要申報。", tag: "Customs" },
-                    { en: "Could I have an aisle seat, please?", ch: "請問可以給我靠走道的位子嗎？", tag: "Flight" },
-                    { en: "Is there a free shuttle to the city center?", ch: "有免費接駁車到市中心嗎？", tag: "Transport" },
-                    { en: "I'd like to check in, please.", ch: "我要辦理入住。", tag: "Hotel" },
-                    { en: "Could you recommend some local spots?", ch: "可以推薦一些在地景點嗎？", tag: "Sightseeing" },
-                    { en: "Do you have a map of the city?", ch: "你有城市地圖嗎？", tag: "Info" },
-                    { en: "How do I get to the train station?", ch: "請問火車站怎麼走？", tag: "Direction" },
-                    { en: "Can I leave my luggage here?", ch: "我可以把行李寄放在這嗎？", tag: "Service" }
-                ]
-            },
-            "shopping": {
-                icon: "ph-bag",
-                label: "Shopping",
-                title: "逛街購物",
-                desc: "殺價、退換貨與尋找商品的實用句。",
-                prompt: "你現在是一個英文口說教練。請跟我進行一場關於「購物 (Shopping)」的角色扮演練習。",
-                sentences: [
-                    { en: "Do you have this in a smaller size?", ch: "這件有小一點的尺寸嗎？", tag: "Size" },
-                    { en: "It's a little out of my budget.", ch: "這有點超出我的預算。", tag: "Price" },
-                    { en: "Can you give me a discount?", ch: "可以給我一點折扣嗎？", tag: "Bargain" },
-                    { en: "I'm just browsing, thanks.", ch: "我只是看看，謝謝。", tag: "Browsing" },
-                    { en: "Is this on sale?", ch: "這件有特價嗎？", tag: "Sale" },
-                    { en: "I'd like to return this item.", ch: "我想退這件商品。", tag: "Return" },
-                    { en: "Where is the fitting room?", ch: "試衣間在哪裡？", tag: "Location" },
-                    { en: "Do you take credit cards?", ch: "你們收信用卡嗎？", tag: "Payment" }
-                ]
-            },
-            "restaurant": {
-                icon: "ph-fork-knife",
-                label: "Restaurant",
-                title: "餐廳點餐",
-                desc: "訂位、點餐與特殊飲食需求的表達。",
-                prompt: "你現在是一個英文口說教練。請跟我進行一場關於「餐廳 (Restaurant)」的角色扮演練習。",
-                sentences: [
-                    { en: "Table for two, please.", ch: "兩位，謝謝。", tag: "Seating" },
-                    { en: "Could we see the menu?", ch: "我們可以看菜單嗎？", tag: "Ordering" },
-                    { en: "I'll have the steak, medium rare.", ch: "我要牛排，三分熟。", tag: "Food" },
-                    { en: "Does this dish contain nuts?", ch: "這道菜有含堅果嗎？", tag: "Allergy" },
-                    { en: "Can I get this to go?", ch: "這個可以外帶嗎？", tag: "Takeout" },
-                    { en: "Check, please.", ch: "麻煩買單。", tag: "Bill" },
-                    { en: "The service here is impeccable.", ch: "這裡的服務無懈可擊。", tag: "Review" },
-                    { en: "Is the tip included?", ch: "小費有包含在內嗎？", tag: "Payment" }
-                ]
-            },
             "business": {
                 icon: "ph-briefcase",
-                label: "Business",
-                title: "職場商務",
+                label: "職場商務",
+                title: "Business & Workplace",
                 desc: "會議、簡報與職場社交用語。",
-                prompt: "你現在是一個英文口說教練。請跟我進行一場關於「商務 (Business)」的角色扮演練習。",
+                prompt: "你現在是一個英文口說教練。請跟我進行一場關於「職場商務 (Business)」的角色扮演練習。請修正我的文法錯誤，並提供更道地的說法。",
                 sentences: [
                     { en: "Let's get down to business.", ch: "我們言歸正傳吧。", tag: "Meeting" },
-                    { en: "I'd like to propose a new strategy.", ch: "我想提出一個新策略。", tag: "Idea" },
+                    { en: "I'd like to propose a new strategy.", ch: "我想提出一個新策略。", tag: "Proposal" },
                     { en: "Could you elaborate on that point?", ch: "你可以詳細說明那一點嗎？", tag: "Clarify" },
                     { en: "We are on the same page.", ch: "我們的看法一致。", tag: "Agreement" },
                     { en: "I'll follow up with an email.", ch: "我稍後會發一封郵件跟進。", tag: "Follow-up" },
                     { en: "What's the deadline for this project?", ch: "這個專案的截止日期是什麼時候？", tag: "Schedule" },
                     { en: "Let's wrap up this meeting.", ch: "我們結束這場會議吧。", tag: "Closing" },
-                    { en: "Thinking outside the box is crucial.", ch: "跳脫框架思考很關鍵。", tag: "Idiom" }
+                    { en: "Thinking outside the box is crucial.", ch: "跳脫框架思考很關鍵。", tag: "Idiom" },
+                    { en: "I'll keep you in the loop.", ch: "我會隨時讓你了解進度。", tag: "Update" }
+                ]
+            },
+            "travel": {
+                icon: "ph-airplane-tilt",
+                label: "旅遊機場",
+                title: "Travel & Airport",
+                desc: "機場報到、轉機與詢問資訊。",
+                prompt: "你現在是一個英文口說教練。請跟我進行一場關於「旅遊機場 (Travel)」的角色扮演練習。",
+                sentences: [
+                    { en: "I'd like to check in for my flight.", ch: "我想辦理登機手續。", tag: "Check-in" },
+                    { en: "Is there a layover for this flight?", ch: "這班飛機有轉機嗎？", tag: "Flight" },
+                    { en: "Where can I claim my baggage?", ch: "哪裡可以領取行李？", tag: "Baggage" },
+                    { en: "I have nothing to declare.", ch: "我沒有需要申報的東西。", tag: "Customs" },
+                    { en: "Could I get a window seat, please?", ch: "可以給我靠窗的位子嗎？", tag: "Seat" },
+                    { en: "How do I get to the city center?", ch: "我該如何前往市中心？", tag: "Transport" },
+                    { en: "My flight has been delayed.", ch: "我的航班延誤了。", tag: "Status" },
+                    { en: "Is breakfast included in the stay?", ch: "住宿包含早餐嗎？", tag: "Hotel" },
+                    { en: "Can you recommend a local attraction?", ch: "你能推薦一個當地的景點嗎？", tag: "Sightseeing" }
+                ]
+            },
+            "restaurant": {
+                icon: "ph-fork-knife",
+                label: "餐飲英文",
+                title: "Restaurant & Dining",
+                desc: "訂位、點餐與特殊飲食需求。",
+                prompt: "你現在是一個英文口說教練。請跟我進行一場關於「餐廳 (Restaurant)」的角色扮演練習。",
+                sentences: [
+                    { en: "A table for two, please.", ch: "請給我兩位客人的位子。", tag: "Seating" },
+                    { en: "May I see the menu?", ch: "可以給我看菜單嗎？", tag: "Menu" },
+                    { en: "What's the specialty of the house?", ch: "你們的招牌菜是什麼？", tag: "Recommend" },
+                    { en: "I'm allergic to peanuts.", ch: "我對花生過敏。", tag: "Allergy" },
+                    { en: "I'll have the same as her.", ch: "我要跟她點一樣的。", tag: "Order" },
+                    { en: "Can we have the check, please?", ch: "可以幫我們結帳嗎？", tag: "Bill" },
+                    { en: "Is it possible to make a reservation?", ch: "可以訂位嗎？", tag: "Booking" },
+                    { en: "This isn't what I ordered.", ch: "這不是我點的菜。", tag: "Issue" },
+                    { en: "Keep the change.", ch: "不用找錢了。", tag: "Tip" }
+                ]
+            },
+            "dating": {
+                icon: "ph-heart",
+                label: "社交約會",
+                title: "Dating & Romance",
+                desc: "表達好感、稱讚與約會用語。",
+                prompt: "你現在是一個英文口說教練。請跟我進行一場關於「約會 (Dating)」的角色扮演練習。",
+                sentences: [
+                    { en: "Would you like to grab a coffee?", ch: "想去喝杯咖啡嗎？", tag: "Invitation" },
+                    { en: "I had a great time tonight.", ch: "我今晚過得很開心。", tag: "Feeling" },
+                    { en: "You look stunning today.", ch: "你今天看起來很迷人。", tag: "Compliment" },
+                    { en: "Are you seeing anyone lately?", ch: "你最近有在跟誰交往嗎？", tag: "Inquiry" },
+                    { en: "I'm really into you.", ch: "我很中意你。", tag: "Confession" },
+                    { en: "Let's keep in touch.", ch: "保持聯絡。", tag: "Contact" },
+                    { en: "What do you do for fun?", ch: "你平常有什麼休閒嗜好？", tag: "Hobby" },
+                    { en: "Can I walk you home?", ch: "我可以陪你走回家嗎？", tag: "Polite" },
+                    { en: "I think we have a lot in common.", ch: "我覺得我們有很多共同點。", tag: "Connection" }
+                ]
+            },
+            "shopping": {
+                icon: "ph-bag",
+                label: "購物消費",
+                title: "Shopping & Retail",
+                desc: "殺價、退換貨與尋找商品。",
+                prompt: "你現在是一個英文口說教練。請跟我進行一場關於「購物 (Shopping)」的角色扮演練習。",
+                sentences: [
+                    { en: "I'm just looking, thanks.", ch: "我只是看看，謝謝。", tag: "Browsing" },
+                    { en: "Does this come in another color?", ch: "這個有別的顏色嗎？", tag: "Option" },
+                    { en: "Where is the fitting room?", ch: "試衣間在哪裡？", tag: "Location" },
+                    { en: "Is this on sale?", ch: "這個有打折嗎？", tag: "Discount" },
+                    { en: "It's a bit out of my budget.", ch: "這有點超出我的預算。", tag: "Price" },
+                    { en: "Can I get a discount?", ch: "可以給我折扣嗎？", tag: "Bargain" },
+                    { en: "I'd like to return this item.", ch: "我想退掉這件商品。", tag: "Return" },
+                    { en: "Do you accept credit cards?", ch: "你們收信用卡嗎？", tag: "Payment" },
+                    { en: "It fits like a glove.", ch: "這件穿起來非常合身。", tag: "Fitting" }
+                ]
+            },
+            "hotel": {
+                icon: "ph-bed",
+                label: "飯店住宿",
+                title: "Hotel & Accommodation",
+                desc: "入住退房、客房服務與設施詢問。",
+                prompt: "你現在是一個英文口說教練。請跟我進行一場關於「飯店 (Hotel)」的角色扮演練習。",
+                sentences: [
+                    { en: "I have a reservation under my name.", ch: "我有預約，名字是...", tag: "Check-in" },
+                    { en: "Is there free Wi-Fi here?", ch: "這裡有免費 Wi-Fi 嗎？", tag: "Internet" },
+                    { en: "Could I have some extra towels?", ch: "可以多給我幾條毛巾嗎？", tag: "Request" },
+                    { en: "What time is check-out?", ch: "退房時間是什麼時候？", tag: "Info" },
+                    { en: "The air conditioner isn't working.", ch: "冷氣壞掉了。", tag: "Complaint" },
+                    { en: "Can I leave my bags here?", ch: "我可以把行李寄放在這嗎？", tag: "Service" },
+                    { en: "Is there a gym in the hotel?", ch: "飯店內有健身房嗎？", tag: "Facility" },
+                    { en: "Can you wake me up at 7 AM?", ch: "早上七點可以叫我起床嗎？", tag: "Wake-up" },
+                    { en: "I'd like to extend my stay.", ch: "我想延長續住。", tag: "Extend" }
+                ]
+            },
+            "transport": {
+                icon: "ph-train",
+                label: "交通通勤",
+                title: "Transportation",
+                desc: "大眾運輸、問路與乘車用語。",
+                prompt: "你現在是一個英文口說教練。請跟我進行一場關於「交通 (Transportation)」的角色扮演練習。",
+                sentences: [
+                    { en: "Where is the nearest subway station?", ch: "最近的捷運站在哪？", tag: "Direction" },
+                    { en: "How much is the fare to the airport?", ch: "去機場的車資是多少？", tag: "Fare" },
+                    { en: "Does this bus go to downtown?", ch: "這輛公車有去市中心嗎？", tag: "Route" },
+                    { en: "Please pull over here.", ch: "請在這邊靠邊停車。", tag: "Taxi" },
+                    { en: "The train is bound for London.", ch: "這班火車前往倫敦。", tag: "Destination" },
+                    { en: "How often does the shuttle run?", ch: "接駁車多久一班？", tag: "Schedule" },
+                    { en: "I missed my transfer.", ch: "我錯過了轉乘。", tag: "Problem" },
+                    { en: "Is this seat taken?", ch: "這個位子有人坐嗎？", tag: "Seat" },
+                    { en: "You need to top up your card.", ch: "你的卡片需要儲值。", tag: "Card" }
+                ]
+            },
+            "health": {
+                icon: "ph-first-aid",
+                label: "醫療健康",
+                title: "Health & Medical",
+                desc: "身體不適、看診與藥局用語。",
+                prompt: "你現在是一個英文口說教練。請跟我進行一場關於「醫療 (Health)」的角色扮演練習。",
+                sentences: [
+                    { en: "I'm not feeling well.", ch: "我覺得不太舒服。", tag: "Symptom" },
+                    { en: "I have a splitting headache.", ch: "我頭痛欲裂。", tag: "Pain" },
+                    { en: "Where is the pharmacy?", ch: "藥局在哪裡？", tag: "Location" },
+                    { en: "I'd like to make an appointment.", ch: "我想掛號預約。", tag: "Doctor" },
+                    { en: "Are there any side effects?", ch: "有什麼副作用嗎？", tag: "Medicine" },
+                    { en: "How often should I take this?", ch: "這藥多久吃一次？", tag: "Dosage" },
+                    { en: "I've been feeling dizzy lately.", ch: "我最近一直覺得頭暈。", tag: "Condition" },
+                    { en: "Does it hurt here?", ch: "這裡會痛嗎？", tag: "Exam" },
+                    { en: "I need a medical certificate.", ch: "我需要一張診斷證明書。", tag: "Doc" }
+                ]
+            },
+            "home": {
+                icon: "ph-house",
+                label: "居家生活",
+                title: "Daily Life & Home",
+                desc: "家事、日常請求與家庭對話。",
+                prompt: "你現在是一個英文口說教練。請跟我進行一場關於「居家 (Home)」的角色扮演練習。",
+                sentences: [
+                    { en: "Can you help me with the chores?", ch: "你能幫我做家事嗎？", tag: "Chores" },
+                    { en: "We're running out of milk.", ch: "我們的牛奶快喝完了。", tag: "Grocery" },
+                    { en: "Make yourself at home.", ch: "當作自己家，別客氣。", tag: "Guest" },
+                    { en: "The trash needs to be taken out.", ch: "垃圾該拿出去倒了。", tag: "Trash" },
+                    { en: "Could you turn down the volume?", ch: "可以把音量調小聲一點嗎？", tag: "Noise" },
+                    { en: "I'm going to do the laundry.", ch: "我要去洗衣服。", tag: "Washing" },
+                    { en: "What's for dinner tonight?", ch: "今晚晚餐吃什麼？", tag: "Dinner" },
+                    { en: "Don't forget to lock the door.", ch: "別忘了鎖門。", tag: "Safety" },
+                    { en: "I need to tidy up my room.", ch: "我需要整理我的房間。", tag: "Cleaning" }
                 ]
             }
         };
 
-        let activeCategory = "dating"; // Default
+        let activeCategory = "business"; // Default
 
         // --- Functions ---
 
@@ -256,6 +359,9 @@
             activeCategory = key;
             renderNav();
             updateView();
+            // Clear inputs
+            document.getElementById('custom-en').value = '';
+            document.getElementById('custom-ch').value = '';
         }
 
         function updateView() {
@@ -272,25 +378,59 @@
             container.innerHTML = '';
 
             data.sentences.forEach(s => {
-                const card = document.createElement('div');
-                card.className = "bg-white p-6 rounded-xl border border-gray-100 card-shadow relative group";
-                card.innerHTML = `
-                    <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button onclick="speak('${s.en.replace(/'/g, "\\'")}')" class="p-2 bg-indigo-50 text-indigo-600 rounded-full hover:bg-indigo-100 transition">
-                            <i class="ph-bold ph-speaker-high"></i>
-                        </button>
-                    </div>
-                    <span class="inline-block px-2 py-1 bg-gray-100 text-gray-500 text-xs font-bold rounded-md mb-3">
-                        ${s.tag}
-                    </span>
-                    <h3 class="text-xl font-bold text-gray-800 mb-2 en-font leading-relaxed">${s.en}</h3>
-                    <p class="text-gray-500 font-medium">${s.ch}</p>
-                `;
+                const card = createCardElement(s.en, s.ch, s.tag);
                 container.appendChild(card);
             });
         }
 
+        // Helper to create card DOM
+        function createCardElement(en, ch, tag) {
+            const card = document.createElement('div');
+            card.className = "bg-white p-6 rounded-xl border border-gray-100 card-shadow relative group";
+            card.innerHTML = `
+                <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <button onclick="speak('${en.replace(/'/g, "\\'")}')" class="p-2 bg-indigo-50 text-indigo-600 rounded-full hover:bg-indigo-100 transition">
+                        <i class="ph-bold ph-speaker-high"></i>
+                    </button>
+                </div>
+                <span class="inline-block px-2 py-1 bg-gray-100 text-gray-500 text-xs font-bold rounded-md mb-3">
+                    ${tag}
+                </span>
+                <h3 class="text-xl font-bold text-gray-800 mb-2 en-font leading-relaxed">${en}</h3>
+                <p class="text-gray-500 font-medium">${ch}</p>
+            `;
+            return card;
+        }
+
+        // Custom Card Generator Logic
+        function addCustomCard() {
+            const enInput = document.getElementById('custom-en');
+            const chInput = document.getElementById('custom-ch');
+            const enText = enInput.value.trim();
+            const chText = chInput.value.trim();
+
+            if (!enText || !chText) {
+                alert("請輸入完整的英文句子與中文翻譯！");
+                return;
+            }
+
+            const container = document.getElementById('cards-container');
+            const newCard = createCardElement(enText, chText, "Custom");
+            
+            // Add animation class
+            newCard.classList.add('new-card-anim');
+            
+            // Insert at the beginning
+            container.insertBefore(newCard, container.firstChild);
+
+            // Clear inputs
+            enInput.value = '';
+            chInput.value = '';
+        }
+
         function speak(text) {
+            // Cancel current speech if any
+            window.speechSynthesis.cancel();
             const utterance = new SpeechSynthesisUtterance(text);
             utterance.lang = 'en-US';
             utterance.rate = 0.9;
@@ -304,14 +444,9 @@
             html2canvas(captureArea, {
                 scale: 2,
                 backgroundColor: "#F9FAFB",
-                onclone: (clonedDoc) => {
-                    // Optional: Styling adjustments for the screenshot
-                    const cards = clonedDoc.querySelectorAll('.card-shadow');
-                    // Ensure full height capture if needed
-                }
             }).then(canvas => {
                 const link = document.createElement('a');
-                link.download = `Daily_Conversation_${new Date().toISOString().slice(0,10)}.png`;
+                link.download = `Chungen_English_${activeCategory}_${new Date().toISOString().slice(0,10)}.png`;
                 link.href = canvas.toDataURL('image/png');
                 link.click();
                 document.body.style.cursor = 'default';
