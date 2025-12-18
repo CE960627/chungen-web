@@ -20,26 +20,26 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-        /* 遮罩效果核心 CSS - 修正版：回歸 Inline 風格 */
+        /* --- 遮罩效果核心 CSS (修正版：行內顯示) --- */
         .reveal-wrapper {
             position: relative;
             transition: all 0.2s;
             border-radius: 0.375rem;
-            padding: 0.25rem 0.75rem; /* 適當內距 */
-            display: inline-flex;     /* 關鍵：改回 inline-flex，不會強迫換行 */
+            padding: 0.35rem 0.75rem; /* 增加一點內距讓它好按 */
+            display: inline-flex;     /* 關鍵：行內排列，不會變直的 */
             align-items: center;      /* 垂直置中 */
             justify-content: center;  /* 水平置中 */
-            min-width: 80px;          /* 最小寬度，避免字太少很難按 */
-            min-height: 2.25rem;      /* 最小高度 */
-            vertical-align: middle;   /* 對齊文字 */
+            min-width: 100px;         /* 最小寬度，確保好點擊 */
+            vertical-align: middle;   /* 對齊文字基線 */
             cursor: default;
             user-select: none;
+            margin: 0 4px;            /* 左右留點空隙 */
         }
         
         /* 遮罩開啟時 */
         .reveal-wrapper.masked-mode {
             cursor: pointer;
-            background-color: #f1f5f9; /* 淺灰背景提示可點擊 */
+            background-color: #f1f5f9; /* 淺灰背景 */
             border: 1px solid transparent;
         }
         .reveal-wrapper.masked-mode:hover {
@@ -55,7 +55,7 @@
         }
         .reveal-text.hidden {
             filter: blur(5px);
-            opacity: 0; /* 配合 blur 隱藏文字 */
+            opacity: 0; 
         }
         
         /* 點擊顯示提示層 */
@@ -77,7 +77,7 @@
             opacity: 1; 
         }
 
-        /* 選項按鈕樣式 (解決跳動問題) */
+        /* 練習模式選項按鈕 */
         .option-btn {
             transition: all 0.2s;
             border-width: 1px;
@@ -363,27 +363,30 @@
             { id: 33, question: "The government conducted a nationwide _____ to gather data on the current employment trends among fresh graduates.", options: ["A) strategy", "B) victim", "C) survey", "D) technology"], answer: "C", explanation: "解析：(C) conduct a survey (進行調查)。<br>中譯: 政府進行了一項全國性的調查，以收集關於應屆畢業生目前就業趨勢的數據。<br><br>選項中譯：<br>(A) 策略<br>(B) 受害者<br>(D) 科技" }
         ];
 
-        // 狀態管理
+        // --- 2. 狀態管理 ---
         let currentTab = 'verbs';
         let isMasked = false;
-        let currentQuestions = [];
+        
+        // 題庫管理
+        let shuffledQuestions = [];
         let currentQuestionIndex = 0;
+        let currentQuestions = [];
         let userAnswers = {};
         let resultsChecked = {};
 
         // 啟動 Lucide 圖標
         lucide.createIcons();
 
-        // 朗讀功能
-        function speak(text) {
-            window.speechSynthesis.cancel();
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = 'en-US';
-            utterance.rate = 0.8;
-            window.speechSynthesis.speak(utterance);
+        // 初始化：洗牌題目
+        function initQuestions() {
+            shuffledQuestions = [...fullQuestionBank].sort(() => 0.5 - Math.random());
+            currentQuestionIndex = 0;
         }
+        
+        // 頁面載入時先洗牌一次
+        initQuestions();
 
-        // 渲染函式
+        // --- 3. 渲染主函式 ---
         function render() {
             const contentArea = document.getElementById('content-area');
             const maskBtn = document.getElementById('mask-toggle');
@@ -409,14 +412,14 @@
 
             let html = '';
 
-            // Section Description
+            // Section Description (說明區塊)
             if (currentTab === 'verbs') html += `<div class="mb-6 text-slate-600 font-medium border-l-4 border-blue-500 pl-4 py-1"> Part 1. 必考核心動詞：常出現於詞彙題選項或閱讀測驗的關鍵動作。</div>`;
             if (currentTab === 'adj') html += `<div class="mb-6 text-slate-600 font-medium border-l-4 border-purple-500 pl-4 py-1"> Part 2. 高頻關鍵形容詞：決定語氣與態度，是判斷「作者立場」的關鍵。</div>`;
             if (currentTab === 'nouns') html += `<div class="mb-6 text-slate-600 font-medium border-l-4 border-emerald-500 pl-4 py-1"> Part 3. 抽象與學術名詞：閱讀測驗中若看不懂，往往會導致整段大意抓不到。</div>`;
             if (currentTab === 'adv') html += `<div class="mb-6 text-slate-600 font-medium border-l-4 border-amber-500 pl-4 py-1"> Part 4. 易混淆與高頻副詞：掌握語氣轉折與程度，對克漏字拿分至關重要。</div>`;
             if (currentTab === 'practice') html += `<div class="mb-6 text-slate-600 font-medium border-l-4 border-indigo-500 pl-4 py-1"> Part 5. 實戰練習：精選歷屆高頻單字擬真試題庫。</div>`;
 
-            // Render content based on tab
+            // Render Content
             if (['verbs', 'adj', 'nouns'].includes(currentTab)) {
                 const data = currentTab === 'verbs' ? verbsData : currentTab === 'adj' ? adjectivesData : nounsData;
                 html += renderTable(data);
@@ -425,19 +428,29 @@
             } else if (currentTab === 'tips') {
                 html += renderTips();
             } else if (currentTab === 'practice') {
-                html += renderPracticeHTML();
+                html += renderPracticeHTML(); // 只生成初始HTML結構
             }
 
             contentArea.innerHTML = html;
-            lucide.createIcons(); // 重新渲染後要再次呼叫圖標
+            lucide.createIcons(); // 刷新 Icon
 
-            // 如果是練習模式，需要綁定事件和狀態
+            // 如果是練習模式，需要綁定事件和狀態，而不是每次重繪
             if (currentTab === 'practice') {
-                updatePracticeUI();
+                updatePracticeUI(); // 根據當前狀態更新 DOM，不重繪 HTML
             }
         }
 
-        // 表格渲染 (加入發音按鈕 + 修正遮罩樣式)
+        // --- 4. 渲染子函式 ---
+        
+        // 朗讀功能
+        function speak(text) {
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'en-US';
+            utterance.rate = 0.8; // 稍微放慢語速，適合學習
+            window.speechSynthesis.speak(utterance);
+        }
+
         function renderTable(data) {
             return `
             <div class="overflow-x-auto rounded-lg border border-slate-200 shadow-sm bg-white">
@@ -456,7 +469,7 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100 bg-white">
-                        ${data.map((item, index) => `
+                        ${data.map((item) => `
                             <tr class="hover:bg-slate-50 transition-colors">
                                 <td class="p-4">
                                     <div class="flex items-center gap-3">
@@ -469,7 +482,7 @@
                                 <td class="p-4 text-center">
                                     <span class="inline-block px-2 py-1 rounded text-xs font-bold ${item.level >= 5 ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700'}">L${item.level}</span>
                                 </td>
-                                <td class="p-4">
+                                <td class="p-4 text-center">
                                     <div class="reveal-wrapper ${isMasked ? 'masked-mode' : ''}" onclick="toggleSingleReveal(this)">
                                         <div class="reveal-text ${isMasked ? 'hidden' : ''} text-slate-600 font-medium">${item.meaning}</div>
                                         ${isMasked ? '<div class="reveal-overlay"><i data-lucide="eye-off" class="w-3 h-3 mr-1"></i> 點擊顯示</div>' : ''}
@@ -483,7 +496,6 @@
             </div>`;
         }
 
-        // 副詞頁面渲染 (加入發音按鈕)
         function renderAdvPage() {
             return `
             <div class="grid md:grid-cols-2 gap-6">
@@ -493,15 +505,15 @@
                     </h3>
                     <ul class="space-y-3">
                         ${adverbsData.map(item => `
-                            <li class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between border-b border-slate-50 pb-2 last:border-0 hover:bg-slate-50 p-2 rounded transition-colors">
+                            <li class="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b border-slate-50 pb-2 last:border-0 hover:bg-slate-50 p-2 rounded transition-colors">
                                 <span class="font-bold text-blue-700 font-mono text-lg mr-2 flex items-center gap-2">
                                     ${item.word}
                                     <button onclick="speak('${item.word}')" class="p-1 rounded-full text-indigo-400 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">
                                         <i data-lucide="volume-2" class="w-4 h-4"></i>
                                     </button>
                                 </span>
-                                <span class="flex-1 text-right sm:text-left" style="display: flex; align-items: center; justify-content: flex-end;">
-                                    <div class="reveal-wrapper ${isMasked ? 'masked-mode' : ''}" style="width: auto; min-width: 120px;" onclick="toggleSingleReveal(this)">
+                                <span class="flex-1 text-right sm:text-left w-full sm:w-auto mt-2 sm:mt-0" style="display: flex; justify-content: flex-end;">
+                                    <div class="reveal-wrapper ${isMasked ? 'masked-mode' : ''}" onclick="toggleSingleReveal(this)">
                                         <div class="reveal-text ${isMasked ? 'hidden' : ''} text-slate-600">${item.desc}</div>
                                         ${isMasked ? '<div class="reveal-overlay"><i data-lucide="eye-off" class="w-3 h-3 mr-1"></i> 點擊顯示</div>' : ''}
                                     </div>
@@ -516,14 +528,14 @@
                     </h3>
                     <div class="space-y-4">
                         ${confusingPairs.map(item => `
-                            <div class="bg-slate-50 p-4 rounded-lg border border-slate-100">
-                                <div class="font-bold text-slate-800 mb-2 font-mono flex items-center gap-2">
+                            <div class="bg-slate-50 p-4 rounded-lg border border-slate-100 flex flex-col items-center text-center">
+                                <div class="font-bold text-slate-800 mb-2 font-mono flex items-center gap-2 justify-center">
                                     ${item.pair}
                                     <button onclick="speak('${item.pair.replace(/\//g, ', ')}')" class="p-1 rounded-full text-indigo-400 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">
                                         <i data-lucide="volume-2" class="w-4 h-4"></i>
                                     </button>
                                 </div>
-                                <div class="reveal-wrapper ${isMasked ? 'masked-mode' : ''} w-full" onclick="toggleSingleReveal(this)">
+                                <div class="reveal-wrapper ${isMasked ? 'masked-mode' : ''}" onclick="toggleSingleReveal(this)" style="width: 100%;">
                                     <div class="reveal-text ${isMasked ? 'hidden' : ''} text-slate-600">${item.desc}</div>
                                     ${isMasked ? '<div class="reveal-overlay"><i data-lucide="eye-off" class="w-3 h-3 mr-1"></i> 點擊顯示</div>' : ''}
                                 </div>
@@ -534,7 +546,7 @@
             </div>`;
         }
 
-        // 視覺化 Tips (行銷導向)
+        // 行銷導向的 Tips Section
         function renderTips() {
             const tips = [
                 { 
@@ -564,11 +576,19 @@
                         <p class="text-slate-600 leading-relaxed relative z-10 text-justify font-medium">${tip.content}</p>
                     </div>
                 `).join('')}
+            </div>
+            <div class="mt-8 text-center bg-indigo-50 p-6 rounded-xl border border-indigo-100">
+                <p class="text-indigo-800 font-bold text-lg mb-2">準備好開始了嗎？</p>
+                <button onclick="switchTab('practice')" class="bg-indigo-600 text-white px-8 py-3 rounded-full font-bold shadow-lg hover:bg-indigo-700 hover:shadow-xl transition-all transform hover:scale-105 flex items-center gap-2 mx-auto">
+                    <i data-lucide="play-circle" class="w-5 h-5"></i> 立即進入實戰模考
+                </button>
             </div>`;
         }
 
-        // 實戰練習模式邏輯 (不跳動版本)
+        // --- 5. 實戰練習模式邏輯 (解決跳動問題的核心) ---
+
         function renderPracticeHTML() {
+            // 如果還沒有題目，先生成
             if (currentQuestions.length === 0) generateQuestionsLogic();
 
             let html = `
@@ -643,15 +663,29 @@
                 container.dataset.qid = String(currentQuestions[0].id);
                 lucide.createIcons();
             }
+
+            // 恢復使用者的選擇狀態
+            currentQuestions.forEach(q => {
+                const prefix = userAnswers[q.id];
+                if (prefix) {
+                    const btn = document.getElementById(`btn-${q.id}-${prefix}`);
+                    if (btn) updateSelectionVisuals(btn, q.id, prefix);
+                }
+                if (resultsChecked[q.id]) {
+                    showResultVisuals(q.id);
+                }
+            });
         }
 
-        // 生成題目邏輯
+        // 邏輯: 生成題目數據
         function generateQuestionsLogic() {
+            // 洗牌初始化
             if (shuffledQuestions.length === 0) {
                  shuffledQuestions = [...fullQuestionBank].sort(() => 0.5 - Math.random());
                  currentQuestionIndex = 0;
             }
 
+            // 檢查是否做完
             if (currentQuestionIndex >= shuffledQuestions.length) {
                 alert("恭喜！你已經做完所有題目了。系統將重新洗牌，開始新的一輪練習！");
                 shuffledQuestions = [...fullQuestionBank].sort(() => 0.5 - Math.random());
@@ -777,6 +811,7 @@
         // 邏輯控制
         function switchTab(tabId) {
             currentTab = tabId;
+            // 先重置所有按鈕樣式 (含 Tailwind class)
             const inactiveClasses = ['bg-white', 'text-slate-600', 'border-slate-200', 'hover:bg-slate-50'];
             const activeClasses = ['bg-indigo-600', 'text-white', 'border-indigo-600', 'shadow-md', 'transform', 'scale-105'];
 
