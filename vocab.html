@@ -17,95 +17,60 @@
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         /* 隱藏滾動條但保留功能 */
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
 
         /* 遮罩效果核心 CSS */
         .reveal-wrapper {
             position: relative;
             transition: all 0.2s;
-            border-radius: 0.5rem;
-            padding: 0.5rem 0.75rem;
-            margin: -0.25rem;
-            display: flex;       
-            align-items: center; 
-            justify-content: center; 
-            width: 100%;         
-            min-height: 2.75rem; 
+            border-radius: 0.375rem;
+            padding: 0.25rem 0.5rem;
+            margin-left: -0.5rem;
+            display: inline-block;
             user-select: none;
         }
+        
+        /* 當遮罩開啟時，滑鼠移過去會有淡淡灰色 */
         .reveal-wrapper.masked-mode {
             cursor: pointer;
-            background-color: #f8fafc;
-            border: 1px solid transparent;
         }
         .reveal-wrapper.masked-mode:hover {
             background-color: #f1f5f9;
-            border-color: #cbd5e1;
         }
+
+        /* 文字模糊狀態 */
         .reveal-text {
             transition: all 0.3s;
-            width: 100%;
-            text-align: center;
         }
         .reveal-text.hidden {
-            filter: blur(6px);
+            filter: blur(5px);
             background-color: #e2e8f0;
             color: transparent; 
             border-radius: 4px;
-            user-select: none;
         }
+        
+        /* 點擊顯示提示層 */
         .reveal-overlay {
             position: absolute;
             inset: 0;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: #64748b;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #94a3b8;
             pointer-events: none;
             opacity: 0;
             transition: opacity 0.2s;
         }
-        .reveal-text.hidden + .reveal-overlay { opacity: 1; }
-
-        /* 練習模式專用樣式 (解決跳動問題) */
-        .option-btn {
-            transition: all 0.2s;
-            border-width: 1px;
-        }
-        /* 選中狀態 */
-        .option-btn.selected {
-            background-color: #eff6ff; /* blue-50 */
-            border-color: #4f46e5; /* indigo-600 */
-            color: #4338ca; /* indigo-700 */
-            font-weight: 600;
-            box-shadow: 0 0 0 1px #4f46e5;
-        }
-        /* 正確答案 */
-        .option-btn.correct {
-            background-color: #f0fdf4; /* green-50 */
-            border-color: #22c55e; /* green-500 */
-            color: #15803d; /* green-700 */
-            font-weight: 700;
-        }
-        /* 錯誤答案 */
-        .option-btn.wrong {
-            background-color: #fef2f2; /* red-50 */
-            border-color: #fca5a5; /* red-300 */
-            color: #b91c1c; /* red-700 */
-            opacity: 0.8;
-        }
-        /* 禁用狀態 */
-        .option-btn.disabled {
-            pointer-events: none;
-        }
-        /* 未選中的其他選項變淡 */
-        .option-btn.muted {
-            opacity: 0.5;
-            filter: grayscale(100%);
-            border-color: #f1f5f9;
+        .reveal-text.hidden + .reveal-overlay {
+            opacity: 1;
         }
     </style>
 </head>
@@ -194,12 +159,11 @@
 
     <footer class="bg-slate-800 text-slate-400 py-8 text-center text-sm mt-auto">
         <p>歷屆學測英文高頻單字與試題分析</p>
-        <p class="mt-2 text-slate-500">© Chungen English. All rights reserved.</p>
+        <p class="mt-2 text-slate-500">Based on GSAT English Exam Trends</p>
     </footer>
 
     <script>
-        // --- 1. 資料庫 (Data) ---
-        // (保持你的原始單字資料不變)
+        // 資料庫 (Data)
         const verbsData = [
             { word: "acquire", level: 4, meaning: "獲得；習得", note: "acquire knowledge/skills (習得知識/技能)。常考與 require (要求) 的辨析。" },
             { word: "adapt", level: 4, meaning: "適應；改編", note: "adapt to (適應環境)。111年考過生物適應環境的議題。注意與 adopt (採用/領養) 區分。" },
@@ -315,56 +279,27 @@
             { pair: "respectful / respective / respectable", desc: "恭敬的 / 分別的 / 值得尊敬的" }
         ];
 
-        // 完整題庫 (已補完選項中文意思)
         const fullQuestionBank = [
-            // Test 1
-            { id: 1, question: "To get a good job, students need to _____ new skills, such as using computers.", options: ["A) acquire", "B) anticipate", "C) decline", "D) evaluate"], answer: "A", explanation: "解析：(A) acquire skills (習得技能)。<br>中譯: 為了得到一份好工作，學生需要習得新技能，例如使用電腦。<br><br>選項中譯：<br>(B) 預期<br>(C) 下降/婉拒<br>(D) 評估" },
-            { id: 2, question: "Scientists _____ the heavy rain to the typhoon coming next week.", options: ["A) expose", "B) attribute", "C) encounter", "D) establish"], answer: "B", explanation: "解析：(B) attribute A to B (把A歸因於B)。<br>中譯: 科學家將這場大雨歸因於下週要來的颱風。<br><br>選項中譯：<br>(A) 暴露<br>(C) 遭遇<br>(D) 建立" },
-            { id: 3, question: "It is hard for the new student to _____ to the school life here because he has no friends yet.", options: ["A) alter", "B) associate", "C) adapt", "D) overcome"], answer: "C", explanation: "解析：(C) adapt to (適應環境)。<br>中譯: 這位新生很難適應這裡的學校生活，因為他還沒有朋友。<br><br>選項中譯：<br>(A) 改變<br>(B) 聯想<br>(D) 克服" },
-            { id: 4, question: "The study results _____ that eating too much sugar is bad for your health.", options: ["A) maintain", "B) demonstrate", "C) encounter", "D) expose"], answer: "B", explanation: "解析：(B) studies demonstrate (研究顯示)。<br>中譯: 研究結果顯示，吃太多糖對你的健康不好。<br><br>選項中譯：<br>(A) 維持/主張<br>(C) 遭遇<br>(D) 暴露" },
-            { id: 5, question: "All drivers must _____ the traffic rules to avoid accidents.", options: ["A) observe", "B) associate", "C) decline", "D) indicate"], answer: "A", explanation: "解析：(A) observe the rules (遵守規則)。<br>中譯: 所有駕駛都必須遵守交通規則以避免車禍。<br><br>選項中譯：<br>(B) 聯想<br>(C) 下降<br>(D) 指出" },
-            // Test 2
-            { id: 6, question: "The investigative journalist worked secretly for months to _____ the truth about the factory's illegal waste disposal.", options: ["A) reveal", "B) reinforce", "C) recommend", "D) transfer"], answer: "A", explanation: "解析：(A) reveal the truth (揭露真相)。<br>中譯: 這位調查記者秘密工作了數個月，以揭露關於工廠非法棄置廢棄物的真相。<br><br>選項中譯：<br>(B) 強化<br>(C) 推薦<br>(D) 轉移" },
-            { id: 7, question: "Many students feel extremely _____ about their exam results, checking their phones every few minutes for updates.", options: ["A) annual", "B) anxious", "C) artificial", "D) appropriate"], answer: "B", explanation: "解析：(B) anxious about (對...感到焦慮)。<br>中譯: 許多學生對他們的考試成績感到非常焦慮，每隔幾分鐘就查看手機是否有更新。<br><br>選項中譯：<br>(A) 每年的<br>(C) 人造的<br>(D) 適當的" },
-            { id: 8, question: "To make the historic building _____ to visitors with disabilities, the museum management decided to install ramps and elevators.", options: ["A) accessible", "B) alternative", "C) available", "D) aware"], answer: "A", explanation: "解析：(A) accessible to (可進入的/易取得的)。<br>中譯: 為了讓身心障礙遊客能夠進入這棟歷史建築，博物館方決定安裝坡道和電梯。<br><br>選項中譯：<br>(B) 替代的<br>(C) 可用的<br>(D) 意識到的" },
-            { id: 9, question: "The marketing team launched a new campaign to _____ the idea that their product is the most eco-friendly option on the market.", options: ["A) preserve", "B) promote", "C) confuse", "D) reinforce"], answer: "D", explanation: "解析：(D) reinforce the idea (強化這個觀點)。<br>中譯: 行銷團隊發起了一項新活動，以強化他們的產品是市面上最環保選擇的這個觀點。<br><br>選項中譯：<br>(A) 保存<br>(B) 促進/推銷<br>(C) 使困惑" },
-            { id: 10, question: "With the help of advanced technology, the company was able to _____ the small local workshop into a world-class manufacturing plant.", options: ["A) transform", "B) transfer", "C) preserve", "D) recommend"], answer: "A", explanation: "解析：(A) transform A into B (將A轉變為B)。<br>中譯: 藉助先進科技，該公司成功將這間在地小工作坊轉變為世界級的製造廠。<br><br>選項中譯：<br>(B) 轉移<br>(C) 保存<br>(D) 推薦" },
-            // Test 3
-            { id: 11, question: "The witness's statement was not _____ with the evidence found at the crime scene, which made the police suspicious.", options: ["A) consistent", "B) conservative", "C) current", "D) crucial"], answer: "A", explanation: "解析：(A) consistent with (與...一致)。<br>中譯: 目擊者的陳述與在犯罪現場發現的證據不一致，這讓警方感到懷疑。<br><br>選項中譯：<br>(B) 保守的<br>(C) 目前的<br>(D) 關鍵的" },
-            { id: 12, question: "During the global _____ crisis, many small businesses went bankrupt and people lost their jobs.", options: ["A) domestic", "B) financial", "C) negative", "D) potential"], answer: "B", explanation: "解析：(B) financial crisis (金融危機)。<br>中譯: 在全球金融危機期間，許多小企業破產，人們也失去了工作。<br><br>選項中譯：<br>(A) 國內的<br>(C) 負面的<br>(D) 潛在的" },
-            { id: 13, question: "To save money on electricity bills and protect the environment, we should replace old appliances with energy-_____ models.", options: ["A) essential", "B) obvious", "C) gradual", "D) efficient"], answer: "D", explanation: "解析：(D) energy-efficient (節能的/有效率的)。<br>中譯: 為了節省電費並保護環境，我們應該將舊家電汰換成節能的型號。<br><br>選項中譯：<br>(A) 必要的<br>(B) 明顯的<br>(C) 逐漸的" },
-            { id: 14, question: "Doctors emphasize that maintaining good _____ health is just as important as keeping physically fit in this high-stress society.", options: ["A) precise", "B) mental", "C) considerable", "D) conservative"], answer: "B", explanation: "解析：(B) mental health (心理健康)。<br>中譯: 醫生強調，在這個高壓社會中，保持良好的心理健康與保持身體健康同樣重要。<br><br>選項中譯：<br>(A) 精確的<br>(C) 相當大的<br>(D) 保守的" },
-            { id: 15, question: "The university campus is culturally _____ with students coming from over 50 different countries to study together.", options: ["A) domestic", "B) potential", "C) diverse", "D) crucial"], answer: "C", explanation: "解析：(C) culturally diverse (文化多樣的)。<br>中譯: 這座大學校園在文化上相當多樣化，有來自超過50個不同國家的學生一起學習。<br><br>選項中譯：<br>(A) 國內的<br>(B) 潛在的<br>(D) 關鍵的" },
-            // Test 4
-            { id: 16, question: "The government is promoting _____ development policies to ensure that economic growth does not harm the environment for future generations.", options: ["A) reluctant", "B) sustainable", "C) psychological", "D) specific"], answer: "B", explanation: "解析：(B) sustainable development (永續發展)。<br>中譯: 政府正在推廣永續發展政策，以確保經濟成長不會為了後代子孫而損害環境。<br><br>選項中譯：<br>(A) 不情願的<br>(C) 心理的<br>(D) 特定的" },
-            { id: 17, question: "Without proper protection, the elderly and young children are particularly _____ to the flu virus during the winter season.", options: ["A) significant", "B) unique", "C) sustainable", "D) vulnerable"], answer: "D", explanation: "解析：(D) be vulnerable to (易受...影響/脆弱的)。<br>中譯: 若沒有適當的保護，老人與幼童在冬季特別易受流感病毒感染。<br><br>選項中譯：<br>(A) 顯著的<br>(B) 獨特的<br>(C) 永續的" },
-            { id: 18, question: "Although he knew he was wrong, the proud boy was _____ to apologize to his classmates.", options: ["A) reluctant", "B) specific", "C) vulnerable", "D) psychological"], answer: "A", explanation: "解析：(A) be reluctant to (不情願/勉強做...)。<br>中譯: 雖然他知道自己錯了，但這位驕傲的男孩仍不情願向他的同學道歉。<br><br>選項中譯：<br>(B) 特定的<br>(C) 脆弱的<br>(D) 心理的" },
-            { id: 19, question: "The language _____ is often the biggest challenge for travelers visiting a country where they do not speak the local tongue.", options: ["A) aspect", "B) convention", "C) barrier", "D) application"], answer: "C", explanation: "解析：(C) language barrier (語言隔閡/障礙)。<br>中譯: 對於造訪不講當地語言國家的旅客來說，語言隔閡往往是最大的挑戰。<br><br>選項中譯：<br>(A) 層面<br>(B) 慣例<br>(D) 應用/申請" },
-            { id: 20, question: "Under no _____ should you share your personal banking passwords with anyone who calls you claiming to be from the bank.", options: ["A) consequences", "B) campaigns", "C) circumstances", "D) characteristics"], answer: "C", explanation: "解析：(C) under no circumstances (絕不/在任何情況下都不)。<br>中譯: 你絕不應該將個人銀行密碼分享給任何打電話自稱是銀行的人。<br><br>選項中譯：<br>(A) 後果<br>(B) 活動<br>(D) 特徵" },
-            // Test 5
-            { id: 21, question: "The construction of the new highway has had a huge _____ on the local environment, destroying the habitats of many wild animals.", options: ["A) interaction", "B) innovation", "C) impact", "D) infection"], answer: "C", explanation: "解析：(C) have a huge impact on (對...有巨大影響)。<br>中譯: 新公路的建設對當地環境造成了巨大的影響，破壞了許多野生動物的棲息地。<br><br>選項中譯：<br>(A) 互動<br>(B) 創新<br>(D) 感染" },
-            { id: 22, question: "After the devastating earthquake, the mayor announced that rescuing the trapped residents was the city's top _____.", options: ["A) resource", "B) priority", "C) phenomenon", "D) decline"], answer: "B", explanation: "解析：(B) top priority (首要任務/優先事項)。<br>中譯: 在毀滅性的地震後，市長宣布救援受困居民是城市的首要任務。<br><br>選項中譯：<br>(A) 資源<br>(C) 現象<br>(D) 下降" },
-            { id: 23, question: "The school puts a strong _____ on foreign language learning, requiring all students to take at least three years of English classes.", options: ["A) evidence", "B) disaster", "C) solution", "D) emphasis"], answer: "D", explanation: "解析：(D) put emphasis on (強調/重視)。<br>中譯: 這所學校非常強調外語學習，要求所有學生至少修習三年的英文課。<br><br>選項中譯：<br>(A) 證據<br>(B) 災難<br>(C) 解決方案" },
-            { id: 24, question: "To prevent viral _____, health experts advise people to wear masks and wash their hands frequently during the flu season.", options: ["A) infection", "B) reduction", "C) factor", "D) resident"], answer: "A", explanation: "解析：(A) viral infection (病毒感染)。<br>中譯: 為了預防病毒感染，健康專家建議民眾在流感季節期間戴口罩並勤洗手。<br><br>選項中譯：<br>(B) 減少<br>(C) 因素<br>(D) 居民" },
-            { id: 25, question: "The Northern Lights are a spectacular natural _____ that attracts thousands of tourists to the polar regions every year.", options: ["A) priority", "B) phenomenon", "C) measure", "D) emphasis"], answer: "B", explanation: "解析：(B) natural phenomenon (自然現象)。<br>中譯: 北極光是一種壯觀的自然現象，每年吸引成千上萬的遊客前往極地地區。<br><br>選項中譯：<br>(A) 優先事項<br>(C) 措施<br>(D) 強調" },
-            // Test 6
-            { id: 26, question: "The sensors in the smart building can _____ detect when no one is in the room and turn off the lights to save energy.", options: ["A) deliberately", "B) relatively", "C) constantly", "D) automatically"], answer: "D", explanation: "解析：(D) automatically (自動地)。<br>中譯: 這棟智慧建築中的感測器可以自動偵測房間內何時無人，並關閉燈光以節省能源。<br><br>選項中譯：<br>(A) 故意地<br>(B) 相對地<br>(C) 不斷地" },
-            { id: 27, question: "Although the typhoon was strong, the damage to the city was _____ minor compared to the devastation caused by the earthquake last year.", options: ["A) approximately", "B) relatively", "C) gradually", "D) eventually"], answer: "B", explanation: "解析：(B) relatively (相對地/比較上)。<br>中譯: 雖然颱風很強，但與去年地震造成的破壞相比，對這座城市的損害相對輕微。<br><br>選項中譯：<br>(A) 大約<br>(C) 逐漸地<br>(D) 最終" },
-            { id: 28, question: "It was very _____ of the manager to give his employees an extra day off after they completed the difficult project ahead of schedule.", options: ["A) considerable", "B) considerate", "C) economical", "D) technological"], answer: "B", explanation: "解析：(B) considerate (體貼的/周到的)。<br>中譯: 經理在員工提前完成困難專案後多給他們一天假，真是非常體貼的。<br><br>選項中譯：<br>(A) 相當大的<br>(C) 節省的<br>(D) 科技的" },
-            { id: 29, question: "Many elderly people fall _____ to telephone scams because they are often less familiar with modern fraud techniques.", options: ["A) survey", "B) victim", "C) trend", "D) strategy"], answer: "B", explanation: "解析：(B) fall victim to (成為...的受害者)。<br>中譯: 許多長者成為電話詐騙的受害者，因為他們通常較不熟悉現代詐欺手法。<br><br>選項中譯：<br>(A) 調查<br>(C) 趨勢<br>(D) 策略" },
-            { id: 30, question: "The school board decided to _____ a new teaching method that encourages students to learn through hands-on activities.", options: ["A) adapt", "B) affect", "C) adopt", "D) adept"], answer: "C", explanation: "解析：(C) adopt (採用)。<br>中譯: 校務委員會決定採用一種新的教學法，鼓勵學生透過實作活動來學習。<br><br>選項中譯：<br>(A) 適應/改編<br>(B) 影響<br>(D) 熟練的" },
-            { id: 31, question: "Pollution has a negative _____ on the health of people living in urban areas, leading to an increase in respiratory diseases.", options: ["A) effect", "B) affect", "C) effort", "D) aspect"], answer: "A", explanation: "解析：(A) effect (影響-名詞)。<br>中譯: 汙染對居住在市區民眾的健康有負面影響，導致呼吸道疾病增加。<br><br>選項中譯：<br>(B) 影響(動詞)<br>(C) 努力<br>(D) 方面" },
-            { id: 32, question: "With the rapid development of AI, we are witnessing a major _____ revolution that is reshaping industries around the world.", options: ["A) respectful", "B) technological", "C) economical", "D) considerable"], answer: "B", explanation: "解析：(B) technological revolution (科技革命)。<br>中譯: 隨著AI的快速發展，我們正見證一場重大的科技革命，正在重塑全球產業。<br><br>選項中譯：<br>(A) 恭敬的<br>(C) 節省的<br>(D) 相當大的" },
-            { id: 33, question: "The government conducted a nationwide _____ to gather data on the current employment trends among fresh graduates.", options: ["A) strategy", "B) victim", "C) survey", "D) technology"], answer: "C", explanation: "解析：(C) conduct a survey (進行調查)。<br>中譯: 政府進行了一項全國性的調查，以收集關於應屆畢業生目前就業趨勢的數據。<br><br>選項中譯：<br>(A) 策略<br>(B) 受害者<br>(D) 科技" }
+            { id: 1, question: "The government has decided to _____ new measures to combat climate change, focusing on reducing carbon emissions.", options: ["A) acquire", "B) adopt", "C) adapt", "D) associate"], answer: "B", explanation: "解析：(B) adopt 採用(措施/方法)。語意為「政府決定採取新措施...」。(A)獲得 (C)適應/改編 (D)聯想，皆不合語意。注意 adapt (適應) 與 adopt (採用) 的區別。" },
+            { id: 2, question: "Elderly people are particularly _____ to the flu, so it is recommended that they get vaccinated every year.", options: ["A) reluctant", "B) sustainable", "C) vulnerable", "D) efficient"], answer: "C", explanation: "解析：(C) vulnerable 易受傷害/影響的。be vulnerable to 是慣用法，意指「易受流感感染」。(A)不情願的 (B)永續的 (D)有效率的。" },
+            { id: 3, question: "It is _____ that all students attend the orientation to understand the school regulations.", options: ["A) essential", "B) diverse", "C) artificial", "D) vague"], answer: "A", explanation: "解析：(A) essential 必要的。句型 It is essential that ... (某事是必要的)。(B)多樣的 (C)人造的 (D)模糊的。" },
+            { id: 4, question: "Despite the bad weather, the athlete _____ his training routine to prepare for the upcoming Olympics.", options: ["A) observed", "B) maintained", "C) estimated", "D) collapsed"], answer: "B", explanation: "解析：(B) maintained 維持。maintain one's routine 維持慣例。(A)觀察/遵守 (C)估計 (D)倒塌。" },
+            { id: 5, question: "Technological _____ has changed the way we communicate, making it much faster and more convenient.", options: ["A) convention", "B) innovation", "C) barrier", "D) victim"], answer: "B", explanation: "解析：(B) innovation 創新。Technological innovation (科技創新) 是高頻搭配詞。(A)慣例/大會 (C)障礙 (D)受害者。" },
+            { id: 6, question: "Before making a decision, we need to _____ all possible risks and benefits carefully.", options: ["A) evaluate", "B) promote", "C) encounter", "D) expose"], answer: "A", explanation: "解析：(A) evaluate 評估。語意為「我們需要仔細評估所有可能的風險與利益」。(B)促進 (C)遭遇 (D)暴露。" },
+            { id: 7, question: "The company's profits have been in _____ for three consecutive years due to the economic recession.", options: ["A) priority", "B) decline", "C) access", "D) survey"], answer: "B", explanation: "解析：(B) decline 下降/衰退。in decline 為片語，意指「處於衰退中」。(A)優先事項 (C)途徑 (D)調查。" },
+            { id: 8, question: "To protect the environment, many countries are looking for _____ energy sources like solar and wind power.", options: ["A) alternative", "B) anxious", "C) reluctant", "D) obvious"], answer: "A", explanation: "解析：(A) alternative 替代的。alternative energy (替代能源) 為高頻搭配詞。(B)焦慮的 (C)不情願的 (D)明顯的。" },
+            { id: 9, question: "The study _____ a strong link between lack of sleep and poor academic performance.", options: ["A) transfers", "B) reveals", "C) acquires", "D) preserves"], answer: "B", explanation: "解析：(B) reveals 揭露/顯示。研究(study)顯示結果，常用 reveal 或 indicate。(A)轉移 (C)獲得 (D)保存。" },
+            { id: 10, question: "It is important to be _____ of your surroundings when walking alone at night.", options: ["A) aware", "B) consistent", "C) mental", "D) domestic"], answer: "A", explanation: "解析：(A) aware 意識到的。be aware of 為慣用語。(B)一致的 (C)心理的 (D)國內的/家庭的。" },
+            { id: 11, question: "The new policy aims to _____ gender equality in the workplace.", options: ["A) promote", "B) decline", "C) overcome", "D) anticipate"], answer: "A", explanation: "解析：(A) promote 促進。促進性別平等 (promote equality)。(B)下降 (C)克服 (D)預期。" },
+            { id: 12, question: "Since the evidence was not _____, the judge could not make a final decision immediately.", options: ["A) consistent", "B) reluctant", "C) artificial", "D) annual"], answer: "A", explanation: "解析：(A) consistent 一致的。指證據前後不一或與事實不符。(B)不情願的 (C)人造的 (D)每年的。" },
+            { id: 13, question: "Many students feel _____ about their future careers because of the rapidly changing job market.", options: ["A) efficient", "B) anxious", "C) specific", "D) potential"], answer: "B", explanation: "解析：(B) anxious 焦慮的。feel anxious about 對...感到焦慮。(A)有效率的 (C)具體的 (D)潛在的。" },
+            { id: 14, question: "Without a common language, the two groups faced a significant _____ to communication.", options: ["A) barrier", "B) resource", "C) strategy", "D) convention"], answer: "A", explanation: "解析：(A) barrier 障礙。language barrier (語言隔閡)。(B)資源 (C)策略 (D)慣例。" },
+            { id: 15, question: "We need to find a _____ solution to the problem, rather than just a temporary fix.", options: ["A) sustainable", "B) gradual", "C) psychological", "D) negative"], answer: "A", explanation: "解析：(A) sustainable 永續的/可持續的。與 temporary (暫時的) 形成對比。(B)逐漸的 (C)心理的 (D)負面的。" }
         ];
 
-        // --- 2. 狀態管理 ---
+        // 狀態管理
         let currentTab = 'verbs';
         let isMasked = false;
-        
-        // 題庫管理
-        let shuffledQuestions = [];
-        let currentQuestionIndex = 0;
         let currentQuestions = [];
         let userAnswers = {};
         let resultsChecked = {};
@@ -372,16 +307,16 @@
         // 啟動 Lucide 圖標
         lucide.createIcons();
 
-        // 初始化：洗牌題目
-        function initQuestions() {
-            shuffledQuestions = [...fullQuestionBank].sort(() => 0.5 - Math.random());
-            currentQuestionIndex = 0;
+        // 朗讀功能
+        function speak(text) {
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'en-US';
+            utterance.rate = 0.8;
+            window.speechSynthesis.speak(utterance);
         }
-        
-        // 頁面載入時先洗牌一次
-        initQuestions();
 
-        // --- 3. 渲染主函式 ---
+        // 渲染函式
         function render() {
             const contentArea = document.getElementById('content-area');
             const maskBtn = document.getElementById('mask-toggle');
@@ -407,14 +342,14 @@
 
             let html = '';
 
-            // Section Description (說明區塊)
+            // Section Description
             if (currentTab === 'verbs') html += `<div class="mb-6 text-slate-600 font-medium border-l-4 border-blue-500 pl-4 py-1"> Part 1. 必考核心動詞：常出現於詞彙題選項或閱讀測驗的關鍵動作。</div>`;
             if (currentTab === 'adj') html += `<div class="mb-6 text-slate-600 font-medium border-l-4 border-purple-500 pl-4 py-1"> Part 2. 高頻關鍵形容詞：決定語氣與態度，是判斷「作者立場」的關鍵。</div>`;
             if (currentTab === 'nouns') html += `<div class="mb-6 text-slate-600 font-medium border-l-4 border-emerald-500 pl-4 py-1"> Part 3. 抽象與學術名詞：閱讀測驗中若看不懂，往往會導致整段大意抓不到。</div>`;
             if (currentTab === 'adv') html += `<div class="mb-6 text-slate-600 font-medium border-l-4 border-amber-500 pl-4 py-1"> Part 4. 易混淆與高頻副詞：掌握語氣轉折與程度，對克漏字拿分至關重要。</div>`;
-            if (currentTab === 'practice') html += `<div class="mb-6 text-slate-600 font-medium border-l-4 border-indigo-500 pl-4 py-1"> Part 5. 實戰練習：精選歷屆高頻單字擬真試題庫。</div>`;
+            if (currentTab === 'practice') html += `<div class="mb-6 text-slate-600 font-medium border-l-4 border-indigo-500 pl-4 py-1"> Part 5. 實戰練習：AI 隨機生成題目，請多加利用「生成新試卷」功能。</div>`;
 
-            // Render Content
+            // Render content based on tab
             if (['verbs', 'adj', 'nouns'].includes(currentTab)) {
                 const data = currentTab === 'verbs' ? verbsData : currentTab === 'adj' ? adjectivesData : nounsData;
                 html += renderTable(data);
@@ -423,20 +358,14 @@
             } else if (currentTab === 'tips') {
                 html += renderTips();
             } else if (currentTab === 'practice') {
-                html += renderPracticeHTML(); // 只生成初始HTML結構
+                html += renderPractice();
             }
 
             contentArea.innerHTML = html;
-            lucide.createIcons(); // 刷新 Icon
-
-            // 如果是練習模式，需要綁定事件和狀態，而不是每次重繪
-            if (currentTab === 'practice') {
-                updatePracticeUI(); // 根據當前狀態更新 DOM，不重繪 HTML
-            }
+            lucide.createIcons(); // 重新渲染後要再次呼叫圖標
         }
 
-        // --- 4. 渲染子函式 ---
-
+        // 表格渲染 (加入發音按鈕)
         function renderTable(data) {
             return `
             <div class="overflow-x-auto rounded-lg border border-slate-200 shadow-sm bg-white">
@@ -455,9 +384,16 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100 bg-white">
-                        ${data.map((item) => `
+                        ${data.map((item, index) => `
                             <tr class="hover:bg-slate-50 transition-colors">
-                                <td class="p-4 font-bold text-slate-800 text-lg">${item.word}</td>
+                                <td class="p-4">
+                                    <div class="flex items-center gap-3">
+                                        <span class="font-bold text-slate-800 text-lg">${item.word}</span>
+                                        <button onclick="speak('${item.word.replace(/'/g, "\\'")}')" class="p-1.5 rounded-full bg-indigo-50 text-indigo-600 hover:bg-indigo-100 transition-colors" title="發音">
+                                            <i data-lucide="volume-2" class="w-4 h-4"></i>
+                                        </button>
+                                    </div>
+                                </td>
                                 <td class="p-4 text-center">
                                     <span class="inline-block px-2 py-1 rounded text-xs font-bold ${item.level >= 5 ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700'}">L${item.level}</span>
                                 </td>
@@ -475,6 +411,7 @@
             </div>`;
         }
 
+        // 副詞頁面渲染 (加入發音按鈕)
         function renderAdvPage() {
             return `
             <div class="grid md:grid-cols-2 gap-6">
@@ -484,9 +421,14 @@
                     </h3>
                     <ul class="space-y-3">
                         ${adverbsData.map(item => `
-                            <li class="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b border-slate-50 pb-2 last:border-0 hover:bg-slate-50 p-2 rounded transition-colors">
-                                <span class="font-bold text-blue-700 font-mono text-lg mr-2">${item.word}</span>
-                                <span class="flex-1 text-right sm:text-left w-full sm:w-auto mt-2 sm:mt-0">
+                            <li class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between border-b border-slate-50 pb-2 last:border-0 hover:bg-slate-50 p-2 rounded transition-colors">
+                                <span class="font-bold text-blue-700 font-mono text-lg mr-2 flex items-center gap-2">
+                                    ${item.word}
+                                    <button onclick="speak('${item.word}')" class="p-1 rounded-full text-indigo-400 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">
+                                        <i data-lucide="volume-2" class="w-4 h-4"></i>
+                                    </button>
+                                </span>
+                                <span class="flex-1 text-right sm:text-left">
                                     <div class="reveal-wrapper ${isMasked ? 'masked-mode' : ''} inline-block" onclick="toggleSingleReveal(this)">
                                         <div class="reveal-text ${isMasked ? 'hidden' : ''} text-slate-600">${item.desc}</div>
                                         ${isMasked ? '<div class="reveal-overlay"><i data-lucide="eye-off" class="w-3 h-3 mr-1"></i> 點擊顯示</div>' : ''}
@@ -502,8 +444,13 @@
                     </h3>
                     <div class="space-y-4">
                         ${confusingPairs.map(item => `
-                            <div class="bg-slate-50 p-4 rounded-lg border border-slate-100 flex flex-col items-center text-center">
-                                <div class="font-bold text-slate-800 mb-2 font-mono">${item.pair}</div>
+                            <div class="bg-slate-50 p-4 rounded-lg border border-slate-100">
+                                <div class="font-bold text-slate-800 mb-2 font-mono flex items-center gap-2">
+                                    ${item.pair}
+                                    <button onclick="speak('${item.pair.replace(/\//g, ', ')}')" class="p-1 rounded-full text-indigo-400 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">
+                                        <i data-lucide="volume-2" class="w-4 h-4"></i>
+                                    </button>
+                                </div>
                                 <div class="reveal-wrapper ${isMasked ? 'masked-mode' : ''} inline-block w-full" onclick="toggleSingleReveal(this)">
                                     <div class="reveal-text ${isMasked ? 'hidden' : ''} text-slate-600">${item.desc}</div>
                                     ${isMasked ? '<div class="reveal-overlay"><i data-lucide="eye-off" class="w-3 h-3 mr-1"></i> 點擊顯示</div>' : ''}
@@ -515,53 +462,26 @@
             </div>`;
         }
 
-        // 行銷導向的 Tips Section
         function renderTips() {
             const tips = [
-                { 
-                    title: "大數據精準命中", 
-                    icon: "target",
-                    color: "text-red-500",
-                    content: "不必背7000單字海！我們透過分析歷屆十年學測真題，為你篩選出最常出現的「核心20%單字」，這些字掌握了，考試分數就穩拿80%。" 
-                },
-                { 
-                    title: "慣用搭配語塊", 
-                    icon: "puzzle",
-                    color: "text-blue-500",
-                    content: "單字不能只背中文意思，考試考的是「搭配詞 (Collocation)」。本站整理了每個高頻字的必考用法，讓你看到題目就能產生「語感直覺」，秒殺克漏字。" 
-                },
-                { 
-                    title: "擬真刷題實戰", 
-                    icon: "zap",
-                    color: "text-yellow-500",
-                    content: "「看得懂」不代表「會寫」。透過實戰模考功能，強迫大腦進行「主動回想 (Active Recall)」，這才是記憶定型的關鍵。反覆刷題，直到看到題目不再需要思考。" 
-                }
+                { title: "情境記憶", content: "不要死背中文。例如背 accessible 時，想著「WIFI is accessible here」或「Wheelchair accessible」。" },
+                { title: "注意多義字", content: "學測愛考熟詞生義。例如 observe (慶祝/遵守)、consume (吃喝)、address (演說/處理)。" },
+                { title: "關鍵 Level 5", content: "若目標是前標或頂標，vulnerable, reluctant, innovation, sustainable 這類字是閱讀測驗的分水嶺。" }
             ];
             return `
             <div class="grid md:grid-cols-3 gap-6">
                 ${tips.map(tip => `
-                    <div class="bg-white p-8 rounded-xl shadow-md border border-slate-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
-                        <div class="absolute top-0 right-0 w-32 h-32 bg-slate-50 rounded-full -mr-10 -mt-10 opacity-50 group-hover:scale-110 transition-transform"></div>
-                        <h3 class="text-2xl font-bold text-slate-800 mb-4 relative z-10 flex items-center gap-2">
-                            <i data-lucide="${tip.icon}" class="w-6 h-6 ${tip.color}"></i> ${tip.title}
-                        </h3>
-                        <p class="text-slate-600 leading-relaxed relative z-10 text-justify font-medium">${tip.content}</p>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition-shadow relative overflow-hidden group">
+                        <div class="absolute top-0 right-0 w-24 h-24 bg-blue-100 rounded-full -mr-12 -mt-12 opacity-50 group-hover:scale-110 transition-transform"></div>
+                        <h3 class="text-xl font-bold text-slate-800 mb-4 relative z-10">${tip.title}</h3>
+                        <p class="text-slate-600 leading-relaxed relative z-10">${tip.content}</p>
                     </div>
                 `).join('')}
-            </div>
-            <div class="mt-8 text-center bg-indigo-50 p-6 rounded-xl border border-indigo-100">
-                <p class="text-indigo-800 font-bold text-lg mb-2">準備好開始了嗎？</p>
-                <button onclick="switchTab('practice')" class="bg-indigo-600 text-white px-8 py-3 rounded-full font-bold shadow-lg hover:bg-indigo-700 hover:shadow-xl transition-all transform hover:scale-105 flex items-center gap-2 mx-auto">
-                    <i data-lucide="play-circle" class="w-5 h-5"></i> 立即進入實戰模考
-                </button>
             </div>`;
         }
 
-        // --- 5. 實戰練習模式邏輯 (解決跳動問題的核心) ---
-
-        function renderPracticeHTML() {
-            // 如果還沒有題目，先生成
-            if (currentQuestions.length === 0) generateQuestionsLogic();
+        function renderPractice() {
+            if (currentQuestions.length === 0) generateQuestions();
 
             let html = `
             <div class="space-y-6 max-w-4xl mx-auto">
@@ -569,226 +489,70 @@
                     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                         <div>
                             <h2 class="text-xl font-bold text-slate-800 mb-2 flex items-center gap-2">
-                                <i data-lucide="brain-circuit" class="text-indigo-600 w-6 h-6"></i> 仿真學測題庫 (詞彙題)
+                                <i data-lucide="brain-circuit" class="text-indigo-600 w-6 h-6"></i> AI 仿真學測題庫 (詞彙題)
                             </h2>
                             <p class="text-slate-600 text-sm">系統已從核心單字庫中隨機生成試卷。</p>
                         </div>
-                        <button onclick="generateNewQuestions()" class="flex items-center gap-2 px-5 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors shadow-md active:scale-95">
+                        <button onclick="generateQuestions()" class="flex items-center gap-2 px-5 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors shadow-md active:scale-95">
                             <i data-lucide="refresh-cw" class="w-4 h-4"></i> 生成新試卷
                         </button>
                     </div>
-                </div>
-                <div id="questions-container"></div>
-            </div>`;
+                </div>`;
+
+            currentQuestions.forEach((q, idx) => {
+                const userAns = userAnswers[q.id];
+                const isChecked = resultsChecked[q.id];
+                const isCorrect = userAns === q.answer;
+
+                const questionText = q.question.split('_____').join(
+                    `<span class="inline-block border-b-2 w-20 mx-1 text-center font-bold ${isChecked ? (isCorrect ? 'border-green-500 text-green-600' : 'border-red-500 text-red-600') : 'border-slate-300 text-blue-600'}">${isChecked ? (q.answer === userAns ? userAns : (userAns || '')) : (userAns || '')}</span>`
+                );
+
+                html += `
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 transition-all hover:shadow-md animate-fade-in-up">
+                    <div class="flex gap-3 mb-4">
+                        <span class="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-indigo-100 text-indigo-700 font-bold rounded-full">${idx + 1}</span>
+                        <p class="text-lg text-slate-800 font-medium leading-relaxed">${questionText}</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 ml-11">
+                        ${q.options.map(opt => {
+                            const prefix = opt.charAt(0);
+                            let btnClass = "border-slate-200 hover:bg-slate-50 text-slate-600";
+                            if (userAns === prefix) btnClass = "border-indigo-500 bg-indigo-50 text-indigo-700 font-semibold ring-1 ring-indigo-500";
+                            if (isChecked) {
+                                if (prefix === q.answer) btnClass = "border-green-500 bg-green-50 text-green-700 font-bold ring-1 ring-green-500";
+                                else if (userAns === prefix && prefix !== q.answer) btnClass = "border-red-300 bg-red-50 text-red-600 opacity-60";
+                                else btnClass = "opacity-50 grayscale border-slate-100";
+                            }
+                            return `<button onclick="handleSelect(${q.id}, '${prefix}')" ${isChecked ? 'disabled' : ''} class="text-left px-4 py-3 rounded-lg border transition-all flex items-center justify-between ${btnClass}">
+                                <span>${opt}</span>
+                                ${isChecked && prefix === q.answer ? '<i data-lucide="check-circle" class="w-5 h-5 text-green-600"></i>' : ''}
+                                ${isChecked && userAns === prefix && prefix !== q.answer ? '<i data-lucide="x-circle" class="w-5 h-5 text-red-500"></i>' : ''}
+                            </button>`;
+                        }).join('')}
+                    </div>
+                    <div class="mt-6 ml-11">
+                        ${!isChecked ? 
+                            `<button onclick="checkResult(${q.id})" ${!userAns ? 'disabled' : ''} class="px-6 py-2 rounded-lg font-bold text-white transition-all ${userAns ? 'bg-indigo-600 hover:bg-indigo-700 shadow-md' : 'bg-slate-300 cursor-not-allowed'}">檢查答案</button>` :
+                            `<div class="p-4 rounded-lg w-full ${isCorrect ? 'bg-green-50 border border-green-100' : 'bg-red-50 border border-red-100'}">
+                                <div class="flex items-center gap-2 font-bold mb-2">
+                                    ${isCorrect ? '<span class="text-green-700 flex items-center gap-1"><i data-lucide="check-circle" class="w-5 h-5"></i> Correct!</span>' : `<span class="text-red-700 flex items-center gap-1"><i data-lucide="x-circle" class="w-5 h-5"></i> Wrong. Answer: ${q.answer}</span>`}
+                                </div>
+                                <p class="text-slate-700 text-sm leading-relaxed">${q.explanation}</p>
+                            </div>`
+                        }
+                    </div>
+                </div>`;
+            });
+
+            html += `</div>`;
             return html;
         }
 
-        // 更新練習模式 UI (DOM操作，不重繪整個畫面)
-        function updatePracticeUI() {
-            const container = document.getElementById('questions-container');
-            if (!container) return;
-
-            // 只有當容器是空的時候，才生成 HTML (第一次載入)
-            // 或者當題目改變時，清空重建 (切換試卷)
-            if (container.innerHTML === '' || container.dataset.qid !== String(currentQuestions[0].id)) {
-                let questionsHTML = '';
-                currentQuestions.forEach((q, idx) => {
-                    const questionText = q.question.split('_____').join(
-                        `<span id="blank-${q.id}" class="inline-block border-b-2 w-20 mx-1 text-center font-bold text-blue-600 border-slate-300"></span>`
-                    );
-
-                    questionsHTML += `
-                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 transition-all hover:shadow-md animate-fade-in-up mb-6" id="q-card-${q.id}">
-                        <div class="flex gap-3 mb-4">
-                            <span class="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-indigo-100 text-indigo-700 font-bold rounded-full">${idx + 1}</span>
-                            <p class="text-lg text-slate-800 font-medium leading-relaxed">${questionText}</p>
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 ml-11">
-                            ${q.options.map(opt => {
-                                const prefix = opt.charAt(0);
-                                return `<button onclick="handleSelect(this, ${q.id}, '${prefix}')" id="btn-${q.id}-${prefix}" class="option-btn text-left px-4 py-3 rounded-lg border flex items-center justify-between border-slate-200 hover:bg-slate-50 text-slate-600">
-                                    <span>${opt}</span>
-                                    <i id="icon-${q.id}-${prefix}" class="w-5 h-5"></i>
-                                </button>`;
-                            }).join('')}
-                        </div>
-                        <div class="mt-6 ml-11" id="action-area-${q.id}">
-                            <button onclick="checkResult(${q.id})" id="check-btn-${q.id}" class="px-6 py-2 rounded-lg font-bold text-white transition-all bg-slate-300 cursor-not-allowed" disabled>檢查答案</button>
-                            <div id="explanation-${q.id}" class="hidden p-4 rounded-lg w-full border mt-4">
-                                <div class="flex items-center gap-2 font-bold mb-2" id="result-header-${q.id}"></div>
-                                <p class="text-slate-700 text-sm leading-relaxed">${q.explanation}</p>
-                            </div>
-                        </div>
-                    </div>`;
-                });
-                container.innerHTML = questionsHTML;
-                container.dataset.qid = String(currentQuestions[0].id); // 標記當前題目ID
-                lucide.createIcons(); // 新生成的 HTML 需要初始化圖標
-            }
-
-            // 恢復使用者的選擇狀態 (如果是切換 Tab 回來)
-            currentQuestions.forEach(q => {
-                const prefix = userAnswers[q.id];
-                if (prefix) {
-                    const btn = document.getElementById(`btn-${q.id}-${prefix}`);
-                    if (btn) updateSelectionVisuals(btn, q.id, prefix);
-                }
-                if (resultsChecked[q.id]) {
-                    showResultVisuals(q.id);
-                }
-            });
-        }
-
-        // 邏輯: 生成題目數據
-        function generateQuestionsLogic() {
-            if (currentQuestionIndex >= shuffledQuestions.length) {
-                alert("恭喜！你已經做完所有題目了。系統將重新洗牌，開始新的一輪練習！");
-                initQuestions();
-            }
-            const nextQuestions = shuffledQuestions.slice(currentQuestionIndex, currentQuestionIndex + 5);
-            currentQuestionIndex += 5;
-            currentQuestions = nextQuestions;
-            userAnswers = {};
-            resultsChecked = {};
-        }
-
-        // 觸發: 生成新試卷
-        function generateNewQuestions() {
-            generateQuestionsLogic();
-            const container = document.getElementById('questions-container');
-            if(container) container.innerHTML = ''; // 強制清空以觸發重繪
-            updatePracticeUI();
-            
-            // 捲動到頂部
-            setTimeout(() => {
-               document.getElementById('content-area').scrollIntoView({ behavior: 'smooth' });
-            }, 100);
-        }
-
-        // 處理選擇 (DOM 操作，不重繪)
-        function handleSelect(btnElement, qId, prefix) {
-            if (resultsChecked[qId]) return; // 已檢查過不能再選
-
-            userAnswers[qId] = prefix;
-            updateSelectionVisuals(btnElement, qId, prefix);
-        }
-
-        function updateSelectionVisuals(btnElement, qId, prefix) {
-            // 1. 清除該題所有按鈕的選中狀態
-            const allBtns = document.querySelectorAll(`#q-card-${qId} .option-btn`);
-            allBtns.forEach(btn => {
-                btn.classList.remove('selected', 'bg-indigo-50', 'border-indigo-500', 'text-indigo-700', 'ring-1', 'ring-indigo-500');
-                btn.classList.add('border-slate-200', 'text-slate-600');
-            });
-
-            // 2. 設定當前按鈕為選中
-            // 注意：因為 switchTab 切換回來時 btnElement 可能是 null (如果只傳了 ID)
-            // 所以這裡再次獲取
-            const targetBtn = document.getElementById(`btn-${qId}-${prefix}`);
-            if(targetBtn) {
-                targetBtn.classList.remove('border-slate-200', 'text-slate-600', 'hover:bg-slate-50');
-                targetBtn.classList.add('selected', 'bg-indigo-50', 'border-indigo-500', 'text-indigo-700', 'ring-1', 'ring-indigo-500');
-            }
-
-            // 3. 更新填空處文字
-            const blank = document.getElementById(`blank-${qId}`);
-            if(blank) blank.textContent = prefix;
-
-            // 4. 啟用檢查按鈕
-            const checkBtn = document.getElementById(`check-btn-${qId}`);
-            if(checkBtn) {
-                checkBtn.disabled = false;
-                checkBtn.classList.remove('bg-slate-300', 'cursor-not-allowed');
-                checkBtn.classList.add('bg-indigo-600', 'hover:bg-indigo-700', 'shadow-md');
-            }
-        }
-
-        // 檢查答案 (DOM 操作)
-        function checkResult(qId) {
-            resultsChecked[qId] = true;
-            showResultVisuals(qId);
-        }
-
-        function showResultVisuals(qId) {
-            const userAns = userAnswers[qId];
-            const correctAns = currentQuestions.find(q => q.id === qId).answer;
-            const isCorrect = userAns === correctAns;
-
-            // 1. 鎖定所有按鈕
-            const allBtns = document.querySelectorAll(`#q-card-${qId} .option-btn`);
-            allBtns.forEach(btn => {
-                btn.classList.add('disabled'); // 禁止點擊
-                btn.onclick = null; // 移除事件
-                
-                // 變淡未選中的
-                if (!btn.id.includes(userAns) && !btn.id.includes(correctAns)) {
-                    btn.classList.add('muted');
-                }
-            });
-
-            // 2. 標示正確與錯誤
-            const correctBtn = document.getElementById(`btn-${qId}-${correctAns}`);
-            if (correctBtn) {
-                correctBtn.className = "option-btn correct text-left px-4 py-3 rounded-lg border flex items-center justify-between ring-1 ring-green-500";
-                // 插入打勾圖示
-                const icon = document.getElementById(`icon-${qId}-${correctAns}`);
-                if(icon) {
-                    icon.setAttribute('data-lucide', 'check-circle');
-                    icon.classList.add('text-green-600');
-                }
-            }
-
-            if (!isCorrect && userAns) {
-                const wrongBtn = document.getElementById(`btn-${qId}-${userAns}`);
-                if (wrongBtn) {
-                    wrongBtn.className = "option-btn wrong text-left px-4 py-3 rounded-lg border flex items-center justify-between ring-1 ring-red-300";
-                    // 插入叉叉圖示
-                    const icon = document.getElementById(`icon-${qId}-${userAns}`);
-                    if(icon) {
-                        icon.setAttribute('data-lucide', 'x-circle');
-                        icon.classList.add('text-red-500');
-                    }
-                }
-            }
-
-            // 3. 更新填空處顏色
-            const blank = document.getElementById(`blank-${qId}`);
-            if(blank) {
-                blank.className = isCorrect 
-                    ? "inline-block border-b-2 w-20 mx-1 text-center font-bold text-green-600 border-green-500"
-                    : "inline-block border-b-2 w-20 mx-1 text-center font-bold text-red-600 border-red-500";
-            }
-
-            // 4. 隱藏檢查按鈕，顯示解析
-            const checkBtn = document.getElementById(`check-btn-${qId}`);
-            if(checkBtn) checkBtn.style.display = 'none';
-
-            const explanationDiv = document.getElementById(`explanation-${qId}`);
-            const resultHeader = document.getElementById(`result-header-${qId}`);
-            
-            if(explanationDiv && resultHeader) {
-                explanationDiv.classList.remove('hidden');
-                if (isCorrect) {
-                    explanationDiv.classList.add('bg-green-50', 'border-green-100');
-                    resultHeader.innerHTML = `<span class="text-green-700 flex items-center gap-1"><i data-lucide="check-circle" class="w-5 h-5"></i> Correct!</span>`;
-                } else {
-                    explanationDiv.classList.add('bg-red-50', 'border-red-100');
-                    resultHeader.innerHTML = `<span class="text-red-700 flex items-center gap-1"><i data-lucide="x-circle" class="w-5 h-5"></i> Wrong. Answer: ${correctAns}</span>`;
-                }
-                // 重要：解析區塊顯示後，重新渲染裡面的圖標
-                lucide.createIcons({ root: explanationDiv });
-            }
-            
-            // 重新渲染按鈕上的圖標
-            lucide.createIcons({ root: document.getElementById(`q-card-${qId}`) });
-        }
-
-
-        // --- 6. 通用邏輯 ---
-
+        // 邏輯控制
         function switchTab(tabId) {
             currentTab = tabId;
-            // 視覺切換
+            // 先重置所有按鈕樣式 (含 Tailwind class)
             const inactiveClasses = ['bg-white', 'text-slate-600', 'border-slate-200', 'hover:bg-slate-50'];
             const activeClasses = ['bg-indigo-600', 'text-white', 'border-indigo-600', 'shadow-md', 'transform', 'scale-105'];
 
@@ -797,18 +561,17 @@
                 btn.classList.add(...inactiveClasses);
             });
 
+            // 設定當前按鈕樣式
             const activeBtn = document.getElementById('btn-' + tabId);
-            if(activeBtn) {
-                activeBtn.classList.remove(...inactiveClasses);
-                activeBtn.classList.add('active', ...activeClasses);
-            }
+            activeBtn.classList.remove(...inactiveClasses);
+            activeBtn.classList.add('active', ...activeClasses);
             
             render();
         }
 
         function toggleMask() {
             isMasked = !isMasked;
-            render(); // 重新渲染以應用/移除遮罩樣式
+            render();
         }
 
         function toggleSingleReveal(el) {
@@ -822,6 +585,25 @@
                 textEl.classList.add('hidden');
                 if(overlayEl) overlayEl.style.opacity = '1';
             }
+        }
+
+        function generateQuestions() {
+            const shuffled = [...fullQuestionBank].sort(() => 0.5 - Math.random());
+            currentQuestions = shuffled.slice(0, 5);
+            userAnswers = {};
+            resultsChecked = {};
+            render();
+        }
+
+        function handleSelect(qId, prefix) {
+            if (resultsChecked[qId]) return;
+            userAnswers[qId] = prefix;
+            render();
+        }
+
+        function checkResult(qId) {
+            resultsChecked[qId] = true;
+            render();
         }
 
         // 初始執行
