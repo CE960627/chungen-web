@@ -69,8 +69,10 @@
                 <section class="flex flex-col md:flex-row gap-8 md:gap-12 mb-16 items-stretch">
     
     <div class="md:w-1/2 w-full">
-        <img src="8-lesson-plan.png" alt="116 學測英文衝刺" 
-             class="w-full h-auto rounded-2xl shadow-2xl border border-gray-100">
+
+        <img src="8-lesson-plan.png" alt="116 學測英文 8 堂課完勝計畫" 
+     loading="eager" fetchpriority="high"
+     class="w-full h-auto rounded-xl shadow-2xl border border-gray-100">
     </div>
     
     <div class="md:w-1/2 w-full flex flex-col justify-between">
@@ -224,34 +226,76 @@
                     </div>
                 </section>
 
-                <section class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                    <div class="bg-gray-100 p-6 rounded-lg shadow-sm">
-                        <h3 class="text-2xl font-bold text-gray-800 mb-4">課程費用</h3>
-                        <p class="text-gray-700 mb-2">(可提供半價試教)</p>
-                        <div class="mb-3">
-                            <p class="text-lg font-bold text-indigo-700">高中英文 / 作文指導</p>
-                            <p class="text-2xl font-bold text-gray-900">1000 <span class="text-base font-normal">/ hr</span></p>
-                            <p class="text-sm text-gray-600">(含題庫＋批改＋各科解題)</p>
-                        </div>
-                        <div>
-                            <p class="text-lg font-bold text-indigo-700">英文作文單篇批改</p>
-                            <p class="text-2xl font-bold text-gray-900">200 <span class="text-base font-normal">/ 篇</span></p>
-                        </div>
+                <section class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+    
+    <div class="bg-white p-6 md:p-8 rounded-2xl border border-slate-200 shadow-sm">
+        <h3 class="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+            <span class="text-indigo-600">💰</span> 課程費用
+        </h3>
+        
+        <div class="space-y-6">
+            <div class="border-b border-slate-100 pb-4">
+                <div class="flex justify-between items-end mb-1">
+                    <p class="text-lg font-bold text-indigo-700">1 對 1 精準特訓</p>
+                    <p class="text-2xl font-bold text-gray-900">1200 <span class="text-sm font-normal text-gray-500">/ hr</span></p>
+                </div>
+                <p class="text-xs text-gray-500">含完整題庫、作文批改及全科解題支援</p>
+            </div>
+
+            <div class="border-b border-slate-100 pb-4">
+                <div class="flex justify-between items-end mb-1">
+                    <p class="text-lg font-bold text-emerald-700">兩人同行 (共學優惠)</p>
+                    <p class="text-2xl font-bold text-gray-900">1000 <span class="text-sm font-normal text-gray-500">/ hr (每人)</span></p>
+                </div>
+                <p class="text-xs text-gray-500">適合程度相近的同班同學或戰友</p>
+            </div>
+
+            <div>
+                <div class="flex justify-between items-end mb-1">
+                    <p class="text-lg font-bold text-gray-700">英文作文單篇批改</p>
+                    <p class="text-2xl font-bold text-gray-900">200 <span class="text-sm font-normal text-gray-500">/ 篇</span></p>
+                </div>
+                <p class="text-xs text-gray-500">詳細回饋並附帶優化建議與高分句型</p>
+            </div>
+        </div>
+        
+        <p class="mt-6 text-sm text-indigo-600 font-medium italic bg-indigo-50 p-2 rounded text-center">
+            ※ 歡迎預約，可提供半價試教服務
+        </p>
+    </div>
+
+    <div class="bg-white p-6 md:p-8 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+        <div>
+            <h3 class="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+                <span class="text-indigo-600">📍</span> 上課地點
+            </h3>
+            
+            <div class="space-y-6">
+                <div class="flex items-start gap-4">
+                    <span class="bg-blue-500 text-white rounded-lg px-3 py-1 text-sm font-bold mt-1">面授</span>
+                    <div>
+                        <p class="text-lg font-bold text-gray-800">新竹地區</p>
+                        <p class="text-sm text-gray-600">以陽明交大周邊、新竹高中周邊佳</p>
                     </div>
-                    <div class="bg-gray-100 p-6 rounded-lg shadow-sm">
-                        <h3 class="text-2xl font-bold text-gray-800 mb-4">上課地點</h3>
-                        <ul class="list-none space-y-2">
-                            <li class="flex items-center text-lg text-gray-800">
-                                <span class="bg-blue-500 text-white rounded-md px-2 py-1 text-sm mr-3">面授</span>
-                                <span>新竹地區 (陽明交大周邊佳)</span>
-                            </li>
-                            <li class="flex items-center text-lg text-gray-800">
-                                <span class="bg-green-500 text-white rounded-md px-2 py-1 text-sm mr-3">線上</span>
-                                <span>使用Google meet授課</span>
-                            </li>
-                        </ul>
+                </div>
+
+                <div class="flex items-start gap-4">
+                    <span class="bg-green-500 text-white rounded-lg px-3 py-1 text-sm font-bold mt-1">線上</span>
+                    <div>
+                        <p class="text-lg font-bold text-gray-800">全台遠端授課</p>
+                        <p class="text-sm text-gray-600">使用 Google Meet 同步教學，不受地區限制</p>
                     </div>
-                </section>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-8 pt-6 border-t border-slate-100">
+            <p class="text-sm text-gray-500 leading-relaxed italic">
+                「不只是教英文，更是陪你走完大考最後一哩路的戰友。」
+            </p>
+        </div>
+    </div>
+</section>
             </main>
 
             <footer class="bg-indigo-900 text-white p-8 md:p-10 text-center">
