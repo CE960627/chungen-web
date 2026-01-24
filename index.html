@@ -163,6 +163,19 @@
     .alluring-button {
         animation: alluring-breathe 2s infinite ease-in-out;
     }
+	/* 預防進場排版亂跳並解決手機版擁擠問題 */
+.nav-button-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+}
+@media (min-width: 768px) {
+    .nav-button-container {
+        display: flex;
+        justify-content: center;
+    }
+}
+body { opacity: 0; transition: opacity 0.2s; }
     </style>
 </head>
 <body class="bg-slate-50 text-gray-800">
@@ -212,7 +225,7 @@
     <!-- 導覽列 -->
     <nav class="bg-white shadow-sm z-10 border-t border-gray-100">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-wrap justify-center -mb-px space-x-1 md:space-x-6">
+            <div class="nav-button-container grid grid-cols-2 md:flex md:flex-wrap md:justify-center -mb-px gap-2 md:gap-6 px-2 md:px-0">
                 <button id="nav-part1" class="nav-button" onclick="showPage('part1')">
                     Part 1: 核心原則
                 </button>
@@ -1254,12 +1267,18 @@
 
         // 初始化：因為 HTML/CSS 已經預設好 Part 3 了，這裡什麼都不用跑，就不會閃爍。
 document.addEventListener('DOMContentLoaded', () => {
-    // 留空即可
+    // 確保預設只顯示 Part 3
+    document.querySelectorAll('.page-content').forEach(page => {
+        if (page.id !== 'part3') page.style.display = 'none';
+    });
+    // 渲染完畢才顯示畫面
+    document.body.style.opacity = "1";
 });
     </script>
 
 </body>
 </html>
+
 
 
 
