@@ -166,7 +166,7 @@
     </style>
 </head>
 <body class="bg-slate-50 text-gray-800">
-	<nav class="bg-gray-900 text-white shadow-lg sticky top-0 z-[60]">
+	<nav class="bg-gray-900 text-white shadow-lg">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex-shrink-0 font-bold text-xl tracking-wider">
@@ -1252,24 +1252,15 @@
             });
         }
 
-        // 初始化
-        document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('.nav-button').forEach(button => {
-                button.className = 'nav-button ' + inactiveNavClass;
-            });
-            // ★ 修改這裡：初始化按鈕改為 nav-part3
-            const defaultButton = document.getElementById('nav-part3'); 
-            if(defaultButton) {
-                defaultButton.classList.remove('border-transparent', 'text-gray-500');
-                defaultButton.classList.add('border-blue-600', 'text-blue-600', 'font-bold', 'border-b-4');
-            }
-            // ★ 修改這裡：預設顯示改為 part3
-            showPage('part3'); 
-        });
+        // 初始化：因為 HTML/CSS 已經預設好 Part 3 了，這裡什麼都不用跑，就不會閃爍。
+document.addEventListener('DOMContentLoaded', () => {
+    // 留空即可
+});
     </script>
 
 </body>
 </html>
+
 
 
 
