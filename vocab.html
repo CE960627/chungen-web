@@ -374,11 +374,11 @@
             let html = '';
 
             // Section Description (說明區塊)
-            if (currentTab === 'verbs') html += `<div class="mb-6 text-slate-600 font-medium border-l-4 border-blue-500 pl-4 py-1"> Part 1. 必考核心動詞：常出現於詞彙題選項或閱讀測驗的關鍵動作。</div>`;
-            if (currentTab === 'adj') html += `<div class="mb-6 text-slate-600 font-medium border-l-4 border-purple-500 pl-4 py-1"> Part 2. 高頻關鍵形容詞：決定語氣與態度，是判斷「作者立場」的關鍵。</div>`;
-            if (currentTab === 'nouns') html += `<div class="mb-6 text-slate-600 font-medium border-l-4 border-emerald-500 pl-4 py-1"> Part 3. 抽象與學術名詞：閱讀測驗中若看不懂，往往會導致整段大意抓不到。</div>`;
-            if (currentTab === 'adv') html += `<div class="mb-6 text-slate-600 font-medium border-l-4 border-amber-500 pl-4 py-1"> Part 4. 易混淆與高頻副詞：掌握語氣轉折與程度，對克漏字拿分至關重要。</div>`;
-            if (currentTab === 'practice') html += `<div class="mb-6 text-slate-600 font-medium border-l-4 border-indigo-500 pl-4 py-1"> Part 5. 實戰練習：精選歷屆高頻單字擬真試題庫。</div>`;
+            if (currentTab === 'verbs') html += `<div class="mb-6 text-slate-600 font-medium border-l-4 border-blue-500 pl-4 py-1"> Part 1. 必考核心動詞：<br>常出現於詞彙題選項或閱讀測驗的關鍵動作。</div>`;
+            if (currentTab === 'adj') html += `<div class="mb-6 text-slate-600 font-medium border-l-4 border-purple-500 pl-4 py-1"> Part 2. 高頻關鍵形容詞：<br>決定語氣與態度，是判斷「作者立場」的關鍵。</div>`;
+            if (currentTab === 'nouns') html += `<div class="mb-6 text-slate-600 font-medium border-l-4 border-emerald-500 pl-4 py-1"> Part 3. 抽象與學術名詞：<br>閱讀測驗中若看不懂，往往會導致整段大意抓不到。</div>`;
+            if (currentTab === 'adv') html += `<div class="mb-6 text-slate-600 font-medium border-l-4 border-amber-500 pl-4 py-1"> Part 4. 易混淆與高頻副詞：<br>掌握語氣轉折與程度，對克漏字拿分至關重要。</div>`;
+            if (currentTab === 'practice') html += `<div class="mb-6 text-slate-600 font-medium border-l-4 border-indigo-500 pl-4 py-1"> Part 5. 實戰練習：<br>精選歷屆高頻單字擬真試題庫。</div>`;
 
             // Render Content
             if (['verbs', 'adj', 'nouns'].includes(currentTab)) {
