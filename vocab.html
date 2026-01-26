@@ -617,6 +617,7 @@
         // --- 5. 實戰練習模式邏輯 (解決跳動問題的核心) ---
 
         function renderPracticeHTML() {
+            // 固定顯示這 3 題示範題
             currentQuestions = fullQuestionBank; 
             userAnswers = {};
             resultsChecked = {};
@@ -626,8 +627,8 @@
                 
                 <div class="bg-slate-900 rounded-3xl p-8 md:p-10 text-center border border-slate-700 shadow-2xl">
                     <h3 class="text-2xl md:text-3xl font-bold text-white mb-6">將單字力轉化為實戰得分</h3>
-                    <p class="text-slate-300 mb-8 max-w-lg mx-auto leading-relaxed">
-                        家教課程 <span class="text-yellow-400 font-bold">每週精準命題</span> 與 <span class="text-blue-300 font-bold">全國前 0.04% 實績</span> 等級的寫作深度指導<br>就是要帶你走拿高分的捷徑
+                    <p class="text-slate-300 text-lg mb-8 max-w-2xl mx-auto leading-relaxed">
+                        家教課程 <span class="text-yellow-400 font-bold">每週精準命題</span> 與 <span class="text-yellow-400 font-bold">全國前 0.04% 實績</span> 等級的寫作深度指導<br><span class="text-blue-300 font-bold">就是要帶你走拿高分的捷徑</span>
                     </p>
                     <a href="tutoring.html" class="alluring-glow inline-flex items-center gap-3 px-10 py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-black text-lg transition-all shadow-xl">
                         🚀 我想了解完整課程 
@@ -638,9 +639,9 @@
                     <h2 class="text-2xl font-black text-indigo-900 mb-3 flex items-center gap-3">
                         <i data-lucide="zap" class="w-8 h-8 text-yellow-500 fill-yellow-500"></i> 仿真題型示範
                     </h2>
-                    <p class="text-indigo-800 text-lg leading-relaxed">
-                        以下精選家教課程 <strong>每週課前小考</strong> 範例。<br class="hidden md:block">
-                        正式學員可解鎖完整 <strong>300+ 組關鍵題庫</strong> 與 <strong>個人化分析系統</strong>。
+                    <p class="text-slate-600 text-lg leading-relaxed">
+                        精選家教課程 <strong class="text-indigo-900 underline decoration-indigo-300 underline-offset-4">每週課前小考</strong> 範例<br class="hidden md:block">
+                        正式學員可解鎖完整 <strong class="text-indigo-900 underline decoration-indigo-300 underline-offset-4">關鍵 6 回題庫暨詳解</strong> 與 <strong class="text-indigo-900 underline decoration-indigo-300 underline-offset-4">個人化分析系統</strong>
                     </p>
                 </div>
 
