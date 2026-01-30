@@ -185,6 +185,14 @@ body { opacity: 0; transition: opacity 0.2s; }
         .alluring-glow {
             animation: alluring-glow-only 2s infinite ease-in-out;
         }
+		/* 微妙的呼吸燈動畫：用於次要但重要的資源連結 */
+        @keyframes subtle-pulse {
+            0%, 100% { box-shadow: 0 0 0 rgba(37, 99, 235, 0.4); }
+            50% { box-shadow: 0 0 12px rgba(37, 99, 235, 0.7); }
+        }
+        .subtle-pulse {
+            animation: subtle-pulse 3s infinite ease-in-out;
+        }
     </style>
 </head>
 <body class="bg-slate-50 text-gray-800">
@@ -349,7 +357,7 @@ body { opacity: 0; transition: opacity 0.2s; }
     
     <div class="bg-blue-50 px-6 py-3 border-b border-blue-100 flex items-start">
         <span class="text-blue-600 mr-2 font-bold flex-shrink-0">💡 核心概念：</span>
-        <p class="text-blue-900 font-medium text-sm md:text-base">不只背單字，更要背語塊 </p>
+        <p class="text-blue-900 font-medium text-sm md:text-base">除了單字，更要背語塊 </p>
     </div>
 
     <div class="grid md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-slate-100">
@@ -366,11 +374,11 @@ body { opacity: 0; transition: opacity 0.2s; }
                     <strong class="text-slate-800 block mb-1">搭配詞 (Collocations)</strong>
                     這是拿分的關鍵。例如學到 effort，要同時記 make an effort；學到 conclusion，要記 draw a conclusion
                 </li>
-                <li class="bg-blue-50 p-4 rounded-xl border border-blue-100">
-                    <strong class="text-blue-800 block mb-2 font-black">🚀 推薦免費資源</strong>
-                    <a href="vocab.html" class="inline-flex items-center text-blue-600 font-bold hover:text-blue-800 transition group">
-                        點此查看：學測高頻單字考點彙整 
-                        <span class="ml-1 transform group-hover:translate-x-1 transition-transform">→</span>
+                <li class="bg-blue-600 p-4 rounded-xl border border-blue-700 shadow-md hover:shadow-lg transition-all duration-300 subtle-pulse">
+                    <a href="vocab.html" class="flex items-center justify-center text-white font-bold text-lg group">
+                        <span class="mr-2">🎁</span>
+                        免費資源：高頻單字考點彙整
+                        <span class="ml-2 transform group-hover:translate-x-1 transition-transform">→</span>
                     </a>
                 </li>
             </ul>
@@ -1324,5 +1332,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 </body>
 </html>
+
 
 
