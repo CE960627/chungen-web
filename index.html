@@ -269,90 +269,114 @@ body { opacity: 0; transition: opacity 0.2s; }
 
             <!-- Part 1: 核心原則 -->
             <section id="part1" class="page-content">
-    <div class="mb-10 bg-gradient-to-br from-emerald-600 via-teal-600 to-slate-800 p-8 rounded-3xl shadow-xl border-l-8 border-emerald-900 backdrop-blur-sm text-left">
+    <div class="mb-10 bg-gradient-to-br from-teal-400 via-cyan-500 to-teal-600 p-8 rounded-3xl shadow-xl border-l-8 border-teal-700 backdrop-blur-sm text-left">
         <div class="flex items-center gap-3 mb-4">
             <span class="text-4xl filter drop-shadow-sm">⚔️</span>
             <h2 class="text-3xl md:text-4xl font-black text-white tracking-tight">
-                戰略布局：贏在系統而非語感
+                完勝學測：贏在系統佈局
             </h2>
         </div>
-        <p class="text-emerald-50 text-lg md:text-2xl leading-relaxed font-bold opacity-90">
-            學測英文不只是單字量的競賽，更是一場關於**時間管理**與**邏輯分配**的資源戰：我們不追求神級的直覺，而是透過理科式的系統化策略，確保在任何題目下都能穩定發揮
+        <p class="text-teal-50 text-lg md:text-2xl leading-relaxed font-bold opacity-95">
+            學測英文不只是單字量的競賽，更是一場關於<span class="font-black text-white">時間管理</span>與<span class="font-black text-white">邏輯分配</span>的資源戰：我們不追求神級的直覺，而是透過理科式的系統化策略，確保在任何題目下都能穩定發揮
         </p>
     </div>
 
     <div class="mb-16 bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
         <div class="bg-slate-800 p-5 md:p-6 text-left">
             <h3 class="text-xl md:text-2xl font-bold text-white flex items-center gap-3">
-                <span class="bg-emerald-500 text-white w-8 h-8 rounded-lg flex items-center justify-center text-sm font-black">1</span>
-                取分模型：基本盤與決勝點
+                <span class="bg-teal-500 text-white w-8 h-8 rounded-lg flex items-center justify-center text-sm font-black">1</span>
+                分數結構：大題重點分配
             </h3>
         </div>
         
-        <div class="p-6 md:p-8 border-b border-slate-100 bg-emerald-50/30">
-            <p class="text-emerald-900 text-base md:text-xl font-black leading-relaxed">
-                想拿高分，必須先看清分數結構：這不只是考英文，更是考你對資源的精準分配。我在每一個大題都有設計對應的系統化教學：讓你用最理科的邏輯處理文科題目
+        <div class="p-6 md:p-8 border-b border-slate-100 bg-teal-50/50">
+            <p class="text-teal-900 text-base md:text-xl leading-relaxed font-bold">
+                想拿高分，必須先看清分數結構：這不只是考英文，更是考你對資源的精準分配。我在<span class="text-teal-600 font-black">每一個大題都有設計對應的系統化教學</span>：讓你用最理科的邏輯處理文科題目
             </p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-slate-100">
+        <div class="grid grid-cols-1 divide-y-4 divide-dashed divide-teal-100">
             <div class="p-8">
-                <div class="text-emerald-600 font-black text-2xl mb-4">72 分 基本盤：選擇與混合題</div>
-                <ul class="space-y-3 text-slate-600 text-base md:text-lg font-bold">
+                <div class="text-teal-600 font-black text-2xl mb-6">72 分 基本盤：選擇與混合題</div>
+                
+                <div class="bg-teal-50 px-6 py-4 border-b border-teal-100 flex items-center mb-6 rounded-xl cursor-pointer hover:bg-teal-100 transition-all" onclick="showPage('part2')">
+                    <span class="text-teal-600 mr-3 font-black text-xl flex-shrink-0">🎯</span>
+                    <p class="text-teal-900 font-black text-base md:text-lg leading-none">前往查看：選擇題攻略 Part 2</p>
+                </div>
+
+                <ul class="space-y-4 text-slate-600 text-base md:text-lg font-bold">
                     <li class="flex items-start gap-2">戰略意義：穩住底限的門檻</li>
-                    <li class="flex items-start gap-2">核心目標：追求極速與 **1:1** 證據檢索：騰出 **40** 分鐘以上緩衝時間</li>
-                    <li class="mt-6">
-                        <button onclick="showPage('part2')" class="text-emerald-700 hover:text-emerald-500 transition font-black flex items-center gap-2">
-                            👉 前往查看：**🎯 選擇題攻略**
-                        </button>
-                    </li>
+                    <li class="flex items-start gap-2">核心目標：追求極速與 <span class="text-teal-600 font-black">1:1 證據檢索</span>：騰出 <span class="text-teal-600 font-black">40 分鐘以上</span>緩衝時間</li>
                 </ul>
             </div>
+
             <div class="p-8">
-                <div class="text-indigo-600 font-black text-2xl mb-4">28 分 決勝點：作文與翻譯</div>
-                <ul class="space-y-3 text-slate-600 text-base md:text-lg font-bold">
+                <div class="text-indigo-600 font-black text-2xl mb-6">28 分 決勝點：作文與翻譯</div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <div class="bg-indigo-50 px-6 py-4 border-b border-indigo-100 flex items-center rounded-xl cursor-pointer hover:bg-indigo-100 transition-all" onclick="showPage('part3')">
+                        <span class="text-indigo-600 mr-3 font-black text-xl flex-shrink-0">🏆</span>
+                        <p class="text-indigo-900 font-black text-base md:text-lg leading-none">前往查看：英文作文 Part 3</p>
+                    </div>
+                    <div class="bg-violet-50 px-6 py-4 border-b border-violet-100 flex items-center rounded-xl cursor-pointer hover:bg-violet-100 transition-all" onclick="showPage('part4')">
+                        <span class="text-violet-600 mr-3 font-black text-xl flex-shrink-0">🛡️</span>
+                        <p class="text-violet-900 font-black text-base md:text-lg leading-none">前往查看：中翻英攻略 Part 4</p>
+                    </div>
+                </div>
+
+                <ul class="space-y-4 text-slate-600 text-base md:text-lg font-bold">
                     <li class="flex items-start gap-2">戰略意義：決定最終分數厚度的關鍵</li>
-                    <li class="flex items-start gap-2">核心目標：透過邏輯模組化與 **S.T.C.** 檢查協議：展現高端用字深度</li>
-                    <li class="mt-6 flex flex-wrap gap-4">
-                        <button onclick="showPage('part3')" class="text-indigo-700 hover:text-indigo-500 transition font-black flex items-center gap-2">
-                            👉 **🏆 英文作文**
-                        </button>
-                        <button onclick="showPage('part4')" class="text-indigo-700 hover:text-indigo-500 transition font-black flex items-center gap-2">
-                            👉 **🎯 中翻英攻略**
-                        </button>
-                    </li>
+                    <li class="flex items-start gap-2">核心目標：透過邏輯模組化與 <span class="text-indigo-600 font-black">S.T.C. 檢查協議</span>：將失誤降到最低並展現高端用字</li>
                 </ul>
             </div>
         </div>
     </div>
 
-    <div class="mb-16 bg-white p-8 rounded-3xl shadow-sm border border-slate-200">
+    <div class="mb-16 bg-white p-8 rounded-3xl shadow-sm border border-slate-200 text-left">
         <h4 class="text-xl font-black text-slate-800 mb-10 border-b border-slate-100 pb-4 flex items-center gap-2">
-            <span class="text-emerald-600">📊</span> 練習效益：做真正有用的事
+            <span class="text-teal-600">📊</span> 練習效益：做真正有用的事
         </h4>
         
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
-            <div class="bg-red-50/50 p-8 rounded-2xl border border-red-100">
-                <div class="text-red-600 font-black text-xl mb-6 flex items-center gap-2">
+            <div class="bg-red-50/50 p-8 rounded-2xl border-2 border-red-100">
+                <div class="text-red-600 font-black text-xl mb-8 flex items-center gap-2">
                     <span>❌</span> 停止無效勞動
                 </div>
-                <ul class="space-y-8 text-slate-600 text-base md:text-lg font-bold">
-                    <li>漫無目的閱讀：只讀大意卻沒看清命題者的邏輯脈絡</li>
-                    <li>**在題本寫下中文翻譯**：以為寫完就算訂正完成：實際上單字根本沒記進大腦</li>
-                    <li>單純抄寫答案：訂正時只補上正確選項：卻忽略了出錯的根本原因</li>
+                <ul class="space-y-8 text-slate-600 text-base md:text-lg font-bold leading-relaxed">
+                    <li class="flex gap-3">
+                        <span class="bg-red-100 text-red-600 w-7 h-7 rounded-full flex items-center justify-center text-sm flex-shrink-0">1</span>
+                        <div>漫無目的閱讀：只讀大意卻沒看清命題者的<span class="text-red-700 font-black">邏輯脈絡</span></div>
+                    </li>
+                    <li class="flex gap-3">
+                        <span class="bg-red-100 text-red-600 w-7 h-7 rounded-full flex items-center justify-center text-sm flex-shrink-0">2</span>
+                        <div>在題本寫下中文翻譯：以為寫完就算訂正完成：實際上單字根本<span class="text-red-700 font-black">沒記進大腦</span></div>
+                    </li>
+                    <li class="flex gap-3">
+                        <span class="bg-red-100 text-red-600 w-7 h-7 rounded-full flex items-center justify-center text-sm flex-shrink-0">3</span>
+                        <div>單純抄寫答案：訂正時只補上正確選項：卻忽略了<span class="text-red-700 font-black">出錯的根本原因</span></div>
+                    </li>
                 </ul>
             </div>
 
-            <div class="bg-emerald-50/50 p-8 rounded-2xl border border-emerald-100">
-                <div class="text-emerald-600 font-black text-xl mb-6 flex items-center gap-2">
+            <div class="bg-teal-50/50 p-8 rounded-2xl border-2 border-teal-100">
+                <div class="text-teal-600 font-black text-xl mb-8 flex items-center gap-2">
                     <span>✅</span> 開始高效練習
                 </div>
-                <ul class="space-y-8 text-slate-600 text-base md:text-lg font-bold">
-                    <li>建立個人錯誤日誌：針對常犯錯誤如時態一致性或冠詞進行精準打擊</li>
-                    <li>掌握邏輯模組：用一套系統應對各類題組：讓分數產出變得穩定且可預測</li>
-                    <li>
-                        <span class="text-emerald-700 font-black">實踐高效學習法：</span>
-                        找到對的工具比埋頭苦讀更重要：我憑藉這套**系統性準備學測英文**的方法：拿下**學測英文 15 級分**與**全國作文前 0.04%** 的成績：在課堂中我也會教你如何高效記憶單字並精準分配時間
+                <ul class="space-y-8 text-slate-600 text-base md:text-lg font-bold leading-relaxed">
+                    <li class="flex gap-3">
+                        <span class="bg-teal-100 text-teal-600 w-7 h-7 rounded-full flex items-center justify-center text-sm flex-shrink-0">1</span>
+                        <div>建立個人錯誤日誌：針對常犯錯誤如時態一致性或冠詞進行<span class="text-teal-600 font-black">精準打擊</span></div>
+                    </li>
+                    <li class="flex gap-3">
+                        <span class="bg-teal-100 text-teal-600 w-7 h-7 rounded-full flex items-center justify-center text-sm flex-shrink-0">2</span>
+                        <div>掌握邏輯模組：用一套系統應對各類題組：讓分數產出變得<span class="text-teal-600 font-black">穩定且可預測</span></div>
+                    </li>
+                    <li class="flex gap-3">
+                        <span class="bg-teal-100 text-teal-600 w-7 h-7 rounded-full flex items-center justify-center text-sm flex-shrink-0">3</span>
+                        <div>
+                            <span class="text-teal-600 font-black">實踐高效學習法：</span>
+                            找到對的工具比埋頭苦讀更重要。我憑藉這套<span class="text-teal-600 font-black">系統性準備學測英文</span>的方法：拿下<span class="text-teal-600 font-black">學測 15 級分</span>與<span class="text-teal-600 font-black">全國作文前 0.04%</span>。在課程中我會教你如何高效記憶單字並精準分配時間
+                        </div>
                     </li>
                 </ul>
             </div>
@@ -361,41 +385,40 @@ body { opacity: 0; transition: opacity 0.2s; }
 
     <div class="mb-16">
         <h3 class="text-2xl md:text-3xl font-black text-slate-800 mb-10 text-center flex items-center justify-center gap-3">
-            <span>⚙️</span> 3C 取分作業系統
+            <span>⚙️</span> 3C 邏輯累積英文實力
         </h3>
         
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div class="bg-white p-8 rounded-3xl shadow-lg border-t-8 border-emerald-500 hover:shadow-2xl transition-all">
-                <div class="text-emerald-600 font-black text-2xl mb-4 text-left">Context：語境</div>
-                <p class="text-slate-600 text-base md:text-lg font-bold leading-relaxed text-left">
-                    單字不是靜止的定義，而是隨環境改變的零件：建立語意場意識能讓你在選詞時具備準確的直覺：不再輕易掉進克漏字的誘答陷阱
+            <div class="bg-white p-8 rounded-3xl shadow-lg border-t-8 border-teal-400 hover:shadow-2xl transition-all text-left">
+                <div class="text-teal-600 font-black text-2xl mb-4">Context：語境</div>
+                <p class="text-slate-600 text-base md:text-lg font-bold leading-relaxed">
+                    單字不是靜止的定義，而是隨環境改變的零件：建立<span class="text-teal-600 font-black">語意場意識</span>能讓你在選詞時具備準確的直覺：不再掉進克漏字的陷阱
                 </p>
             </div>
 
-            <div class="bg-white p-8 rounded-3xl shadow-lg border-t-8 border-teal-500 hover:shadow-2xl transition-all">
-                <div class="text-teal-600 font-black text-2xl mb-4 text-left">Collocation：搭配</div>
-                <p class="text-slate-600 text-base md:text-lg font-bold leading-relaxed text-left">
-                    別單獨背字，要掌握道地的組合：精準掌握正確的字詞搭配：你的寫作與翻譯才會有具備深度且自然的專業感
+            <div class="bg-white p-8 rounded-3xl shadow-lg border-t-8 border-cyan-500 hover:shadow-2xl transition-all text-left">
+                <div class="text-cyan-600 font-black text-2xl mb-4">Collocation：搭配</div>
+                <p class="text-slate-600 text-base md:text-lg font-bold leading-relaxed">
+                    別單獨背字，要掌握道地的組合：掌握<span class="text-cyan-600 font-black">正確的字詞搭配</span>：你的寫作與翻譯才會有具備深度且自然的專業感
                 </p>
             </div>
 
-            <div class="bg-white p-8 rounded-3xl shadow-lg border-t-8 border-slate-700 hover:shadow-2xl transition-all">
-                <div class="text-slate-700 font-black text-2xl mb-4 text-left">Coherence：連貫</div>
-                <p class="text-slate-600 text-base md:text-lg font-bold leading-relaxed text-left">
-                    英文測驗本質上是邏輯測驗：文章鋪陳與段落串接都有脈絡可循：掌握這套邏輯鏈結：閱讀測驗就能像做實驗一樣推導出唯一正確的答案
+            <div class="bg-white p-8 rounded-3xl shadow-lg border-t-8 border-teal-600 hover:shadow-2xl transition-all text-left">
+                <div class="text-teal-700 font-black text-2xl mb-4">Coherence：連貫</div>
+                <p class="text-slate-600 text-base md:text-lg font-bold leading-relaxed">
+                    英文測驗本質上是邏輯測驗：文章鋪陳與段落串接都有脈絡可循：掌握<span class="text-teal-600 font-black">邏輯鏈結</span>：閱讀測驗就能推導出唯一答案
                 </p>
             </div>
         </div>
     </div>
 
     <div class="text-center mt-16 mb-12">
-        <a href="tutoring.html" class="alluring-button inline-block bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-500 hover:to-teal-600 text-white font-black py-5 px-6 md:px-12 rounded-2xl shadow-2xl shadow-emerald-900/40 transition transform hover:-translate-y-1 text-xl md:text-2xl whitespace-nowrap">
+        <a href="tutoring.html" class="alluring-button inline-block bg-gradient-to-r from-teal-400 via-cyan-500 to-teal-600 hover:from-teal-300 hover:to-cyan-400 text-white font-black py-5 px-8 md:px-12 rounded-2xl shadow-2xl shadow-cyan-500/40 transition transform hover:-translate-y-1 text-xl md:text-2xl whitespace-nowrap">
             🚀 我想完勝學測英文
         </a>
         <p class="text-white text-base mt-6 font-medium"> 與其獨自摸索<br class="md:hidden"> 不如讓專業的來帶你走捷徑！ </p>
     </div>
 </section>
-
             <!-- Part 2: 選擇題 (網頁風格排版) -->
             <section id="part2" class="page-content">
     <div class="mb-10 bg-gradient-to-br from-amber-400 via-orange-400 to-orange-500 p-8 rounded-3xl shadow-xl border-l-8 border-orange-600 backdrop-blur-sm">
@@ -1526,6 +1549,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 </body>
 </html>
+
 
 
 
