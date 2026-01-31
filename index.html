@@ -290,44 +290,50 @@ body { opacity: 0; transition: opacity 0.2s; }
         </h3>
     </div>
     
-    <div class="p-6 md:p-8 border-b border-slate-100 bg-teal-50/50">
+    <div class="p-6 md:p-8 border-b border-slate-100 bg-teal-50/50 text-left">
         <p class="text-teal-900 text-base md:text-xl leading-relaxed font-bold">
-            想拿高分，必須先看清分數結構：這不只是考英文，更是考你對資源的精準分配。我在<span class="text-teal-600 font-black">每一個大題都有設計對應的系統化教學</span>：讓你用最理科的邏輯處理文科題目
+            想拿高分必須先看清分數結構。這不只是考英文，更是考你對資源的精準分配。我在<span class="text-teal-600 font-black">每一個大題都有設計對應的系統化教學</span>，讓你用最理科的邏輯處理文科題目
         </p>
     </div>
 
     <div class="p-0">
         <div class="p-6 md:p-10 border-b-4 border-dashed border-teal-100 text-left">
-            <div class="text-teal-600 font-black text-2xl md:text-3xl mb-4">基本盤：<br>選擇與混合題</div>
-            <div class="space-y-3 mb-8 text-slate-600 text-base md:text-lg font-bold">
-                <p>戰略意義：穩住底限的門檻</p>
-                <p>核心目標：追求極速與 <span class="text-teal-600 font-black">1:1 證據檢索</span>：騰出 <span class="text-teal-600 font-black">40 分鐘以上</span>緩衝時間</p>
-            </div>
+            <div class="text-teal-600 font-black text-2xl md:text-3xl mb-4">前 72 分 基本盤：選擇與混合題</div>
             
-            <div class="alluring-glow bg-teal-600 hover:bg-teal-700 p-5 rounded-2xl cursor-pointer transition-all flex items-center justify-between group max-w-xl" onclick="showPage('part2')">
-                <div class="flex items-center gap-3">
-                    <span class="text-2xl">🎯</span>
-                    <span class="text-white font-black text-lg md:text-xl">Part 2 選擇題攻略</span>
-                </div>
-                <span class="text-white text-2xl group-hover:translate-x-2 transition-transform">→</span>
+            <p class="text-slate-600 text-base md:text-lg font-bold leading-relaxed mb-8">
+                前 72 分的基本盤由選擇題與混合題組成，這部分是穩住底限的門檻。我們追求極速與 <span class="text-teal-600 font-black">1:1 證據檢索</span>，目標是為後面的非選題騰出 <span class="text-teal-600 font-black">40 分鐘以上</span>的緩衝時間
+            </p>
+
+            <div class="bg-teal-600 p-4 rounded-xl border border-teal-700 shadow-md hover:shadow-lg transition-all duration-300 subtle-pulse max-w-sm cursor-pointer" onclick="showPage('part2')">
+                <a class="flex items-center justify-center text-white font-bold text-lg group">
+                    <span class="mr-2">🎯</span>
+                    選擇題攻略
+                    <span class="ml-2 transform group-hover:translate-x-1 transition-transform">→</span>
+                </a>
             </div>
         </div>
 
         <div class="p-6 md:p-10 text-left">
-            <div class="text-indigo-600 font-black text-2xl md:text-3xl mb-4">決勝點：<br>作文與翻譯</div>
-            <div class="space-y-3 mb-8 text-slate-600 text-base md:text-lg font-bold">
-                <p>戰略意義：決定最終分數厚度的關鍵</p>
-                <p>核心目標：透過邏輯模組化與 <span class="text-indigo-600 font-black">S.T.C. 檢查協議</span>：將失誤降到最低並展現高端用字</p>
-            </div>
+            <div class="text-indigo-600 font-black text-2xl md:text-3xl mb-4">後 28 分 決勝點：作文與翻譯</div>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl">
-                <div class="alluring-glow bg-indigo-600 hover:bg-indigo-700 p-5 rounded-2xl cursor-pointer transition-all flex items-center gap-3" onclick="showPage('part3')">
-                    <span class="text-2xl">🏆</span>
-                    <span class="text-white font-black text-lg">Part 3 英文作文攻略</span>
+            <p class="text-slate-600 text-base md:text-lg font-bold leading-relaxed mb-8">
+                後 28 分的決勝點則是作文與翻譯，這才是決定最終分數厚度的關鍵。我們透過邏輯模組化與 <span class="text-indigo-600 font-black">S.T.C. [cite_start]檢查協議</span>將失誤降到最低 [cite: 2, 3]，並展現具備深度的高端用字
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-4">
+                <div class="bg-indigo-600 p-4 rounded-xl border border-indigo-700 shadow-md hover:shadow-lg transition-all duration-300 subtle-pulse cursor-pointer flex-1" onclick="showPage('part3')">
+                    <a class="flex items-center justify-center text-white font-bold text-lg group">
+                        <span class="mr-2">🏆</span>
+                        英文作文攻略
+                        <span class="ml-2 transform group-hover:translate-x-1 transition-transform">→</span>
+                    </a>
                 </div>
-                <div class="alluring-glow bg-violet-600 hover:bg-violet-700 p-5 rounded-2xl cursor-pointer transition-all flex items-center gap-3" onclick="showPage('part4')">
-                    <span class="text-2xl">🛡️</span>
-                    <span class="text-white font-black text-lg">Part 4 中翻英攻略</span>
+                <div class="bg-violet-600 p-4 rounded-xl border border-violet-700 shadow-md hover:shadow-lg transition-all duration-300 subtle-pulse cursor-pointer flex-1" onclick="showPage('part4')">
+                    <a class="flex items-center justify-center text-white font-bold text-lg group">
+                        <span class="mr-2">🛡️</span>
+                        中翻英攻略
+                        <span class="ml-2 transform group-hover:translate-x-1 transition-transform">→</span>
+                    </a>
                 </div>
             </div>
         </div>
@@ -1554,6 +1560,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 </body>
 </html>
+
 
 
 
