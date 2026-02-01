@@ -25,101 +25,60 @@
             position: relative;
             transition: all 0.2s;
             border-radius: 0.5rem;
-            padding: 0.4rem 0.75rem;
+            padding: 0.5rem 0.75rem; 
             display: inline-flex;
             align-items: center;
             justify-content: center;
             min-width: 110px;
-            /* 💡 關鍵：設定與內文一致的行高，防止隱藏後變扁 */
-            min-height: 1.5rem; 
+            /* 💡 修正 3：鎖定最小高度 36px，確保隱藏時不會變扁，維持文字高度 */
+            min-height: 2.25rem; 
             vertical-align: middle;
             cursor: default;
             user-select: none;
             margin: 0 4px;
         }
         
-        /* 遮罩開啟時 */
+        /* 遮罩開啟時的背景 */
         .reveal-wrapper.masked-mode {
             cursor: pointer;
             background-color: #f1f5f9;
-            border: 1.5px solid #e2e8f0; /* 增加邊框感 */
-        }
-        .reveal-wrapper.masked-mode:hover {
-            background-color: #e2e8f0;
-            border-color: #cbd5e1;
+            border: 1.5px solid #e2e8f0;
         }
 
         .reveal-text {
-            transition: opacity 0.3s, filter 0.3s;
+            transition: opacity 0.3s;
             text-align: center;
-            font-weight: 500;
-            line-height: 1.5; /* 鎖定行高 */
+            font-weight: 600;
         }
-        /* 💡 解決跳針：隱藏時維持佔位，不使用 filter: blur 以提升效能 */
-        .reveal-text.hidden {
+        
+        /* 💡 修正 2：定義隱藏狀態。隱藏時文字透明，但不消失佔位，防止表格跳動 */
+        .reveal-wrapper.is-hidden .reveal-text {
             opacity: 0;
             pointer-events: none;
         }
-        
-        /* 點擊顯示提示層 */
+
+        /* 點擊查看的提示文字 */
         .reveal-overlay {
             position: absolute;
             inset: 0;
-            display: flex;
+            display: none; /* 預設不顯示 */
             align-items: center;
             justify-content: center;
             font-size: 0.75rem;
             font-weight: 600;
             color: #64748b;
             pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.2s;
-            white-space: nowrap;
         }
-        .reveal-wrapper.masked-mode .reveal-text.hidden + .reveal-overlay { 
-            opacity: 1; 
+        
+        /* 當 wrapper 同時擁有 is-hidden 時，顯示提示文字 */
+        .reveal-wrapper.is-hidden .reveal-overlay { 
+            display: flex; 
         }
 
-        /* 練習模式選項按鈕 */
-        .option-btn {
-            transition: all 0.2s;
-            border-width: 1px;
-        }
-        .option-btn.selected {
-            background-color: #eff6ff; 
-            border-color: #4f46e5; 
-            color: #4338ca;
-            font-weight: 600;
-            box-shadow: 0 0 0 1px #4f46e5;
-        }
-        .option-btn.correct {
-            background-color: #f0fdf4; 
-            border-color: #22c55e; 
-            color: #15803d;
-            font-weight: 700;
-        }
-        .option-btn.wrong {
-            background-color: #fef2f2; 
-            border-color: #fca5a5; 
-            color: #b91c1c; 
-            opacity: 0.8;
-        }
-        .option-btn.disabled { pointer-events: none; }
-        .option-btn.muted { opacity: 0.5; filter: grayscale(100%); border-color: #f1f5f9; }
-
-        /* 分頁按鈕樣式 */
-        .tab-btn { transition: all 0.2s; }
-        .tab-btn.active {
-            background-color: #4f46e5;
-            color: white;
-            border-color: #4f46e5;
-            transform: scale(1.05);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
-        /* 導流區塊：呼吸燈動畫 */
+        /* 💡 修正 1：微量呼吸燈效果 (降低陰影與亮度) */
         @keyframes alluring-glow-only {
-            0%, 100% { box-shadow: 0 0 15px rgba(59, 130, 246, 0.5); }
-            50% { box-shadow: 0 0 30px rgba(59, 130, 246, 0.9); }
+            0%, 100% { box-shadow: 0 0 4px rgba(79, 70, 229, 0.1); border-color: rgba(79, 70, 229, 0.4); }
+            50% { box-shadow: 0 0 10px rgba(79, 70, 229, 0.25); border-color: rgba(79, 70, 229, 0.8); }
         }
         .alluring-glow {
             animation: alluring-glow-only 2s infinite ease-in-out;
@@ -867,22 +826,44 @@
             render();
         }
 
-        function toggleMask() {
-            isMasked = !isMasked;
-            render();
+        // 💡 解決重置問題 1：單獨更新按鈕外觀
+        function updateMaskBtnUI() {
+            const maskBtn = document.getElementById('mask-toggle');
+            if (!maskBtn) return;
+            
+            if(isMasked) {
+                // 開啟狀態：加厚邊框，移除呼吸燈
+                maskBtn.className = "flex items-center gap-2 px-4 py-2.5 rounded-lg font-bold text-sm transition-all bg-amber-100 text-amber-800 border-amber-400 border-2";
+                maskBtn.innerHTML = `<i data-lucide="eye-off" class="w-4 h-4"></i> <span>背單字模式：開啟</span>`;
+            } else {
+                // 關閉狀態：藍色加厚邊框，微呼吸燈
+                maskBtn.className = "flex items-center gap-2 px-4 py-2.5 rounded-lg font-bold text-sm transition-all bg-white text-indigo-700 border-indigo-600 border-2 alluring-glow";
+                maskBtn.innerHTML = `<i data-lucide="eye" class="w-4 h-4"></i> <span>背單字模式：關閉</span>`;
+            }
+            lucide.createIcons({ root: maskBtn });
         }
 
+        // 💡 解決重置問題 2：切換模式時「不動 HTML」，只「改樣式」
+        function toggleMask() {
+            isMasked = !isMasked;
+            updateMaskBtnUI();
+            
+            // 找出畫面上所有的遮罩包裝盒，直接改 Class
+            const wrappers = document.querySelectorAll('.reveal-wrapper');
+            wrappers.forEach(el => {
+                if (isMasked) {
+                    el.classList.add('masked-mode', 'is-hidden');
+                } else {
+                    el.classList.remove('masked-mode', 'is-hidden');
+                }
+            });
+        }
+
+        // 💡 解決重置問題 3：單獨點擊顯現邏輯
         function toggleSingleReveal(el) {
             if (!isMasked) return;
-            const textEl = el.querySelector('.reveal-text');
-            const overlayEl = el.querySelector('.reveal-overlay');
-            if (textEl.classList.contains('hidden')) {
-                textEl.classList.remove('hidden');
-                if(overlayEl) overlayEl.style.opacity = '0';
-            } else {
-                textEl.classList.add('hidden');
-                if(overlayEl) overlayEl.style.opacity = '1';
-            }
+            // 透過切換 is-hidden 這個 class 來顯示/隱藏
+            el.classList.toggle('is-hidden');
         }
 
         // 初始執行
