@@ -259,26 +259,14 @@ body { opacity: 0; transition: opacity 0.2s; }
 
     <!-- 導覽列 -->
     <nav class="bg-white shadow-sm z-10 border-t border-gray-100">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="nav-button-container grid grid-cols-2 md:flex md:flex-wrap md:justify-center -mb-px gap-2 md:gap-6 px-2 md:px-0">
-                <button id="nav-part1" class="nav-button" onclick="showPage('part1')">
-                    Part 1: 核心原則
-                </button>
-                <button id="nav-part2" class="nav-button" onclick="showPage('part2')">
-                    Part 2: 選擇題型
-                </button>
-                <button id="nav-part3" class="nav-button border-blue-600 text-blue-600 font-bold border-b-4" onclick="showPage('part3')">
-                    Part 3: 英文作文
-                </button>
-                <button id="nav-part4" class="nav-button" onclick="showPage('part4')">
-                    Part 4: 英文翻譯
-                </button>
-                <button id="nav-part5" class="nav-button" onclick="showPage('part5')">
-                    Part 5: 實戰計畫
-                </button>
-                <button id="nav-part6" class="nav-button" onclick="showPage('part6')">
-                    Part 6: 猜題分析
-                </button>
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="nav-button-container">
+                <button id="nav-part1" class="nav-button" onclick="showPage('part1')">核心原則</button>
+                <button id="nav-part2" class="nav-button" onclick="showPage('part2')">選擇攻略</button>
+                <button id="nav-part3" class="nav-button active" onclick="showPage('part3')">作文系統</button>
+                <button id="nav-part4" class="nav-button" onclick="showPage('part4')">翻譯策略</button>
+                <button id="nav-part5" class="nav-button" onclick="showPage('part5')">提分藍圖</button>
+                <button id="nav-part6" class="nav-button" onclick="showPage('part6')">數據情報</button>
             </div>
         </div>
     </nav>
@@ -1614,4 +1602,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
 </body>
 </html>
+
 
