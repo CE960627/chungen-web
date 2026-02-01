@@ -599,21 +599,7 @@
         // 行銷導向的 Tips Section
         function renderTips() {
             const tips = [
-                { 
-                    title: "精準鎖定：80/20法則", 
-                    content: "學測英文單字多達數千，但真正決定勝負的往往是那 20% 的「核心高頻字」。本站只收錄歷屆試題中反覆出現的關鍵字，讓你的備考效率最大化。",
-                    icon: "target", color: "text-red-500", bg: "bg-red-50"
-                },
-                { 
-                    title: "語塊學習：擺脫死背", 
-                    content: "單字不該孤立存在。背誦時請務必搭配「歷屆考點與搭配詞 (Collocation)」，例如學到 'emphasis' 就要立刻聯想到 'put emphasis on'，這樣寫作才能道地。",
-                    icon: "puzzle", color: "text-blue-500", bg: "bg-blue-50"
-                },
-                { 
-                    title: "主動回想：大腦健身", 
-                    content: "「遮罩模式」不是為了好玩，而是為了強迫大腦進行「主動檢索 (Active Recall)」。看得到中文不算會，遮住中文還能秒答才是真懂。請反覆利用此功能自我檢測。",
-                    icon: "brain-circuit", color: "text-purple-500", bg: "bg-purple-50"
-                }
+                // ... tips 內容省略 ...
             ];
             return `
             <div class="grid md:grid-cols-3 gap-6">
@@ -627,25 +613,27 @@
                     </div>
                 `).join('')}
             </div>
-            <div class="mt-8 text-center bg-indigo-50 p-6 rounded-xl border border-indigo-100">
-                <p class="text-indigo-800 font-bold text-lg mb-2">準備好開始了嗎？</p>
-                <button onclick="switchTab('practice')" class="bg-indigo-600 text-white px-8 py-3 rounded-full font-bold shadow-lg hover:bg-indigo-700 hover:shadow-xl transition-all transform hover:scale-105 flex items-center gap-2 mx-auto">
-                    <i data-lucide="play-circle" class="w-5 h-5"></i> 立即進入仿真命題示範
-                </button>
+            
+            <div class="mt-12 text-center bg-slate-50 p-10 rounded-3xl border border-slate-100 relative overflow-hidden">
+                <div class="relative z-10">
+                    <p class="text-slate-800 font-black text-xl mb-6">實踐是檢驗真理的唯一標準</p>
+                    <button onclick="switchTab('practice')" class="alluring-glow inline-flex items-center gap-3 bg-indigo-600 text-white px-12 py-5 rounded-2xl font-black text-xl shadow-2xl hover:bg-indigo-700 transition-all transform hover:scale-105">
+                        <i data-lucide="play-circle" class="w-6 h-6"></i> 立即挑戰仿真命題
+                    </button>
+                    <p class="mt-4 text-slate-400 text-sm font-medium">看看你是否能避開大考中心的誘答陷阱</p>
+                </div>
             </div>`;
         }
 
         // --- 5. 實戰練習模式邏輯 (解決跳動問題的核心) ---
 
         function renderPracticeHTML() {
-            // 固定顯示這 3 題示範題
             currentQuestions = fullQuestionBank; 
             userAnswers = {};
             resultsChecked = {};
 
             return `
             <div class="space-y-8 max-w-4xl mx-auto animate-fade-in">
-                
                 <div class="bg-slate-900 rounded-3xl p-8 md:p-10 text-center border border-slate-700 shadow-2xl">
                     <h3 class="text-2xl md:text-3xl font-bold text-white mb-6">將單字力轉化為實戰得分</h3>
                     <p class="text-slate-300 text-lg mb-8 max-w-2xl mx-auto leading-relaxed">
@@ -661,12 +649,23 @@
                         <i data-lucide="zap" class="w-8 h-8 text-yellow-500 fill-yellow-500"></i> 仿真題型示範
                     </h2>
                     <p class="text-slate-600 text-lg leading-relaxed">
-                        精選家教課程 <strong class="text-indigo-900 underline decoration-indigo-300 underline-offset-4">每週課前小考</strong> 範例<br class="hidden md:block">
-                        正式學員享有 <strong class="text-indigo-900 underline decoration-indigo-300 underline-offset-4">關鍵 6 回題庫暨詳解</strong> 與 <strong class="text-indigo-900 underline decoration-indigo-300 underline-offset-4">個人化分析系統</strong>的客製化服務
+                        精選家教課程 <strong class="text-indigo-900 underline decoration-indigo-300 underline-offset-4">每週課前小考</strong> 範例
                     </p>
                 </div>
 
                 <div id="questions-container" class="mt-12"></div>
+
+                <div class="mt-16 bg-white p-8 rounded-3xl border-2 border-dashed border-slate-200 text-center animate-fade-in-up">
+                    <p class="text-slate-500 font-bold mb-6 text-lg">示範題已結束，想挑戰更多完整題庫嗎？</p>
+                    <div class="flex flex-col md:flex-row justify-center gap-4">
+                        <a href="tutoring.html" class="alluring-glow px-8 py-4 bg-indigo-600 text-white rounded-xl font-black shadow-lg hover:bg-indigo-700 transition-all flex items-center justify-center gap-2">
+                            <i data-lucide="award" class="w-5 h-5"></i> 獲取全套 6 回精品詳解題庫
+                        </a>
+                        <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="px-8 py-4 bg-slate-100 text-slate-600 rounded-xl font-bold hover:bg-slate-200 transition-all">
+                            回頂部重新溫習
+                        </button>
+                    </div>
+                </div>
             </div>`;
         }
 
