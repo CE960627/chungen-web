@@ -1479,16 +1479,16 @@ body { opacity: 0; transition: opacity 0.2s; }
         </table>
         
         <div class="mt-8 flex flex-wrap gap-6 text-sm md:text-base font-black px-2">
+			<div class="flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full bg-indigo-600"></span>
+                <span class="text-indigo-600">藍色：該大題出現頻率最高</span>
+            </div>
             <div class="flex items-center gap-2">
                 <span class="w-3 h-3 rounded-full bg-rose-500"></span>
                 <span class="text-rose-600">紅色：該大題出現頻率最低</span>
             </div>
-            <div class="flex items-center gap-2">
-                <span class="w-3 h-3 rounded-full bg-indigo-600"></span>
-                <span class="text-indigo-600">藍色：該大題出現頻率最高</span>
-            </div>
             <p class="w-full mt-6 text-slate-400 border-t border-slate-100 pt-6 italic text-xs md:text-sm font-medium">
-                * 註：本分析排除文意選填與篇章結構，因其選項為固定選項排序，故不具備獨立統計猜題之參考價值
+                * 註：本分析排除文意選填與篇章結構，因其固定選項排序，故不具備獨立統計猜題之參考價值
             </p>
         </div>
     </div>
@@ -1515,7 +1515,7 @@ body { opacity: 0; transition: opacity 0.2s; }
             </div>
 
             <div class="bg-emerald-50 p-6 md:p-10 rounded-3xl border border-emerald-100 text-left">
-                <div class="text-emerald-800 font-black text-xl mb-4">3：閱讀測驗優先考慮 A 與 D</div>
+                <div class="text-emerald-800 font-black text-xl mb-4">3：閱讀測驗優先考慮 A、D</div>
                 <p class="text-slate-700 text-base md:text-lg font-bold leading-relaxed">
                     數據顯示「閱讀測驗」中 <span class="text-emerald-600 font-black">(A) 與 (D) 為最常出現的正確答案</span>。在高壓且限時的環境下，理解這項分佈特徵能協助考生在定位出文章證據後，更果斷且自信地做出最終選擇
                 </p>
@@ -1594,6 +1594,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 </body>
 </html>
+
 
 
 
