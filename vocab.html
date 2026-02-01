@@ -473,7 +473,7 @@
                             <th class="p-4 w-1/4 text-left pl-8">單字 (Word)</th>
                             <th class="p-4 w-20 text-center">級別</th>
                             <th class="p-4 w-1/4 text-center">中文釋義</th>
-                            <th class="p-4 text-center">歷屆考點與搭配詞彙</th>
+                            <th class="p-4 text-left pl-6">歷屆考點與搭配詞彙</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100 bg-white">
@@ -496,7 +496,7 @@
                                         <div class="reveal-overlay"><i data-lucide="eye-off" class="w-3 h-3 mr-1"></i> 點擊顯示</div>
                                     </div>
                                 </td>
-                                <td class="p-4 text-center text-slate-600 leading-relaxed text-sm font-medium">${item.note}</td>
+                                <td class="p-4 pl-6 text-left text-slate-600 leading-relaxed text-sm font-medium">${item.note}</td>
                             </tr>
                         `).join('')}
                     </tbody>
@@ -806,9 +806,14 @@
             lucide.createIcons({ root: document.getElementById(`q-card-${qId}`) });
         }
 
-        // 邏輯控制
+        // 💡 邏輯優化：切換分頁時預設關閉「背單字模式」
         function switchTab(tabId) {
             currentTab = tabId;
+            
+            // 💡 核心修正：自動重置為關閉狀態
+            isMasked = false;
+            updateMaskBtnUI();
+            
             // 先重置所有按鈕樣式 (含 Tailwind class)
             const inactiveClasses = ['bg-white', 'text-slate-600', 'border-slate-200', 'hover:bg-slate-50'];
             const activeClasses = ['bg-indigo-600', 'text-white', 'border-indigo-600', 'shadow-md', 'transform', 'scale-105'];
