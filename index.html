@@ -12,6 +12,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
+		/* 讓全網頁跳轉具備平滑滾動感 */
+html {
+    scroll-behavior: smooth;
+}
         /* 全域字體設定 */
         body {
             font-family: 'Inter', 'Noto Sans TC', sans-serif;
@@ -274,6 +278,7 @@ body { opacity: 0; transition: opacity 0.2s; }
         .subtle-pulse {
             animation: subtle-pulse 3s infinite ease-in-out;
         }
+		
     </style>
 </head>
 <body class="bg-slate-50 text-gray-800">
@@ -863,7 +868,7 @@ body { opacity: 0; transition: opacity 0.2s; }
 </div>
         </div>
     </div>
-	<div id="grading-section" class="text-center mb-12 px-4 scroll-mt-24">
+	<div id="grading-section" class="text-center mb-12 px-4 scroll-mt-0">
     <h3 class="text-2xl md:text-3xl font-bold text-gray-900 mb-6">破解四大評分標準</h3>
 </div>	
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -939,7 +944,7 @@ body { opacity: 0; transition: opacity 0.2s; }
         </p>
     </div>
 				
-    <div id="logic-section" class="mb-20 scroll-mt-24">
+    <div id="logic-section" class="mb-20 scroll-mt-0">
     <div class="text-center mb-10 px-4">
         <h3 class="text-2xl md:text-3xl font-black text-gray-900 mb-6 text-center">作文五大命題素材</h3>
         
@@ -1020,7 +1025,7 @@ body { opacity: 0; transition: opacity 0.2s; }
     </div>
 
 			
-    <div id="syllabus-section" class="mb-24 scroll-mt-24">
+    <div id="syllabus-section" class="mb-24 scroll-mt-0">
         <h3 class="text-2xl md:text-3xl font-black text-gray-900 mb-10 text-center">完整課程核心綱要</h3>
         
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 px-2 md:px-0">
@@ -1663,6 +1668,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 </body>
 </html>
+
 
 
 
