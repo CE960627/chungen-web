@@ -1412,7 +1412,7 @@ body { opacity: 0; transition: opacity 0.2s; }
 </section>
             <!-- Part 6: 選擇題 (A, B, C, D) 分布統計與猜題分析 -->
             <section id="part6" class="page-content">
-    <div class="mb-10 bg-gradient-to-br from-slate-800 via-indigo-950 to-black p-8 rounded-3xl shadow-2xl border-l-8 border-indigo-500 backdrop-blur-sm text-left relative overflow-hidden">
+    <div class="mb-10 bg-gradient-to-br from-slate-800 via-indigo-950 to-black p-8 rounded-3xl shadow-xl border-l-8 border-indigo-500 backdrop-blur-sm text-left relative overflow-hidden">
         <div class="absolute top-0 right-0 w-32 h-32 bg-indigo-500/10 blur-3xl rounded-full"></div>
         <div class="flex items-center gap-3 mb-4">
             <span class="text-4xl filter drop-shadow-md">📡</span>
@@ -1421,7 +1421,7 @@ body { opacity: 0; transition: opacity 0.2s; }
             </h2>
         </div>
         <p class="text-indigo-100 text-lg md:text-2xl leading-relaxed font-bold opacity-90">
-            這是全台唯一針對「新課綱正式五年度」進行的選項平衡分析：透過 160 題樣本的交叉比對，我為考生提煉出大考中心命題的核心慣性與避險邏輯
+            這是基於 111-115 學年度正式答案的統計分析：透過 160 題樣本的交叉比對，我為考生提煉出大考中心命題的核心慣性與避險邏輯
         </p>
     </div>
 
@@ -1433,48 +1433,51 @@ body { opacity: 0; transition: opacity 0.2s; }
             </h3>
         </div>
         
-        <div class="table-wrapper p-4 md:p-8">
-            <table class="w-full text-left border-collapse rounded-xl overflow-hidden shadow-2xl bg-slate-800/50">
+        <div class="p-2 md:p-8">
+            <table class="w-full text-left border-collapse rounded-xl overflow-hidden shadow-2xl bg-slate-800/50 table-fixed">
                 <thead class="bg-slate-900">
-                    <tr class="text-indigo-400 font-black text-base md:text-lg border-b border-slate-700">
-                        <th class="p-4">關鍵大題 (題號)</th>
-                        <th class="p-4 text-center">選項 (A)</th>
-                        <th class="p-4 text-center">選項 (B)</th>
-                        <th class="p-4 text-center">選項 (C)</th>
-                        <th class="p-4 text-center">選項 (D)</th>
+                    <tr class="text-indigo-400 font-black text-sm md:text-lg border-b border-slate-700">
+                        <th class="p-2 md:p-4 w-2/5">大題 (題號)</th>
+                        <th class="p-2 md:p-4 text-center">A</th>
+                        <th class="p-2 md:p-4 text-center">B</th>
+                        <th class="p-2 md:p-4 text-center">C</th>
+                        <th class="p-2 md:p-4 text-center">D</th>
                     </tr>
                 </thead>
-                <tbody class="text-slate-300 text-sm md:text-base font-bold">
+                <tbody class="text-slate-300 text-xs md:text-base font-bold">
                     <tr class="border-b border-slate-700/50">
-                        <td class="p-4 text-white">詞彙題 (1-10)</td>
-                        <td class="p-4 text-center text-indigo-300">14</td>
+                        <td class="p-2 md:p-4 text-white">詞彙題 (1-10)</td>
+                        <td class="p-2 md:p-4 text-center text-indigo-300">14</td>
                         <td class="p-4 text-center">13</td>
                         <td class="p-4 text-center">12</td>
                         <td class="p-4 text-center">11</td>
                     </tr>
                     <tr class="border-b border-slate-700/50 bg-indigo-900/10">
-                        <td class="p-4 text-white">綜合測驗 (11-20)</td>
-                        <td class="p-4 text-center text-rose-500">10</td>
+                        <td class="p-2 md:p-4 text-white">綜合測驗 (11-20)</td>
+                        <td class="p-2 md:p-4 text-center text-rose-500">10</td>
                         <td class="p-4 text-center">13</td>
                         <td class="p-4 text-center font-black text-indigo-400">14</td>
                         <td class="p-4 text-center">13</td>
                     </tr>
                     <tr class="border-b border-slate-700/50">
-                        <td class="p-4 text-white">閱讀測驗 (35-46)</td>
-                        <td class="p-4 text-center font-black text-indigo-400">16</td>
+                        <td class="p-2 md:p-4 text-white">閱讀測驗 (35-46)</td>
+                        <td class="p-2 md:p-4 text-center font-black text-indigo-400">16</td>
                         <td class="p-4 text-center">13</td>
                         <td class="p-4 text-center">15</td>
                         <td class="p-4 text-center font-black text-indigo-400">16</td>
                     </tr>
-                    <tr class="bg-indigo-600/20 text-white font-black text-lg">
-                        <td class="p-4 border-t-2 border-indigo-500">總計頻率 (160題)</td>
-                        <td class="p-4 text-center border-t-2 border-indigo-500">40</td>
-                        <td class="p-4 text-center border-t-2 border-indigo-500">39</td>
-                        <td class="p-4 text-center border-t-2 border-indigo-500 text-yellow-400">41</td>
-                        <td class="p-4 text-center border-t-2 border-indigo-500">40</td>
+                    <tr class="bg-indigo-600/20 text-white font-black text-sm md:text-lg">
+                        <td class="p-2 md:p-4 border-t-2 border-indigo-500">總計頻率</td>
+                        <td class="p-2 md:p-4 text-center border-t-2 border-indigo-500">40</td>
+                        <td class="p-2 md:p-4 text-center border-t-2 border-indigo-500">39</td>
+                        <td class="p-2 md:p-4 text-center border-t-2 border-indigo-500 text-yellow-400">41</td>
+                        <td class="p-2 md:p-4 text-center border-t-2 border-indigo-500">40</td>
                     </tr>
                 </tbody>
             </table>
+            <p class="text-[10px] md:text-xs text-slate-500 mt-4 px-2 italic">
+                * 本分析排除文意選填與篇章結構，因其選項具連動性（固定選項排序），不具備統計猜題之獨立參考價值。
+            </p>
         </div>
     </div>
 
@@ -1486,28 +1489,28 @@ body { opacity: 0; transition: opacity 0.2s; }
         <div class="space-y-8">
             <div class="bg-white p-6 md:p-10 rounded-3xl shadow-sm border border-slate-200 text-left">
                 <div class="text-indigo-700 font-black text-xl mb-4">
-                    1. 結論：平衡規律是科學猜題的唯一基石
+                    結論一：大數法則的極致平衡
                 </div>
                 <p class="text-slate-600 text-base md:text-lg font-bold leading-relaxed">
-                    透過五年度數據可見，選項分布極為平均（各佔 25%）。這意味著在大考中心命題規範中，<span class="text-indigo-600 font-black">「平衡各選項出現次數」</span>是一項硬性指標。考生在檢查時若發現某一選項分布極度傾斜，應重新審視邏輯是否出現偏差
+                    根據五年度數據，選項分布極為平均。這意味著在大考中心命題規範中，<span class="text-indigo-600 font-black">「平衡各選項出現次數」</span>是核心指標。若考生檢查時發現某選項分布嚴重傾斜，應重新審視邏輯是否出錯
                 </p>
             </div>
 
             <div class="bg-white p-6 md:p-10 rounded-3xl shadow-sm border border-slate-200 text-left">
                 <div class="text-indigo-700 font-black text-xl mb-4">
-                    2. 結論：綜合測驗 (11-20) 的選項防禦力
+                    結論二：避開 A 選項的防禦策略
                 </div>
                 <p class="text-slate-600 text-base md:text-lg font-bold leading-relaxed">
-                    數據顯示 (A) 選項在克漏字大題的頻率明顯低於平均（僅 20%）。在面臨二選一猶豫或完全無法判斷時，<span class="text-indigo-600 font-black">避開 (A) 選項</span>具備較高的戰略防禦價值，能有效降低失分風險
+                    在「綜合測驗」中，(A) 選項的出現頻率顯著低於平均（僅佔 20%）。對於猶豫不決的題目，<span class="text-rose-600 font-black">優先避開 (A) 選項</span> 具備較高的戰略價值，能有效降低失分率
                 </p>
             </div>
 
             <div class="bg-white p-6 md:p-10 rounded-3xl shadow-sm border border-slate-200 text-left">
                 <div class="text-indigo-700 font-black text-xl mb-4">
-                    3. 結論：閱讀測驗的「強勢分布」觀察
+                    結論三：閱讀測驗的「強勢分布」觀察
                 </div>
                 <p class="text-slate-600 text-base md:text-lg font-bold leading-relaxed">
-                    閱讀測驗 (35-46) 中，(A) 與 (D) 共佔據了超過一半的正確答案分布。對於追求極限作答速度的考生，理解這項規律能協助在回文定位時，以更果斷的心理素質進行最終決策
+                    在「閱讀測驗」中，<span class="text-indigo-600 font-black">(A) 與 (D) 選項展現了穩定的強勢分布</span>。考生在面臨時間壓力需要快速決策時，理解這項規律能協助你在回文定位後，做出更果斷且具備數據支撐的選擇
                 </p>
             </div>
         </div>
@@ -1515,17 +1518,21 @@ body { opacity: 0; transition: opacity 0.2s; }
 
     <div class="bg-slate-900 rounded-[3rem] p-8 md:p-16 text-center shadow-2xl border border-slate-800 relative overflow-hidden">
         <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-indigo-600 via-sky-400 to-indigo-600"></div>
-        <p class="text-lg md:text-2xl text-white leading-relaxed font-bold italic mb-10 px-4">
-            「數據分析只是最後的戰術防禦，<br class="md:hidden"> 真正的勝利來自系統化的硬核實力。」
+        <p class="text-lg md:text-2xl text-white leading-snug font-bold italic mb-10 px-2">
+            「數據分析只是最後的戰術防禦，真正的勝利來自系統化的硬核實力」
         </p>
         
-        <a href="tutoring.html" class="alluring-button inline-block bg-gradient-to-r from-indigo-500 to-sky-600 hover:from-indigo-400 hover:to-sky-500 text-white font-black py-5 px-8 md:px-12 rounded-2xl shadow-2xl transition transform hover:-translate-y-1 text-xl md:text-2xl whitespace-nowrap">
-            🚀 我想完勝學測英文
-        </a>
-        <p class="text-slate-400 text-sm md:text-base mt-8 font-medium">
-            這套整理好的數據是我送給 116 學測生的禮物<br> 
-            與其在考場賭運氣，不如現在就跟我一起建構絕對的分數領先
-        </p>
+        <div class="inline-block mb-8">
+            <a href="tutoring.html" class="alluring-button bg-gradient-to-r from-indigo-500 to-sky-600 hover:from-indigo-400 hover:to-sky-500 text-white font-black py-5 px-6 md:px-12 rounded-2xl shadow-2xl transition transform hover:-translate-y-1 text-xl md:text-2xl whitespace-nowrap">
+                🚀 我想完勝學測英文
+            </a>
+        </div>
+        
+        <div class="max-w-2xl mx-auto">
+            <p class="text-slate-300 text-sm md:text-lg font-bold leading-relaxed">
+                這套數據是我送給 116 學測生的禮物。與其在考場賭運氣，不如現在就跟我一起建構絕對的分數領先
+            </p>
+        </div>
     </div>
 </section>
 
@@ -1581,6 +1588,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 </body>
 </html>
+
 
 
 
