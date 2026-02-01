@@ -25,13 +25,13 @@
     position: relative;
     transition: all 0.2s;
     border-radius: 0.5rem;
-    /* 💡 修正：增加內距，確保文字顯示時不撞牆 */
-    padding: 0.6rem 1.25rem; 
-    /* 💡 修正：改用 Grid 疊加，確保隱藏前後高度「完全一致」，徹底解決抽筋跳針 */
+    /* 💡 修正：大幅縮減左右內距，防止文字在手機上被擠成垂直 */
+    padding: 0.5rem 0.5rem; 
     display: grid;
     grid-template-columns: 1fr;
     align-items: center;
-    width: 100%; /* 💡 修正：確保框框長度填滿儲存格 */
+    justify-content: center; /* 💡 修正：確保內容在格子內置中 */
+    width: 100%;
     min-height: 2.8rem; 
     vertical-align: middle;
     cursor: default;
@@ -46,19 +46,18 @@
 }
 
 .reveal-text, .reveal-overlay {
-    /* 💡 核心技術：將提示字與原本文字疊在同一個格子裡，由文字決定高度 */
     grid-area: 1 / 1 / 2 / 2;
     transition: opacity 0.2s ease-in-out;
 }
 
 .reveal-text {
-    text-align: left; /* 💡 修正：中文釋義置左靠齊 */
+    text-align: center; /* 💡 修正：中文釋義恢復置中 */
     font-weight: 600;
     width: 100%;
-    line-height: 1.5;
+    line-height: 1.4;
+    white-space: normal; /* 允許必要時換行，但不會強制垂直 */
 }
 
-/* 隱藏時僅改變透明度，實體空間保留，防止表格縮放跳針 */
 .reveal-wrapper.is-hidden .reveal-text {
     opacity: 0;
     pointer-events: none;
@@ -67,7 +66,7 @@
 .reveal-overlay {
     display: none;
     align-items: center;
-    justify-content: flex-start; /* 💡 修正：提示文字也置左 */
+    justify-content: center; /* 💡 修正：提示文字置中 */
     font-size: 0.75rem;
     font-weight: 600;
     color: #64748b;
@@ -471,22 +470,22 @@
         function renderTable(data) {
     return `
     <div class="overflow-x-auto rounded-xl border border-slate-200 shadow-sm bg-white">
-        <table class="w-full text-left text-sm">
+        <table class="w-full text-left text-sm border-collapse">
             <thead class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200">
                 <tr>
-                    <th class="p-4 w-1/4 text-left pl-8">單字 (Word)</th>
-                    <th class="p-4 w-20 text-center">級別</th>
-                    <th class="p-4 w-1/4 text-left pl-6">中文釋義</th>
+                    <th class="p-4 w-[28%] text-left pl-6">單字 (Word)</th>
+                    <th class="p-4 w-16 text-center">級別</th>
+                    <th class="p-4 w-[25%] text-center">中文釋義</th>
                     <th class="p-4 text-left pl-6">歷屆考點與搭配詞彙</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-slate-100 bg-white">
                 ${data.map((item) => `
                     <tr class="hover:bg-slate-50 transition-colors">
-                        <td class="p-4 pl-8">
-                            <div class="flex items-center justify-start gap-3">
+                        <td class="p-4 pl-6">
+                            <div class="flex items-center justify-start gap-2">
                                 <span class="font-bold text-slate-800 text-lg">${item.word}</span>
-                                <button onclick="speak('${item.word.replace(/'/g, "\\'")}')" class="p-1.5 rounded-full bg-indigo-50 text-indigo-600 hover:bg-indigo-100 transition-colors">
+                                <button onclick="speak('${item.word.replace(/'/g, "\\'")}')" class="p-1 rounded-full bg-indigo-50 text-indigo-600 hover:bg-indigo-100 transition-colors">
                                     <i data-lucide="volume-2" class="w-4 h-4"></i>
                                 </button>
                             </div>
@@ -494,10 +493,10 @@
                         <td class="p-4 text-center font-bold">
                             <span class="inline-block px-2 py-1 rounded text-xs ${item.level >= 5 ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700'}">L${item.level}</span>
                         </td>
-                        <td class="p-4">
+                        <td class="p-2">
                             <div class="reveal-wrapper ${isMasked ? 'masked-mode is-hidden' : ''}" onclick="toggleSingleReveal(this)">
-                                <div class="reveal-text text-slate-600 font-bold text-[15px]">${item.meaning}</div>
-                                <div class="reveal-overlay"><i data-lucide="eye-off" class="w-3 h-3 mr-2"></i> 點擊查看</div>
+                                <div class="reveal-text text-slate-600 font-bold text-[14px]">${item.meaning}</div>
+                                <div class="reveal-overlay"><i data-lucide="eye-off" class="w-3 h-3 mr-1"></i> 點擊</div>
                             </div>
                         </td>
                         <td class="p-4 pl-6 text-left text-slate-600 leading-relaxed text-sm font-medium">${item.note}</td>
