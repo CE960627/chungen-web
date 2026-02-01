@@ -20,91 +20,73 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-/* --- 遮罩效果核心 CSS (視覺絕對穩定版) --- */
-        .reveal-wrapper {
-            position: relative;
-            transition: all 0.2s;
-            border-radius: 0.5rem;
-            /* 💡 修正：左內距增加到 1.25rem，確保文字不撞牆 */
-            padding: 0.6rem 1.25rem; 
-            display: flex;
-            width: 100%;
-            align-items: center;
-            justify-content: flex-start; 
-            /* 💡 修正：提高最小高度，確保兩行時也有足夠空間 */
-            min-height: 2.8rem; 
-            vertical-align: middle;
-            cursor: default;
-            user-select: none;
-            overflow: hidden;
-        }
-        
-        .reveal-wrapper.masked-mode {
-            cursor: pointer;
-            background-color: #f1f5f9;
-            border: 1.5px solid #e2e8f0;
-        }
+/* --- 遮罩效果核心 CSS (視覺絕對穩定 Grid 版) --- */
+.reveal-wrapper {
+    position: relative;
+    transition: all 0.2s;
+    border-radius: 0.5rem;
+    /* 💡 修正：增加內距，確保文字顯示時不撞牆 */
+    padding: 0.6rem 1.25rem; 
+    /* 💡 修正：改用 Grid 疊加，確保隱藏前後高度「完全一致」，徹底解決抽筋跳針 */
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: center;
+    width: 100%; /* 💡 修正：確保框框長度填滿儲存格 */
+    min-height: 2.8rem; 
+    vertical-align: middle;
+    cursor: default;
+    user-select: none;
+    overflow: hidden;
+}
 
-        .reveal-text {
-            transition: opacity 0.2s ease-in-out;
-            text-align: left; /* 💡 統一靠左 */
-            font-weight: 600;
-            width: 100%;
-            line-height: 1.5;
-        }
-        
-        /* 💡 穩定核心：隱藏時僅改變透明度，保留實體空間防止跳針 */
-        .reveal-wrapper.is-hidden .reveal-text {
-            opacity: 0;
-        }
+.reveal-wrapper.masked-mode {
+    cursor: pointer;
+    background-color: #f1f5f9;
+    border: 1.5px solid #e2e8f0;
+}
 
-        .reveal-overlay {
-            position: absolute;
-            /* 💡 修正：提示文字也同步靠左，並與 padding 對齊 */
-            left: 1.25rem;
-            right: 1.25rem;
-            top: 0;
-            bottom: 0;
-            display: none; 
-            align-items: center;
-            justify-content: flex-start;
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: #64748b;
-            pointer-events: none;
-            white-space: nowrap;
-        }
-        
-        .reveal-wrapper.is-hidden .reveal-overlay { 
-            display: flex; 
-        }
+.reveal-text, .reveal-overlay {
+    /* 💡 核心技術：將提示字與原本文字疊在同一個格子裡，由文字決定高度 */
+    grid-area: 1 / 1 / 2 / 2;
+    transition: opacity 0.2s ease-in-out;
+}
 
-        /* 點擊查看的提示文字 */
-        .reveal-overlay {
-            position: absolute;
-            inset: 0;
-            display: none; /* 預設不顯示 */
-            align-items: center;
-            justify-content: center;
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: #64748b;
-            pointer-events: none;
-        }
-        
-        /* 當 wrapper 同時擁有 is-hidden 時，顯示提示文字 */
-        .reveal-wrapper.is-hidden .reveal-overlay { 
-            display: flex; 
-        }
+.reveal-text {
+    text-align: left; /* 💡 修正：中文釋義置左靠齊 */
+    font-weight: 600;
+    width: 100%;
+    line-height: 1.5;
+}
 
-        /* 💡 修正 1：微量呼吸燈效果 (降低陰影與亮度) */
-        @keyframes alluring-glow-only {
-            0%, 100% { box-shadow: 0 0 4px rgba(79, 70, 229, 0.1); border-color: rgba(79, 70, 229, 0.4); }
-            50% { box-shadow: 0 0 10px rgba(79, 70, 229, 0.25); border-color: rgba(79, 70, 229, 0.8); }
-        }
-        .alluring-glow {
-            animation: alluring-glow-only 2s infinite ease-in-out;
-        }
+/* 隱藏時僅改變透明度，實體空間保留，防止表格縮放跳針 */
+.reveal-wrapper.is-hidden .reveal-text {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.reveal-overlay {
+    display: none;
+    align-items: center;
+    justify-content: flex-start; /* 💡 修正：提示文字也置左 */
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #64748b;
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+.reveal-wrapper.is-hidden .reveal-overlay { 
+    display: flex; 
+}
+
+/* 💡 修正：高級感微呼吸燈 */
+@keyframes alluring-glow-only {
+    0%, 100% { box-shadow: 0 0 4px rgba(79, 70, 229, 0.1); border-color: rgba(79, 70, 229, 0.4); }
+    50% { box-shadow: 0 0 10px rgba(79, 70, 229, 0.25); border-color: rgba(79, 70, 229, 0.8); }
+}
+.alluring-glow {
+    animation: alluring-glow-only 2s infinite ease-in-out;
+}
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -487,51 +469,51 @@
         }
 
         function renderTable(data) {
-            return `
-            <div class="overflow-x-auto rounded-xl border border-slate-200 shadow-sm bg-white">
-                <table class="w-full text-left text-sm">
-                    <thead class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200">
-                        <tr>
-                            <th class="p-4 w-1/4 text-left pl-8">單字 (Word)</th>
-                            <th class="p-4 w-20 text-center">級別</th>
-                            <th class="p-4 w-1/4 text-left pl-6">中文釋義</th>
-                            <th class="p-4 text-left pl-6">歷屆考點與搭配詞彙</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-slate-100 bg-white">
-                        ${data.map((item) => `
-                            <tr class="hover:bg-slate-50 transition-colors">
-                                <td class="p-4 pl-8">
-                                    <div class="flex items-center justify-start gap-3">
-                                        <span class="font-bold text-slate-800 text-lg">${item.word}</span>
-                                        <button onclick="speak('${item.word.replace(/'/g, "\\'")}')" class="p-1.5 rounded-full bg-indigo-50 text-indigo-600 hover:bg-indigo-100 transition-colors" title="發音">
-                                            <i data-lucide="volume-2" class="w-4 h-4"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                                <td class="p-4 text-center font-bold">
-                                    <span class="inline-block px-2 py-1 rounded text-xs ${item.level >= 5 ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700'}">L${item.level}</span>
-                                </td>
-                                <td class="p-4 text-left">
-                                    <div class="reveal-wrapper ${isMasked ? 'masked-mode is-hidden' : ''}" onclick="toggleSingleReveal(this)">
-                                        <div class="reveal-text text-slate-600 font-medium text-sm">${item.meaning}</div>
-                                        <div class="reveal-overlay"><i data-lucide="eye-off" class="w-3 h-3 mr-2"></i> 點擊顯示</div>
-                                    </div>
-                                </td>
-                                <td class="p-4 pl-6 text-left text-slate-600 leading-relaxed text-sm font-medium">${item.note}</td>
-                            </tr>
-                        `).join('')}
-                    </tbody>
-                </table>
-            </div>
-            
-            <div class="mt-4 px-4 py-3 bg-amber-50 rounded-lg border border-amber-200 flex items-start gap-2 animate-fade-in shadow-sm">
-                <span class="text-lg mt-[-2px]">😊</span>
-                <p class="text-amber-900 text-xs md:text-sm font-bold leading-relaxed">
-                    貼心叮嚀：<span class="font-medium text-amber-800">開啟「背單字模式」後，點擊灰色遮罩即可顯現答案，再次點擊可重新隱藏。建議反覆練習直到能直接聯想釋義與語塊。</span>
-                </p>
-            </div>`;
-        }
+    return `
+    <div class="overflow-x-auto rounded-xl border border-slate-200 shadow-sm bg-white">
+        <table class="w-full text-left text-sm">
+            <thead class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200">
+                <tr>
+                    <th class="p-4 w-1/4 text-left pl-8">單字 (Word)</th>
+                    <th class="p-4 w-20 text-center">級別</th>
+                    <th class="p-4 w-1/4 text-left pl-6">中文釋義</th>
+                    <th class="p-4 text-left pl-6">歷屆考點與搭配詞彙</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 bg-white">
+                ${data.map((item) => `
+                    <tr class="hover:bg-slate-50 transition-colors">
+                        <td class="p-4 pl-8">
+                            <div class="flex items-center justify-start gap-3">
+                                <span class="font-bold text-slate-800 text-lg">${item.word}</span>
+                                <button onclick="speak('${item.word.replace(/'/g, "\\'")}')" class="p-1.5 rounded-full bg-indigo-50 text-indigo-600 hover:bg-indigo-100 transition-colors">
+                                    <i data-lucide="volume-2" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </td>
+                        <td class="p-4 text-center font-bold">
+                            <span class="inline-block px-2 py-1 rounded text-xs ${item.level >= 5 ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700'}">L${item.level}</span>
+                        </td>
+                        <td class="p-4">
+                            <div class="reveal-wrapper ${isMasked ? 'masked-mode is-hidden' : ''}" onclick="toggleSingleReveal(this)">
+                                <div class="reveal-text text-slate-600 font-bold text-[15px]">${item.meaning}</div>
+                                <div class="reveal-overlay"><i data-lucide="eye-off" class="w-3 h-3 mr-2"></i> 點擊查看</div>
+                            </div>
+                        </td>
+                        <td class="p-4 pl-6 text-left text-slate-600 leading-relaxed text-sm font-medium">${item.note}</td>
+                    </tr>
+                `).join('')}
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="mt-4 px-4 py-3 bg-amber-50 rounded-lg border border-amber-200 flex items-start gap-2 animate-fade-in shadow-sm">
+        <span class="text-lg mt-[-2px]">😊</span>
+        <p class="text-amber-900 text-xs md:text-sm font-bold leading-relaxed">
+            貼心叮嚀：<span class="font-medium text-amber-800">開啟「背單字模式」後，點擊灰色遮罩即可顯現答案，再次點擊可重新隱藏。建議反覆練習直到能直接聯想釋義與考點詞彙。</span>
+        </p>
+    </div>`;
+}
         function renderAdvPage() {
             return `
             <div class="grid md:grid-cols-2 gap-6">
@@ -860,43 +842,49 @@
             render();
         }
 
-        // 💡 解決重置問題 1：單獨更新按鈕外觀
+        // 💡 核心手術 1：更新「背單字模式」按鈕的視覺狀態
         function updateMaskBtnUI() {
             const maskBtn = document.getElementById('mask-toggle');
-            if (!maskBtn) return;
+            if (!maskBtn) return; // 防止抓不到按鈕報錯
             
             if(isMasked) {
-                // 開啟狀態：加厚邊框，移除呼吸燈
+                // 當模式「開啟」：按鈕變黃色加厚框，並移除呼吸燈 (以免干擾背誦)
                 maskBtn.className = "flex items-center gap-2 px-4 py-2.5 rounded-lg font-bold text-sm transition-all bg-amber-100 text-amber-800 border-amber-400 border-2";
                 maskBtn.innerHTML = `<i data-lucide="eye-off" class="w-4 h-4"></i> <span>背單字模式：開啟</span>`;
             } else {
-                // 關閉狀態：藍色加厚邊框，微呼吸燈
+                // 當模式「關閉」：恢復白色背景、靛藍邊框，並啟動「精品微呼吸燈」吸引點擊
                 maskBtn.className = "flex items-center gap-2 px-4 py-2.5 rounded-lg font-bold text-sm transition-all bg-white text-indigo-700 border-indigo-600 border-2 alluring-glow";
                 maskBtn.innerHTML = `<i data-lucide="eye" class="w-4 h-4"></i> <span>背單字模式：關閉</span>`;
             }
-            lucide.createIcons({ root: maskBtn });
+            lucide.createIcons({ root: maskBtn }); // 重新渲染按鈕內的圖示
         }
 
-        // 💡 解決重置問題 2：切換模式時「不動 HTML」，只「改樣式」
+        // 💡 核心手術 2：切換模式主邏輯 (不重新渲染 HTML，保留捲動位置)
         function toggleMask() {
-            isMasked = !isMasked;
-            updateMaskBtnUI();
+            isMasked = !isMasked; // 切換布林值
+            updateMaskBtnUI();    // 立即更新右上角按鈕外觀
             
-            // 找出畫面上所有的遮罩包裝盒，直接改 Class
+            // 抓取頁面上當前所有的遮罩元素
             const wrappers = document.querySelectorAll('.reveal-wrapper');
             wrappers.forEach(el => {
                 if (isMasked) {
+                    // 若模式開啟，為所有框框加上「灰色背景」與「隱藏狀態」
                     el.classList.add('masked-mode', 'is-hidden');
                 } else {
+                    // 若模式關閉，移除所有框框的遮罩效果，恢復全顯示
                     el.classList.remove('masked-mode', 'is-hidden');
                 }
             });
+            // 這種做法「完全不會重新載入表格」，所以你的表格捲動到哪裡，就會停在哪裡。
         }
 
-        // 💡 解決重置問題 3：單獨點擊顯現邏輯
+        // 💡 核心手術 3：點擊單一單字顯現/隱藏的邏輯
         function toggleSingleReveal(el) {
-            if (!isMasked) return;
-            // 透過切換 is-hidden 這個 class 來顯示/隱藏
+            if (!isMasked) return; // 只有在「背單字模式」開啟時，點擊才有反應
+            
+            // 透過 toggle 技術切換 is-hidden。
+            // 配合我們先前寫的 CSS，隱藏時透明度 0，顯示時透明度 1，
+            // 因為 Grid 佈局鎖定了高度，所以這裡切換時完全不會跳針。
             el.classList.toggle('is-hidden');
         }
 
