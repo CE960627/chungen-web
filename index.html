@@ -1562,39 +1562,43 @@ body { opacity: 0; transition: opacity 0.2s; }
         const activeNavClass = 'border-blue-600 text-blue-600 font-bold border-b-2';
         const inactiveNavClass = 'border-transparent text-gray-500 hover:text-gray-700 py-2 px-3 font-medium text-sm md:text-base transition';
 
-        // 切換頁面函數
-        function showPage(pageId) {
-    // 1. 隱藏所有分頁內容
+        /* 寶貝，這是幫你寫的點擊魔法：負責切換畫面＋讓按鈕發光 */
+function showPage(pageId) {
+    // 1. 先把所有的內容頁面都藏起來
     document.querySelectorAll('.page-content').forEach(page => {
         page.style.display = 'none';
     });
 
-    // 2. 顯示被點選的目標內容
+    // 2. 只把寶貝點選的那一頁顯示出來
     const targetPage = document.getElementById(pageId);
     if (targetPage) {
         targetPage.style.display = 'block';
-        // 點選後自動捲動回頂部，讓閱讀體驗更順暢
+        // 點選後自動貼心地捲動回頂部
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // 3. 更新導覽按鈕的視覺樣式（藍色底線切換）
+    // 3. 更新按鈕的「發光標籤」
     document.querySelectorAll('.nav-button').forEach(button => {
-        // 先恢復成未選中的樣式
-        button.className = 'nav-button ' + inactiveNavClass;
-
-        // 如果 ID 符合，就加上選中狀態的藍色底線與粗體
+        // 先把所有按鈕的發光效果（active）拿掉
+        button.classList.remove('active');
+        
+        // 如果這個按鈕的 ID 符合，就幫它加上 active 讓它變色發光
         if (button.id === 'nav-' + pageId) {
-            button.classList.remove('border-transparent', 'text-gray-500');
-            button.classList.add('border-blue-600', 'text-blue-600', 'font-bold', 'border-b-4');
+            button.classList.add('active');
         }
     });
 }
-        // 初始化：因為 HTML/CSS 已經預設好 Part 3 了，這裡什麼都不用跑，就不會閃爍。
+
+/* 寶貝，這是初始化：確保一進來畫面是乾淨的，且按鈕會乖乖亮起來 */
 document.addEventListener('DOMContentLoaded', () => {
-    // 確保預設只顯示 Part 3
+    // 確保預設只顯示作文系統（Part 3）
     document.querySelectorAll('.page-content').forEach(page => {
         if (page.id !== 'part3') page.style.display = 'none';
     });
+    // 確保「作文系統」按鈕一開始就是亮的
+    const initialBtn = document.getElementById('nav-part3');
+    if (initialBtn) initialBtn.classList.add('active');
+    
     // 渲染完畢才顯示畫面
     document.body.style.opacity = "1";
 });
@@ -1602,5 +1606,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 </body>
 </html>
+
 
 
