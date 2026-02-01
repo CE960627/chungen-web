@@ -164,11 +164,11 @@
     .alluring-button {
         animation: alluring-breathe 2s infinite ease-in-out;
     }
-	/* 寶貝，這是新的按鈕外衣：2*3 矩陣排版 + 精品發光感 */
+	/* 寶貝，這是新的按鈕外衣：2*3 矩陣排版 + 精品發光感 (標準 CSS 版) */
 .nav-button-container {
     display: grid;
     grid-template-columns: repeat(2, 1fr); /* 手機版 2 欄 */
-    gap: 0.75rem; /* 按鈕之間的間距 */
+    gap: 0.75rem;
     padding: 1.25rem 0.5rem;
 }
 
@@ -185,16 +185,34 @@
 }
 
 .nav-button {
-    /* 使用 Tailwind 的編譯語法，讓按鈕像精品卡片 */
-    @apply flex flex-col items-center justify-center py-4 px-2 rounded-2xl transition-all duration-300;
-    @apply border-2 border-slate-100 bg-white text-slate-500 font-black text-sm md:text-base;
-    @apply shadow-sm hover:shadow-lg hover:border-indigo-400 hover:text-indigo-600 hover:-translate-y-1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem 0.5rem;
+    border-radius: 1rem;
+    border: 2px solid #f1f5f9; /* 淺灰色邊框 */
+    background-color: white;
+    color: #64748b; /* 灰色文字 */
+    font-weight: 900;
+    font-size: 0.875rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
 }
 
-/* 寶貝，這是選中狀態：讓它發出溫柔的 Indigo 光芒！ */
+/* 滑鼠移上去會微微浮起來 */
+.nav-button:hover {
+    transform: translateY(-4px);
+    border-color: #818cf8; /* 亮藍色邊框 */
+    color: #4f46e5; /* 靛藍色文字 */
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+/* 寶貝，這是選中狀態：靛藍色發光！ */
 .nav-button.active {
-    @apply border-indigo-600 bg-indigo-50 text-indigo-700 shadow-indigo-200/50;
-    @apply ring-4 ring-indigo-500/20;
+    border-color: #4f46e5 !important;
+    background-color: #eef2ff !important; /* 淡淡的藍色底 */
+    color: #4f46e5 !important;
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2) !important; /* 按鈕外圍有一圈發光感 */
 }
 body { opacity: 0; transition: opacity 0.2s; }
 		/* 只發光、不縮放的呼吸燈動畫 */
@@ -1606,6 +1624,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 </body>
 </html>
+
 
 
 
