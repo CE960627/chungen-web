@@ -596,11 +596,26 @@
             </div>`;
         }
 
-        // 行銷導向的 Tips Section
+        // 💡 視覺工程：補回完整內容並強化轉換區塊
         function renderTips() {
             const tips = [
-                // ... tips 內容省略 ...
+                { 
+                    title: "精準鎖定：80/20法則", 
+                    content: "學測英文單字多達數千，但真正決定勝負的往往是那 20% 的「核心高頻字」。本站只收錄歷屆試題中反覆出現的關鍵字，讓你的備考效率最大化。",
+                    icon: "target", color: "text-red-500", bg: "bg-red-50"
+                },
+                { 
+                    title: "語塊學習：擺脫死背", 
+                    content: "單字不該孤立存在。背誦時請務必搭配「歷屆考點與搭配詞 (Collocation)」，例如學到 'emphasis' 就要立刻聯想到 'put emphasis on'，這樣寫作才能道地。",
+                    icon: "puzzle", color: "text-blue-500", bg: "bg-blue-50"
+                },
+                { 
+                    title: "主動回想：大腦健身", 
+                    content: "「遮罩模式」不是為了好玩，而是為了強迫大腦進行「主動檢索 (Active Recall)」。看得到中文不算會，遮住中文還能秒答才是真懂。請反覆利用此功能自我檢測。",
+                    icon: "brain-circuit", color: "text-purple-500", bg: "bg-purple-50"
+                }
             ];
+
             return `
             <div class="grid md:grid-cols-3 gap-6">
                 ${tips.map(tip => `
@@ -656,10 +671,10 @@
                 <div id="questions-container" class="mt-12"></div>
 
                 <div class="mt-16 bg-white p-8 rounded-3xl border-2 border-dashed border-slate-200 text-center animate-fade-in-up">
-                    <p class="text-slate-500 font-bold mb-6 text-lg">示範題已結束，想挑戰更多完整題庫嗎？</p>
+                    <p class="text-slate-500 font-bold mb-6 text-lg">想挑戰更多完整獨家題庫嗎？</p>
                     <div class="flex flex-col md:flex-row justify-center gap-4">
                         <a href="tutoring.html" class="alluring-glow px-8 py-4 bg-indigo-600 text-white rounded-xl font-black shadow-lg hover:bg-indigo-700 transition-all flex items-center justify-center gap-2">
-                            <i data-lucide="award" class="w-5 h-5"></i> 獲取全套 6 回精品詳解題庫
+                            <i data-lucide="award" class="w-5 h-5"></i> 獲取全套獨家精選詳解題庫
                         </a>
                         <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="px-8 py-4 bg-slate-100 text-slate-600 rounded-xl font-bold hover:bg-slate-200 transition-all">
                             回頂部重新溫習
