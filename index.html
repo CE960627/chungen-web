@@ -1412,152 +1412,122 @@ body { opacity: 0; transition: opacity 0.2s; }
 </section>
             <!-- Part 6: 選擇題 (A, B, C, D) 分布統計與猜題分析 -->
             <section id="part6" class="page-content">
-                <h2 class="text-3xl font-bold text-gray-900 mb-8 border-l-8 border-blue-600 pl-6">
-                    Part 6: 選擇題 (A, B, C, D) 分布統計與猜題分析
-                </h2>
-                
-                <!-- 信心喊話 -->
-                <div class="bg-green-50 border-l-4 border-green-400 p-6 rounded-r-lg mt-6 mb-8">
-                    <h3 class="text-2xl font-bold text-green-800 mb-3">給考生的話</h3>
-                    <p class="font-semibold text-green-800 text-lg">
-                        考試的最後關頭，你已經準備得很好了！這份資料是基於大數據的統計分析，僅供您在毫無頭緒時作為參考。請記住，充分的準備和穩定的心態才是取得好成績的關鍵。相信自己，你一定可以的！
-                    </p>
+    <div class="mb-10 bg-gradient-to-br from-slate-800 via-indigo-950 to-black p-8 rounded-3xl shadow-2xl border-l-8 border-indigo-500 backdrop-blur-sm text-left relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-32 h-32 bg-indigo-500/10 blur-3xl rounded-full"></div>
+        <div class="flex items-center gap-3 mb-4">
+            <span class="text-4xl filter drop-shadow-md">📡</span>
+            <h2 class="text-3xl md:text-4xl font-black text-white tracking-tight">
+                數據情報：新課綱分佈全解析
+            </h2>
+        </div>
+        <p class="text-indigo-100 text-lg md:text-2xl leading-relaxed font-bold opacity-90">
+            這是全台唯一針對「新課綱正式五年度」進行的選項平衡分析：透過 160 題樣本的交叉比對，我為考生提煉出大考中心命題的核心慣性與避險邏輯
+        </p>
+    </div>
+
+    <div class="mb-16 bg-slate-900 rounded-3xl shadow-2xl border border-slate-700 overflow-hidden">
+        <div class="bg-indigo-950 p-5 md:p-6 text-left border-b border-slate-800">
+            <h3 class="text-xl md:text-2xl font-bold text-indigo-300 flex items-center gap-3">
+                <span class="bg-indigo-600 text-white w-8 h-8 rounded-lg flex items-center justify-center text-sm font-black">Σ</span>
+                111-115 學年度選項出現頻率總表
+            </h3>
+        </div>
+        
+        <div class="table-wrapper p-4 md:p-8">
+            <table class="w-full text-left border-collapse rounded-xl overflow-hidden shadow-2xl bg-slate-800/50">
+                <thead class="bg-slate-900">
+                    <tr class="text-indigo-400 font-black text-base md:text-lg border-b border-slate-700">
+                        <th class="p-4">關鍵大題 (題號)</th>
+                        <th class="p-4 text-center">選項 (A)</th>
+                        <th class="p-4 text-center">選項 (B)</th>
+                        <th class="p-4 text-center">選項 (C)</th>
+                        <th class="p-4 text-center">選項 (D)</th>
+                    </tr>
+                </thead>
+                <tbody class="text-slate-300 text-sm md:text-base font-bold">
+                    <tr class="border-b border-slate-700/50">
+                        <td class="p-4 text-white">詞彙題 (1-10)</td>
+                        <td class="p-4 text-center text-indigo-300">14</td>
+                        <td class="p-4 text-center">13</td>
+                        <td class="p-4 text-center">12</td>
+                        <td class="p-4 text-center">11</td>
+                    </tr>
+                    <tr class="border-b border-slate-700/50 bg-indigo-900/10">
+                        <td class="p-4 text-white">綜合測驗 (11-20)</td>
+                        <td class="p-4 text-center text-rose-500">10</td>
+                        <td class="p-4 text-center">13</td>
+                        <td class="p-4 text-center font-black text-indigo-400">14</td>
+                        <td class="p-4 text-center">13</td>
+                    </tr>
+                    <tr class="border-b border-slate-700/50">
+                        <td class="p-4 text-white">閱讀測驗 (35-46)</td>
+                        <td class="p-4 text-center font-black text-indigo-400">16</td>
+                        <td class="p-4 text-center">13</td>
+                        <td class="p-4 text-center">15</td>
+                        <td class="p-4 text-center font-black text-indigo-400">16</td>
+                    </tr>
+                    <tr class="bg-indigo-600/20 text-white font-black text-lg">
+                        <td class="p-4 border-t-2 border-indigo-500">總計頻率 (160題)</td>
+                        <td class="p-4 text-center border-t-2 border-indigo-500">40</td>
+                        <td class="p-4 text-center border-t-2 border-indigo-500">39</td>
+                        <td class="p-4 text-center border-t-2 border-indigo-500 text-yellow-400">41</td>
+                        <td class="p-4 text-center border-t-2 border-indigo-500">40</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="mb-16">
+        <h4 class="text-xl md:text-2xl font-black text-slate-800 mb-8 border-b-2 border-slate-100 pb-4 flex items-center gap-2">
+            <span class="text-indigo-600">⚖️</span> 戰略分析：期望值與平衡規律
+        </h4>
+        
+        <div class="space-y-8">
+            <div class="bg-white p-6 md:p-10 rounded-3xl shadow-sm border border-slate-200 text-left">
+                <div class="text-indigo-700 font-black text-xl mb-4">
+                    1. 結論：平衡規律是科學猜題的唯一基石
                 </div>
+                <p class="text-slate-600 text-base md:text-lg font-bold leading-relaxed">
+                    透過五年度數據可見，選項分布極為平均（各佔 25%）。這意味著在大考中心命題規範中，<span class="text-indigo-600 font-black">「平衡各選項出現次數」</span>是一項硬性指標。考生在檢查時若發現某一選項分布極度傾斜，應重新審視邏輯是否出現偏差
+                </p>
+            </div>
 
-                <p class="mb-4 text-gray-700">這份分析是基於111、112、113、114學年度學測考題與答案,以及115學年度參考試卷。</p>
-                <p class="mb-4 text-gray-700">下表統計了五份試卷中,(A)(B)(C) (D) 選項在指定題型中出現的總次數 (已排除文意字彙、篇章結構Q21-34)。</p>
-
-                <!-- 表格 1: 近五年 ABCD 選項分佈統計 -->
-                <h4 class="text-xl font-bold text-gray-800 mt-6 mb-3">近五年 ABCD 選項分佈統計</h4>
-                <div class="table-wrapper">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>題型</th>
-                                <th>(A)</th>
-                                <th>(B)</th>
-                                <th>(C)</th>
-                                <th>(D)</th>
-                                <th>總題數</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><strong>詞彙題 (1-10)</strong></td>
-                                <td>14</td>
-                                <td>13</td>
-                                <td>11</td>
-                                <td>12</td>
-                                <td>50</td>
-                            </tr>
-                            <tr>
-                                <td><strong>克漏字 (11-20)</strong></td>
-                                <td>9</td>
-                                <td>13</td>
-                                <td>14</td>
-                                <td>14</td>
-                                <td>50</td>
-                            </tr>
-                            <tr>
-                                <td><strong>閱讀測驗 (35-46)</strong></td>
-                                <td>14</td>
-                                <td>13</td>
-                                <td>16</td>
-                                <td>17</td>
-                                <td>60</td>
-                            </tr>
-                            <tr>
-                                <td><strong>總計</strong></td>
-                                <td><strong>41</strong></td>
-                                <td><strong>35</strong></td>
-                                <td><strong>41</strong></td>
-                                <td><strong>43</strong></td>
-                                <td><strong>160</strong></td>
-                            </tr>
-                        </tbody>
-                    </table>
+            <div class="bg-white p-6 md:p-10 rounded-3xl shadow-sm border border-slate-200 text-left">
+                <div class="text-indigo-700 font-black text-xl mb-4">
+                    2. 結論：綜合測驗 (11-20) 的選項防禦力
                 </div>
+                <p class="text-slate-600 text-base md:text-lg font-bold leading-relaxed">
+                    數據顯示 (A) 選項在克漏字大題的頻率明顯低於平均（僅 20%）。在面臨二選一猶豫或完全無法判斷時，<span class="text-indigo-600 font-black">避開 (A) 選項</span>具備較高的戰略防禦價值，能有效降低失分風險
+                </p>
+            </div>
 
-                <h3 class="text-2xl font-bold text-gray-800 mt-12 mb-6">數據分析與猜題 TIPS</h3>
-                <p class="mb-4 text-gray-700">根據上表，我們可以得出以下重要結論：</p>
-                <ul class="list-none space-y-4 mt-6">
-                    <li class="bg-gray-50 border border-gray-200 rounded-lg p-4">
-                        <strong class="text-blue-700">【TIPS 1: 整體分佈(D)最多,(B)明顯最少】</strong>
-                        <p class="mt-2 text-gray-700">
-                            ○ 在160題的總數中,分佈為:(D)43題,(A)41題,(C) 41題,而(B)僅35題。<br>
-                            ○ <strong>分析:</strong> (B)選項的出現頻率明顯低於其他三者。在完全隨機猜測的情況下,(B)的歷史命中率最低。
-                        </p>
-                    </li>
-                    <li class="bg-gray-50 border border-gray-200 rounded-lg p-4">
-                        <strong class="text-blue-700">【TIPS 2: 克漏字(11-20)應避免猜(A)】</strong>
-                        <p class="mt-2 text-gray-700">
-                            ○ 在克漏字題型中,(C)和(D)各出現14次並列最多,但(A)僅出現9次。<br>
-                            ○ <strong>分析:</strong> (A)在克漏字中的佔比極低 (9/50 = 18%)。若您在克漏字大題有題目需要猜測,(A)應是最後的選擇。
-                        </p>
-                    </li>
-                    <li class="bg-gray-50 border border-gray-200 rounded-lg p-4">
-                        <strong class="text-blue-700">【TIPS 3: 閱讀測驗(35-46)偏好(C) (D)】</strong>
-                        <p class="mt-2 text-gray-700">
-                            ○ 在題數最多的閱讀測驗中,(D)出現17次,(C)出現16次。<br>
-                            ○ <strong>分析:</strong> (C)和(D)在閱讀測驗中的佔比略高於(A)和(B)。
-                        </p>
-                    </li>
-                    <li class="bg-gray-50 border border-gray-200 rounded-lg p-4">
-                        <strong class="text-blue-700">【TIPS 4: 最佳策略 — 統計平衡法】</strong>
-                        <p class="mt-2 text-gray-700">
-                            ○ 鑑於大考中心仍會盡力平衡選項,最有效的策略依然是「統計平衡法」。<br>
-                            ○ <strong>方法:</strong> 在寫完所有有把握的題目後,快速計算您答案卡上(A)、(B)、(C)、(D)各劃了幾個,使你的答案分佈趨於平衡。
-                        </p>
-                    </li>
-                    <li class="bg-gray-50 border border-gray-200 rounded-lg p-4">
-                        <strong class="text-blue-700">【TIPS 5: 連續答案是可能的】</strong>
-                        <p class="mt-2 text-gray-700">
-                            ○ 有些人會避免寫出連續兩個相同的答案(例如A,A)。<br>
-                            ○ <strong>分析:</strong> 114學年甚至出現了大量連續答案。不要害怕填寫連續相同的選項,如果你確定答案是對的,就勇敢寫下去。<br>
-                            ○ <strong class="text-red-600">但是:</strong> 連續三題答案相同(如BBB, CCC)在這五年的179題中一次也沒有出現過。如果你寫出了AAA,強烈建議你重新檢查這三題。
-                        </p>
-                    </li>
-                </ul>
-
-                <!-- 表格 2: 終極猜題順序表 -->
-                <h4 class="text-xl font-bold text-gray-800 mt-6 mb-3">終極猜題順序表 (依總頻率)</h4>
-                <p class="mb-4 text-gray-700">若在沒有任何資訊下盲猜,以下是基於這五份試卷160題「總出現頻率」所排出的猜題順序表：</p>
-                <div class="table-wrapper">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>優先順序</th>
-                                <th>選項</th>
-                                <th>總出現次數 (160題中)</th>
-                                <th>佔比</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><strong>1</strong></td>
-                                <td>(D)</td>
-                                <td>43</td>
-                                <td>26.9%</td>
-                            </tr>
-                            <tr>
-                                <td><strong>2、3</strong></td>
-                                <td>(A)、(C)</td>
-                                <td>41</td>
-                                <td>25.6%</td>
-                            </tr>
-                            <tr>
-                                <td><strong>4</strong></td>
-                                <td>(B)</td>
-                                <td>35</td>
-                                <td>21.9%</td>
-                            </tr>
-                        </tbody>
-                    </table>
+            <div class="bg-white p-6 md:p-10 rounded-3xl shadow-sm border border-slate-200 text-left">
+                <div class="text-indigo-700 font-black text-xl mb-4">
+                    3. 結論：閱讀測驗的「強勢分布」觀察
                 </div>
+                <p class="text-slate-600 text-base md:text-lg font-bold leading-relaxed">
+                    閱讀測驗 (35-46) 中，(A) 與 (D) 共佔據了超過一半的正確答案分布。對於追求極限作答速度的考生，理解這項規律能協助在回文定位時，以更果斷的心理素質進行最終決策
+                </p>
+            </div>
+        </div>
+    </div>
 
-                <p class="mt-6 text-md font-medium text-gray-600">本分析僅供參考。考試的最後關頭,充分的準備和穩定的心態方為取得好成績的關鍵。</p>
-
-            </section>
+    <div class="bg-slate-900 rounded-[3rem] p-8 md:p-16 text-center shadow-2xl border border-slate-800 relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-indigo-600 via-sky-400 to-indigo-600"></div>
+        <p class="text-lg md:text-2xl text-white leading-relaxed font-bold italic mb-10 px-4">
+            「數據分析只是最後的戰術防禦，<br class="md:hidden"> 真正的勝利來自系統化的硬核實力。」
+        </p>
+        
+        <a href="tutoring.html" class="alluring-button inline-block bg-gradient-to-r from-indigo-500 to-sky-600 hover:from-indigo-400 hover:to-sky-500 text-white font-black py-5 px-8 md:px-12 rounded-2xl shadow-2xl transition transform hover:-translate-y-1 text-xl md:text-2xl whitespace-nowrap">
+            🚀 我想完勝學測英文
+        </a>
+        <p class="text-slate-400 text-sm md:text-base mt-8 font-medium">
+            這套整理好的數據是我送給 116 學測生的禮物<br> 
+            與其在考場賭運氣，不如現在就跟我一起建構絕對的分數領先
+        </p>
+    </div>
+</section>
 
         </div>
     </main>
@@ -1611,6 +1581,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 </body>
 </html>
+
 
 
 
