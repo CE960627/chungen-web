@@ -168,7 +168,7 @@
         <div class="absolute bottom-0 left-10 w-48 h-48 bg-blue-400 opacity-10 rounded-full blur-2xl"></div>
     </header>
 
-    <main class="max-w-5xl mx-auto px-4 -mt-16 relative z-20 pb-20 flex-grow w-full">
+    <main class="max-w-5xl mx-auto px-4 -mt-16 relative z-20 pb-6 flex-grow w-full">
         
         <div class="bg-white rounded-xl shadow-lg p-4 mb-8">
             <div class="flex flex-col lg:flex-row gap-4 justify-between items-center">
@@ -203,7 +203,7 @@
 
     </main>
 
-    <footer class="bg-slate-800 text-slate-400 py-8 text-center text-sm mt-auto">
+    <footer class="bg-slate-800 text-slate-400 py-6 text-center text-sm mt-auto">
         <p>學測英文：高頻單字彙整與考點解析</p>
         <p class="mt-2 text-slate-500">Based on GSAT English Exam Trends</p>
     </footer>
@@ -619,23 +619,23 @@
             return `
             <div class="grid md:grid-cols-3 gap-6">
                 ${tips.map(tip => `
-                    <div class="bg-white p-8 rounded-xl shadow-md border border-slate-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
-                        <div class="absolute top-0 right-0 w-32 h-32 ${tip.bg} rounded-full -mr-10 -mt-10 opacity-50 group-hover:scale-110 transition-transform"></div>
-                        <h3 class="text-2xl font-bold text-slate-800 mb-4 relative z-10 flex items-center gap-2">
-                            <i data-lucide="${tip.icon}" class="w-6 h-6 ${tip.color}"></i> ${tip.title}
+                    <div class="bg-white p-8 rounded-xl shadow-md border border-slate-100 hover:shadow-xl transition-all duration-300 relative overflow-hidden group">
+                        <div class="absolute top-0 right-0 w-32 h-32 ${tip.bg} rounded-full -mr-10 -mt-10 opacity-50"></div>
+                        <h3 class="text-xl font-bold text-slate-800 mb-4 relative z-10 flex items-center gap-2">
+                            <i data-lucide="${tip.icon}" class="w-5 h-5 ${tip.color}"></i> ${tip.title}
                         </h3>
-                        <p class="text-slate-600 leading-relaxed relative z-10 text-justify font-medium">${tip.content}</p>
+                        <p class="text-slate-600 leading-relaxed relative z-10 text-justify text-sm font-medium">${tip.content}</p>
                     </div>
                 `).join('')}
             </div>
             
-            <div class="mt-12 text-center bg-slate-50 p-10 rounded-3xl border border-slate-100 relative overflow-hidden">
+            <div class="mt-6 text-center bg-slate-50 p-8 rounded-3xl border border-slate-100">
                 <div class="relative z-10">
-                    <p class="text-slate-800 font-black text-xl mb-6">實踐是檢驗真理的唯一標準</p>
-                    <button onclick="switchTab('practice')" class="alluring-glow inline-flex items-center gap-3 bg-indigo-600 text-white px-12 py-5 rounded-2xl font-black text-xl shadow-2xl hover:bg-indigo-700 transition-all transform hover:scale-105">
-                        <i data-lucide="play-circle" class="w-6 h-6"></i> 立即挑戰仿真命題
+                    <p class="text-slate-700 font-bold text-lg mb-4">將知識轉化為實戰能力</p>
+                    <button onclick="switchTab('practice')" class="alluring-glow inline-flex items-center gap-3 bg-indigo-600 text-white px-10 py-4 rounded-2xl font-black text-lg shadow-xl hover:bg-indigo-700 transition-all">
+                        <i data-lucide="play-circle" class="w-6 h-6"></i> 立即檢驗單字掌握度
                     </button>
-                    <p class="mt-4 text-slate-400 text-sm font-medium">看看你是否能避開大考中心的誘答陷阱</p>
+                    <p class="mt-4 text-slate-400 text-xs font-medium">透過仿真命題，確認您對核心語塊的應用熟練度</p>
                 </div>
             </div>`;
         }
@@ -664,7 +664,7 @@
                         <i data-lucide="zap" class="w-8 h-8 text-yellow-500 fill-yellow-500"></i> 仿真題型示範
                     </h2>
                     <p class="text-slate-600 text-lg leading-relaxed">
-                        精選家教課程 <strong class="text-indigo-900 underline decoration-indigo-300 underline-offset-4">每週課前小考</strong> 範例
+                        精選家教課程 <strong class="text-indigo-900 underline decoration-indigo-300 underline-offset-4">每週課前小考</strong> 範例。<br><strong class="text-indigo-900 underline decoration-indigo-300 underline-offset-4">每週測驗卷皆會附上核心中譯、考點拆解，以及選項分析</strong>
                     </p>
                 </div>
 
