@@ -20,22 +20,22 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-/* --- 遮罩效果核心 CSS (視覺穩定加強版) --- */
+/* --- 遮罩效果核心 CSS (視覺對稱加強版) --- */
         .reveal-wrapper {
             position: relative;
             transition: all 0.2s;
             border-radius: 0.5rem;
-            padding: 0.5rem 0.75rem; 
-            display: inline-flex;
+            /* 💡 修正：增加左右內距 (px-4)，解決文字太擠的問題 */
+            padding: 0.5rem 1rem; 
+            /* 💡 修正：改為 flex 並寬度 100%，確保所有框框一樣長 */
+            display: flex;
+            width: 100%;
             align-items: center;
-            justify-content: center;
-            min-width: 110px;
-            /* 💡 修正 3：鎖定最小高度 36px，確保隱藏時不會變扁，維持文字高度 */
-            min-height: 2.25rem; 
+            justify-content: flex-start; /* 內容預設靠左 */
+            min-height: 2.5rem; 
             vertical-align: middle;
             cursor: default;
             user-select: none;
-            margin: 0 4px;
         }
         
         /* 遮罩開啟時的背景 */
@@ -526,9 +526,9 @@
                                         <i data-lucide="volume-2" class="w-4 h-4"></i>
                                     </button>
                                 </div>
-                                <div class="reveal-wrapper ${isMasked ? 'masked-mode is-hidden' : ''}" onclick="toggleSingleReveal(this)" style="justify-content: flex-start; padding-left: 0;">
-                                    <div class="reveal-text text-slate-600 font-medium text-sm text-left italic">${item.desc}</div>
-                                    <div class="reveal-overlay" style="justify-content: flex-start; padding-left: 1rem;"><i data-lucide="eye-off" class="w-3 h-3 mr-2"></i> 點擊查看釋義</div>
+                                <div class="reveal-wrapper ${isMasked ? 'masked-mode is-hidden' : ''}" onclick="toggleSingleReveal(this)">
+                                    <div class="reveal-text text-slate-600 font-medium text-sm text-left">${item.desc}</div>
+                                    <div class="reveal-overlay"><i data-lucide="eye-off" class="w-3 h-3 mr-2"></i> 點擊查看釋義</div>
                                 </div>
                             </li>
                         `).join('')}
@@ -548,9 +548,9 @@
                                         <i data-lucide="volume-2" class="w-4 h-4"></i>
                                     </button>
                                 </div>
-                                <div class="reveal-wrapper ${isMasked ? 'masked-mode is-hidden' : ''}" onclick="toggleSingleReveal(this)" style="width: 100%; justify-content: flex-start; padding-left: 0;">
+                                <div class="reveal-wrapper ${isMasked ? 'masked-mode is-hidden' : ''}" onclick="toggleSingleReveal(this)" style="background-color: white;">
                                     <div class="reveal-text text-slate-600 font-medium text-sm text-left leading-relaxed">${item.desc}</div>
-                                    <div class="reveal-overlay" style="justify-content: flex-start; padding-left: 1rem;"><i data-lucide="eye-off" class="w-3 h-3 mr-2"></i> 點擊解鎖辨析</div>
+                                    <div class="reveal-overlay"><i data-lucide="eye-off" class="w-3 h-3 mr-2"></i> 點擊解鎖辨析</div>
                                 </div>
                             </div>
                         `).join('')}
