@@ -164,23 +164,24 @@
     .alluring-button {
         animation: alluring-breathe 2s infinite ease-in-out;
     }
-	/* 寶貝，這是新的按鈕外衣：2*3 矩陣排版 + 精品發光感 (標準 CSS 版) */
+	/* 寶貝，這是專屬主題色 + 空間壓縮版按鈕 */
 .nav-button-container {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* 手機版 2 欄 */
-    gap: 0.75rem;
-    padding: 1.25rem 0.5rem;
+    grid-template-columns: repeat(2, 1fr); /* 2*3 矩陣 */
+    gap: 0.5rem; /* 縮小按鈕間距 */
+    padding: 0.5rem; /* 壓縮導覽列高度 */
 }
 
 @media (min-width: 768px) {
     .nav-button-container {
-        grid-template-columns: repeat(3, 1fr); /* 平板改 3 欄 */
+        grid-template-columns: repeat(3, 1fr);
+        padding: 1.25rem 0.5rem;
     }
 }
 
 @media (min-width: 1024px) {
     .nav-button-container {
-        grid-template-columns: repeat(6, 1fr); /* 電腦版排成一排 */
+        grid-template-columns: repeat(6, 1fr);
     }
 }
 
@@ -188,31 +189,68 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 1rem 0.5rem;
-    border-radius: 1rem;
-    border: 2px solid #f1f5f9; /* 淺灰色邊框 */
+    padding: 0.6rem 0.25rem; /* 壓縮按鈕上下寬度，讓版面不擁擠 */
+    border-radius: 0.75rem;
+    border: 2px solid #f1f5f9;
     background-color: white;
-    color: #64748b; /* 灰色文字 */
+    color: #64748b;
     font-weight: 900;
-    font-size: 0.875rem;
+    font-size: 0.8rem; /* 稍微縮小字體以適應壓縮後的按鈕 */
     transition: all 0.3s ease;
     box-shadow: 0 1px 2px rgba(0,0,0,0.05);
 }
 
-/* 滑鼠移上去會微微浮起來 */
-.nav-button:hover {
-    transform: translateY(-4px);
-    border-color: #818cf8; /* 亮藍色邊框 */
-    color: #4f46e5; /* 靛藍色文字 */
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+@media (min-width: 768px) {
+    .nav-button {
+        padding: 1rem 0.5rem;
+        font-size: 0.95rem;
+    }
 }
 
-/* 寶貝，這是選中狀態：靛藍色發光！ */
-.nav-button.active {
+/* --- 這裡開始是寶貝要的「六色霓虹燈」魔法 --- */
+
+/* 核心原則 & 提分藍圖 (Teal) */
+#nav-part1.active, #nav-part5.active {
+    border-color: #0d9488 !important;
+    background-color: #f0fdfa !important;
+    color: #0d9488 !important;
+    box-shadow: 0 0 0 4px rgba(20, 184, 166, 0.2) !important;
+}
+
+/* 選擇攻略 (Orange) */
+#nav-part2.active {
+    border-color: #ea580c !important;
+    background-color: #fff7ed !important;
+    color: #ea580c !important;
+    box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.2) !important;
+}
+
+/* 作文系統 (Indigo) */
+#nav-part3.active {
     border-color: #4f46e5 !important;
-    background-color: #eef2ff !important; /* 淡淡的藍色底 */
+    background-color: #eef2ff !important;
     color: #4f46e5 !important;
-    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2) !important; /* 按鈕外圍有一圈發光感 */
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2) !important;
+}
+
+/* 翻譯策略 (Violet) */
+#nav-part4.active {
+    border-color: #7c3aed !important;
+    background-color: #f5f3ff !important;
+    color: #7c3aed !important;
+    box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.2) !important;
+}
+
+/* 數據情報 (Midnight Blue) */
+#nav-part6.active {
+    border-color: #1e1b4b !important;
+    background-color: #f1f5f9 !important;
+    color: #1e1b4b !important;
+    box-shadow: 0 0 0 4px rgba(30, 27, 75, 0.2) !important;
+}
+
+.nav-button:hover {
+    transform: translateY(-2px);
 }
 body { opacity: 0; transition: opacity 0.2s; }
 		/* 只發光、不縮放的呼吸燈動畫 */
@@ -264,16 +302,16 @@ body { opacity: 0; transition: opacity 0.2s; }
     </nav>
 
     <!-- 頂部標題欄 -->
-    <header class="bg-white shadow-sm py-10">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1 class="text-2xl md:text-3xl font-bold text-blue-800 tracking-tight">
-                116 學測英文全攻略
-            </h1>
-            <p class="text-amber-600 font-bold text-sm md:text-base mt-1.5">
-                全國前 0.04% 寫作實績 ‧ 名校生認證系統化教學
-            </p>
-        </div>
-    </header>
+    <header class="bg-white shadow-sm py-4 md:py-8">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h1 class="text-2xl md:text-3xl font-bold text-blue-800 tracking-tight">
+            116 學測英文全攻略
+        </h1>
+        <p class="text-amber-600 font-bold text-sm md:text-base mt-1">
+            全國前 0.04% 寫作實績 ‧ 名校生認證系統化教學
+        </p>
+    </div>
+</header>
 
     <!-- 導覽列 -->
     <nav class="bg-white shadow-sm z-10 border-t border-gray-100">
@@ -1624,6 +1662,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 </body>
 </html>
+
 
 
 
