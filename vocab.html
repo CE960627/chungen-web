@@ -20,21 +20,24 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-/* --- 遮罩效果核心 CSS (精品橫向版) --- */
+/* --- 遮罩效果核心 CSS (視覺絕對穩定防爆版) --- */
 .reveal-wrapper {
     position: relative;
     transition: all 0.2s;
     border-radius: 0.5rem;
+    /* 💡 核心修正 1：加上 border-box，Padding 再多也不會爆開螢幕 */
+    box-sizing: border-box; 
     padding: 0.5rem 1rem; 
-    display: inline-flex; /* 💡 修正：改回行內塊，讓寬度由文字撐開 */
+    /* 💡 核心修正 2：改為 flex 並強制寬度 100%，確保所有框框一樣長 */
+    display: flex;
+    width: 100%;
     align-items: center;
     justify-content: center;
-    /* 💡 修正：給予足夠的最小寬度，確保遮罩看起來大氣 */
-    min-width: 140px; 
-    min-height: 2.6rem; 
+    min-height: 2.8rem; 
     vertical-align: middle;
     cursor: default;
     user-select: none;
+    overflow: hidden;
 }
 
 .reveal-wrapper.masked-mode {
@@ -46,12 +49,14 @@
 .reveal-text {
     transition: opacity 0.2s ease-in-out;
     text-align: center;
-    font-weight: 700; /* 💡 修正：加粗釋義，提升辨識度 */
-    /* 💡 核心修正：強制文字「一行結束」，絕對不垂直排列 */
-    white-space: nowrap; 
+    font-weight: 700;
     width: 100%;
+    line-height: 1.4;
+    /* 💡 核心修正 3：表格內維持水平一行，卡片內則根據內容寬度適配 */
+    white-space: nowrap; 
 }
 
+/* 絲滑穩定核心：僅改變透明度，保留實體空間防止跳針 */
 .reveal-wrapper.is-hidden .reveal-text {
     opacity: 0;
     pointer-events: none;
@@ -67,15 +72,14 @@
     font-weight: 600;
     color: #64748b;
     pointer-events: none;
-    /* 💡 核心修正：提示字也絕對不換行 */
-    white-space: nowrap; 
+    white-space: nowrap;
 }
 
 .reveal-wrapper.is-hidden .reveal-overlay { 
     display: flex; 
 }
 
-/* 💡 修正：高級感微呼吸燈 */
+/* 高級感微呼吸燈 */
 @keyframes alluring-glow-only {
     0%, 100% { box-shadow: 0 0 4px rgba(79, 70, 229, 0.1); border-color: rgba(79, 70, 229, 0.4); }
     50% { box-shadow: 0 0 10px rgba(79, 70, 229, 0.25); border-color: rgba(79, 70, 229, 0.8); }
@@ -513,14 +517,14 @@
         function renderAdvPage() {
             return `
             <div class="grid md:grid-cols-2 gap-6">
-                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 overflow-hidden">
                     <h3 class="text-lg font-bold text-slate-800 mb-6 flex items-center gap-2">
                         <span class="w-2 h-6 bg-blue-500 rounded-full"></span> 高頻副詞
                     </h3>
                     <ul class="space-y-4">
                         ${adverbsData.map(item => `
                             <li class="border-b border-slate-50 pb-4 last:border-0">
-                                <div class="flex items-center gap-3 mb-2 pl-5">
+                                <div class="flex items-center gap-3 mb-2 pl-4">
                                     <span class="font-bold text-indigo-700 text-lg tracking-tight">${item.word}</span>
                                     <button onclick="speak('${item.word}')" class="p-1.5 rounded-full bg-indigo-50 text-indigo-600 hover:bg-indigo-100 transition-colors">
                                         <i data-lucide="volume-2" class="w-4 h-4"></i>
@@ -528,21 +532,21 @@
                                 </div>
                                 <div class="reveal-wrapper ${isMasked ? 'masked-mode is-hidden' : ''}" onclick="toggleSingleReveal(this)">
                                     <div class="reveal-text text-slate-600 font-bold text-sm text-left w-full">${item.desc}</div>
-                                    <div class="reveal-overlay"><i data-lucide="eye-off" class="w-3 h-3 mr-2"></i> 點擊查看釋義</div>
+                                    <div class="reveal-overlay" style="justify-content: flex-start; padding-left: 1rem;"><i data-lucide="eye-off" class="w-3 h-3 mr-2"></i> 查看釋義</div>
                                 </div>
                             </li>
                         `).join('')}
                     </ul>
                 </div>
 
-                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 overflow-hidden">
                     <h3 class="text-lg font-bold text-slate-800 mb-6 flex items-center gap-2">
                         <span class="w-2 h-6 bg-rose-500 rounded-full"></span> 重點辨析 (必背)
                     </h3>
                     <div class="space-y-5">
                         ${confusingPairs.map(item => `
-                            <div class="bg-slate-50 p-5 rounded-xl border border-slate-100">
-                                <div class="flex items-center gap-3 mb-3 pl-5">
+                            <div class="bg-slate-50 p-5 rounded-xl border border-slate-100 overflow-hidden">
+                                <div class="flex items-center gap-3 mb-3 pl-4">
                                     <span class="font-bold text-slate-800 text-base tracking-tight">${item.pair}</span>
                                     <button onclick="speak('${item.pair.replace(/\//g, ', ')}')" class="p-1.5 rounded-full bg-white text-indigo-400 hover:text-indigo-600 shadow-sm transition-colors">
                                         <i data-lucide="volume-2" class="w-4 h-4"></i>
@@ -550,7 +554,7 @@
                                 </div>
                                 <div class="reveal-wrapper ${isMasked ? 'masked-mode is-hidden' : ''}" onclick="toggleSingleReveal(this)" style="background-color: white;">
                                     <div class="reveal-text text-slate-600 font-bold text-sm text-left leading-relaxed w-full">${item.desc}</div>
-                                    <div class="reveal-overlay"><i data-lucide="eye-off" class="w-3 h-3 mr-2"></i> 點擊解鎖辨析</div>
+                                    <div class="reveal-overlay" style="justify-content: flex-start; padding-left: 1rem;"><i data-lucide="eye-off" class="w-3 h-3 mr-2"></i> 解鎖辨析</div>
                                 </div>
                             </div>
                         `).join('')}
@@ -561,7 +565,7 @@
             <div class="mt-8 px-4 py-3 bg-amber-50 rounded-lg border border-amber-200 flex items-start gap-2 animate-fade-in shadow-sm">
                 <span class="text-lg mt-[-2px]">😊</span>
                 <p class="text-amber-900 text-xs md:text-sm font-bold leading-relaxed">
-                    貼心叮嚀：<span class="font-medium text-amber-800">此區塊收錄學測最易混淆的副詞族群。開啟「背單字模式」後，可針對薄弱項目點擊遮罩進行自我檢測，建議同步搭配上方的發音功能進行語感建立。</span>
+                    貼心叮嚀：<span class="font-medium text-amber-800">此區塊收錄學測最易混淆的副詞族群。開啟「背單字模式」後，可針對薄弱項目點擊遮罩進行檢測，同步建立直覺語感。</span>
                 </p>
             </div>`;
         }
