@@ -164,17 +164,37 @@
     .alluring-button {
         animation: alluring-breathe 2s infinite ease-in-out;
     }
-	/* 預防進場排版亂跳並解決手機版擁擠問題 */
+	/* 寶貝，這是新的按鈕外衣：2*3 矩陣排版 + 精品發光感 */
 .nav-button-container {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.5rem;
+    grid-template-columns: repeat(2, 1fr); /* 手機版 2 欄 */
+    gap: 0.75rem; /* 按鈕之間的間距 */
+    padding: 1.25rem 0.5rem;
 }
+
 @media (min-width: 768px) {
     .nav-button-container {
-        display: flex;
-        justify-content: center;
+        grid-template-columns: repeat(3, 1fr); /* 平板改 3 欄 */
     }
+}
+
+@media (min-width: 1024px) {
+    .nav-button-container {
+        grid-template-columns: repeat(6, 1fr); /* 電腦版排成一排 */
+    }
+}
+
+.nav-button {
+    /* 使用 Tailwind 的編譯語法，讓按鈕像精品卡片 */
+    @apply flex flex-col items-center justify-center py-4 px-2 rounded-2xl transition-all duration-300;
+    @apply border-2 border-slate-100 bg-white text-slate-500 font-black text-sm md:text-base;
+    @apply shadow-sm hover:shadow-lg hover:border-indigo-400 hover:text-indigo-600 hover:-translate-y-1;
+}
+
+/* 寶貝，這是選中狀態：讓它發出溫柔的 Indigo 光芒！ */
+.nav-button.active {
+    @apply border-indigo-600 bg-indigo-50 text-indigo-700 shadow-indigo-200/50;
+    @apply ring-4 ring-indigo-500/20;
 }
 body { opacity: 0; transition: opacity 0.2s; }
 		/* 只發光、不縮放的呼吸燈動畫 */
@@ -1594,3 +1614,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
 </body>
 </html>
+
