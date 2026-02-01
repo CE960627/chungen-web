@@ -20,42 +20,45 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-        /* --- 遮罩效果核心 CSS (修正版：行內顯示) --- */
+/* --- 遮罩效果核心 CSS (視覺穩定加強版) --- */
         .reveal-wrapper {
             position: relative;
             transition: all 0.2s;
-            border-radius: 0.375rem;
-            padding: 0.35rem 0.75rem; /* 增加一點內距讓它好按 */
-            display: inline-flex;     /* 關鍵：行內排列，不會變直的 */
-            align-items: center;      /* 垂直置中 */
-            justify-content: center;  /* 水平置中 */
-            min-width: 100px;         /* 最小寬度，確保好點擊 */
-            vertical-align: middle;   /* 對齊文字基線 */
+            border-radius: 0.5rem;
+            padding: 0.4rem 0.75rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 110px;
+            /* 💡 關鍵：設定與內文一致的行高，防止隱藏後變扁 */
+            min-height: 1.5rem; 
+            vertical-align: middle;
             cursor: default;
             user-select: none;
-            margin: 0 4px;            /* 左右留點空隙 */
+            margin: 0 4px;
         }
         
         /* 遮罩開啟時 */
         .reveal-wrapper.masked-mode {
             cursor: pointer;
-            background-color: #f1f5f9; /* 淺灰背景 */
-            border: 1px solid transparent;
+            background-color: #f1f5f9;
+            border: 1.5px solid #e2e8f0; /* 增加邊框感 */
         }
         .reveal-wrapper.masked-mode:hover {
-            background-color: #e2e8f0; /* hover 加深 */
+            background-color: #e2e8f0;
             border-color: #cbd5e1;
         }
 
-        /* 文字模糊狀態 */
         .reveal-text {
-            transition: all 0.3s;
+            transition: opacity 0.3s, filter 0.3s;
             text-align: center;
             font-weight: 500;
+            line-height: 1.5; /* 鎖定行高 */
         }
+        /* 💡 解決跳針：隱藏時維持佔位，不使用 filter: blur 以提升效能 */
         .reveal-text.hidden {
-            filter: blur(5px);
-            opacity: 0; 
+            opacity: 0;
+            pointer-events: none;
         }
         
         /* 點擊顯示提示層 */
@@ -441,14 +444,15 @@
             const contentArea = document.getElementById('content-area');
             const maskBtn = document.getElementById('mask-toggle');
             
-            // 更新遮罩按鈕樣式
+            // 💡 視覺優化：強化按鈕醒目度
             if(isMasked) {
-                maskBtn.classList.add('bg-amber-100', 'text-amber-800', 'border-amber-300', 'ring-2', 'ring-amber-200');
-                maskBtn.classList.remove('bg-white', 'text-slate-600', 'border-slate-200', 'hover:bg-slate-50');
+                maskBtn.classList.add('bg-amber-100', 'text-amber-800', 'border-amber-400', 'border-2');
+                maskBtn.classList.remove('bg-white', 'text-slate-600', 'border-slate-200', 'hover:bg-slate-50', 'alluring-glow');
                 maskBtn.innerHTML = `<i data-lucide="eye-off" class="w-4 h-4"></i> <span>背單字模式：開啟</span>`;
             } else {
-                maskBtn.classList.remove('bg-amber-100', 'text-amber-800', 'border-amber-300', 'ring-2', 'ring-amber-200');
-                maskBtn.classList.add('bg-white', 'text-slate-600', 'border-slate-200', 'hover:bg-slate-50');
+                // 💡 關閉狀態：加入加厚靛藍邊框與呼吸燈
+                maskBtn.classList.remove('bg-amber-100', 'text-amber-800', 'border-amber-400');
+                maskBtn.classList.add('bg-white', 'text-indigo-700', 'border-indigo-600', 'border-2', 'hover:bg-indigo-50', 'alluring-glow');
                 maskBtn.innerHTML = `<i data-lucide="eye" class="w-4 h-4"></i> <span>背單字模式：關閉</span>`;
             }
             lucide.createIcons();
@@ -505,17 +509,17 @@
             return `
             <div class="overflow-x-auto rounded-lg border border-slate-200 shadow-sm bg-white">
                 <table class="w-full text-left text-sm">
-                    <thead class="bg-slate-100 text-slate-700 font-semibold">
+                    <thead class="bg-slate-100 text-slate-700 font-bold">
                         <tr>
-                            <th class="p-4 w-1/4">單字  </th>
+                            <th class="p-4 w-1/4 text-center">單字 (Word)</th>
                             <th class="p-4 w-20 text-center">級別</th>
-                            <th class="p-4 w-1/4">
+                            <th class="p-4 w-1/4 text-center">
                                 <div class="flex items-center gap-2 whitespace-nowrap justify-center">
                                     中文釋義 
                                     ${isMasked ? '<span class="text-xs font-normal text-amber-600 bg-amber-100 px-2 py-0.5 rounded-full">點擊查看</span>' : ''}
                                 </div>
                             </th>
-                            <th class="p-4">歷屆考點與搭配</th>
+                            <th class="p-4 text-center">歷屆考點與搭配詞彙</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100 bg-white">
