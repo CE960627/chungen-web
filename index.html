@@ -279,35 +279,34 @@ body { opacity: 0; transition: opacity 0.2s; }
         .subtle-pulse {
             animation: subtle-pulse 3s infinite ease-in-out;
         }
-		/* 💡 修正 1：側邊抽屜 - 強制貼邊、修正陰影、高度鎖定 */
+		/* 💡 修正：精品側邊抽屜 - 強制貼邊 0 誤差、高度鎖定 */
         #mobile-menu {
             position: fixed;
             top: 0;
             right: 0;
             width: 80%;
-            height: 100dvh; /* 鎖定動態螢幕高度 */
+            height: 100dvh; 
             background-color: #1e293b;
             z-index: 101;
             transform: translateX(100%); 
             transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             flex-direction: column;
-            justify-content: space-between; /* 上下撐開，解決空虛感 */
-            /* 💡 修正：陰影往左投射，右邊就不會有縫隙感 */
-            box-shadow: -15px 0 35px rgba(0,0,0,0.4); 
+            justify-content: space-between; 
+            /* 💡 修正：陰影往左投射，右邊邊界絕對貼齊手機邊緣 */
+            box-shadow: -20px 0 50px rgba(0,0,0,0.5); 
             overflow: hidden;
         }
         #mobile-menu.open { transform: translateX(0); }
         
-        /* 💡 修正 2：加強背景遮罩模糊感 */
         #menu-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.65);
-            backdrop-filter: blur(5px); 
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(6px); 
             z-index: 100;
             opacity: 0;
             visibility: hidden;
@@ -315,14 +314,13 @@ body { opacity: 0; transition: opacity 0.2s; }
         }
         #menu-overlay.show { opacity: 1; visibility: visible; }
 
-        /* 💡 修正 3：按鈕加入層次感分界線 */
         .mobile-nav-link {
             border-left: 4px solid transparent;
-            border-bottom: 1px solid rgba(255,255,255,0.03); 
-            padding: 1.75rem 1.5rem; /* 加高按鈕，讓版面飽滿 */
+            border-bottom: 1px solid rgba(255,255,255,0.05); 
+            padding: 2rem 1.5rem; /* 💡 修正：加大按鈕高度，消除空虛感 */
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: 1.25rem;
             color: #cbd5e1;
             transition: all 0.2s;
         }
@@ -356,8 +354,9 @@ body { opacity: 0; transition: opacity 0.2s; }
 
                 <div class="md:hidden flex items-center">
                     <button id="mobile-menu-btn" class="text-gray-300 hover:text-white focus:outline-none p-2 relative z-[102]">
-                        <i data-lucide="menu" id="icon-menu" class="w-7 h-7"></i>
-                        <i data-lucide="x" id="icon-close" class="w-7 h-7 hidden"></i>
+                        <div id="icon-container">
+                            <i data-lucide="menu" class="w-7 h-7"></i>
+                        </div>
                     </button>
                 </div>
             </div>
@@ -365,13 +364,13 @@ body { opacity: 0; transition: opacity 0.2s; }
 
         <div id="mobile-menu">
             <div class="h-16 flex items-center px-6 border-b border-gray-700 bg-gray-900/50 flex-shrink-0">
-                <div class="flex items-center gap-2 whitespace-nowrap">
+                <div class="flex items-center gap-2 whitespace-nowrap overflow-hidden">
                     <span class="text-2xl">🎓</span>
                     <span class="text-xl font-black text-white">Chungen English</span>
                 </div>
             </div>
 
-            <div class="flex-grow flex flex-col pt-2">
+            <div class="flex-grow flex flex-col justify-start pt-4">
                 <a href="index.html" class="mobile-nav-link text-lg font-bold">
                     <i data-lucide="compass" class="w-6 h-6 text-blue-400"></i> 學測英文全攻略
                 </a>
@@ -384,14 +383,13 @@ body { opacity: 0; transition: opacity 0.2s; }
             </div>
 
             <div class="p-8 border-t border-gray-700 bg-gray-900/80 mb-[env(safe-area-inset-bottom)]">
-                <p class="text-sm text-yellow-400 font-black mb-3 tracking-widest uppercase">● 全國前 0.04% 寫作實績</p>
-                <p class="text-[12px] text-gray-200 leading-relaxed text-left font-medium opacity-90">
+                <p class="text-sm text-yellow-400 font-bold mb-3 tracking-widest uppercase">● 全國前 0.04% 寫作實績</p>
+                <p class="text-[13px] text-gray-100 leading-relaxed text-left font-medium opacity-100">
                     將理科邏輯帶入英文學習，打造最高效的提分公式
                 </p>
             </div>
         </div>
     </nav>
-
     <!-- 頂部標題欄 -->
 <header class="bg-white shadow-sm pt-7 pb-3 md:pt-10 md:pb-8">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -1718,31 +1716,27 @@ body { opacity: 0; transition: opacity 0.2s; }
         });
     }
 
-    /* 💡 2. 一次到位：背景鎖定、圖示強制轉換、分頁高亮 */
+    /* 💡 2. 終極修正：解決圖示、背景捲動、貼邊落差 */
     document.addEventListener('DOMContentLoaded', () => {
         const btn = document.getElementById('mobile-menu-btn');
         const menu = document.getElementById('mobile-menu');
         const overlay = document.getElementById('menu-overlay');
-        const iconMenu = document.getElementById('icon-menu');
-        const iconClose = document.getElementById('icon-close');
+        const iconContainer = document.getElementById('icon-container');
 
         function toggleDrawer() {
             const isOpen = menu.classList.toggle('open');
             overlay.classList.toggle('show');
             
-            // 💡 鎖定主頁面背景，防止開啟時亂滑
+            // 💡 修正 1：開啟選單時禁止背景亂滑
             document.body.style.overflow = isOpen ? 'hidden' : '';
 
-            // 💡 圖示切換
+            // 💡 修正 2：圖示暴力切換 (直接重寫 HTML 並喚醒 Lucide)
             if (isOpen) {
-                iconMenu.classList.add('hidden');
-                iconClose.classList.remove('hidden');
+                iconContainer.innerHTML = `<i data-lucide="x" class="w-7 h-7 text-white"></i>`;
             } else {
-                iconMenu.classList.remove('hidden');
-                iconClose.classList.add('hidden');
+                iconContainer.innerHTML = `<i data-lucide="menu" class="w-7 h-7 text-gray-300"></i>`;
             }
-            // 💡 關鍵：每次切換都重新喚醒圖示庫，確保叉叉顯示
-            if (window.lucide) lucide.createIcons();
+            if (window.lucide) lucide.createIcons({ root: iconContainer });
         }
 
         if (btn) btn.addEventListener('click', toggleDrawer);
@@ -1754,22 +1748,23 @@ body { opacity: 0; transition: opacity 0.2s; }
             if (link.getAttribute('href') === currentPath) {
                 link.classList.add('active-page');
                 const icon = link.querySelector('i');
-                if(icon) icon.classList.replace('text-blue-400', 'text-yellow-400');
+                if(icon) icon.style.color = '#fbbf24'; 
             }
         });
 
-        // 原有的 Part 3 初始化
+        // 頁面 Part 3 初始化 (首頁預設)
         document.querySelectorAll('.page-content').forEach(page => { if (page.id !== 'part3') page.style.display = 'none'; });
         const initialBtn = document.getElementById('nav-part3');
         if (initialBtn) initialBtn.classList.add('active');
         document.body.style.opacity = "1";
         
-        // 初始載入圖示
+        // 初始渲染所有圖示
         if (window.lucide) lucide.createIcons();
     });
     </script>
 
 </body>
 </html>
+
 
 
