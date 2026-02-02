@@ -279,7 +279,7 @@ body { opacity: 0; transition: opacity 0.2s; }
         .subtle-pulse {
             animation: subtle-pulse 3s infinite ease-in-out;
         }
-		/* 💡 修正：精品抽屜黃金比例 75% 與極輕量陰影 */
+		/* 💡 修正：精品抽屜黃金比例 75% 與「極輕量」透明感 */
         #mobile-menu {
             position: fixed;
             top: 0;
@@ -298,8 +298,8 @@ body { opacity: 0; transition: opacity 0.2s; }
         }
         #mobile-menu.open { 
             transform: translateX(0); 
-            /* 💡 修正：陰影極輕量化，僅提供微妙的層次感 */
-            box-shadow: -5px 0 25px rgba(0,0,0,0.15); 
+            /* 💡 修正：陰影調得更淺，僅提供極細微的邊界感 */
+            box-shadow: -4px 0 20px rgba(0,0,0,0.15); 
         }
         
         #menu-overlay {
@@ -308,7 +308,8 @@ body { opacity: 0; transition: opacity 0.2s; }
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.7); 
+            /* 💡 修正：背景遮罩調淺，讓整體視覺更通透 */
+            background: rgba(0, 0, 0, 0.45); 
             backdrop-filter: blur(8px); 
             z-index: 100;
             opacity: 0;
@@ -317,7 +318,6 @@ body { opacity: 0; transition: opacity 0.2s; }
         }
         #menu-overlay.show { opacity: 1; visibility: visible; }
 
-        /* 💡 修正：背景 Logo 徹底消失防止混淆 */
         .header-content-fade { transition: opacity 0.25s ease; }
         .header-content-hidden { opacity: 0 !important; pointer-events: none; }
 
@@ -369,10 +369,10 @@ body { opacity: 0; transition: opacity 0.2s; }
         </div>
 
         <div id="mobile-menu">
-            <div class="h-16 flex items-center pl-6 pr-16 border-b border-gray-700 bg-gray-900 flex-shrink-0">
+            <div class="h-16 flex items-center pl-6 pr-20 border-b border-gray-700 bg-gray-900 flex-shrink-0">
                 <div class="flex items-center gap-2 whitespace-nowrap overflow-hidden">
                     <span class="text-2xl">🎓</span>
-                    <span class="text-xl font-black text-white">Chungen English</span>
+                    <span class="text-lg font-black text-white">Chungen English</span>
                 </div>
             </div>
 
@@ -1711,7 +1711,7 @@ body { opacity: 0; transition: opacity 0.2s; }
     </footer>
 
     <script>
-      /* 💡 1. 頁面分頁切換邏輯 */
+     /* 💡 1. 頁面分頁切換邏輯 */
     function showPage(pageId) {
         document.querySelectorAll('.page-content').forEach(page => { page.style.display = 'none'; });
         const targetPage = document.getElementById(pageId);
@@ -1725,7 +1725,7 @@ body { opacity: 0; transition: opacity 0.2s; }
         });
     }
 
-    /* 💡 2. 完美校準：同步 Logo 消失、解決壓迫感、圖示切換 */
+    /* 💡 2. 抽屜切換與 Logo 漸隱邏輯 */
     document.addEventListener('DOMContentLoaded', () => {
         const btn = document.getElementById('mobile-menu-btn');
         const menu = document.getElementById('mobile-menu');
@@ -1737,7 +1737,6 @@ body { opacity: 0; transition: opacity 0.2s; }
             const isOpen = menu.classList.toggle('open');
             overlay.classList.toggle('show');
             
-            // 💡 關鍵修正：開啟選單時，背景的帽子圖示和 Chungen 標題會徹底隱藏
             if (mainLogo) {
                 if (isOpen) mainLogo.classList.add('header-content-hidden');
                 else mainLogo.classList.remove('header-content-hidden');
@@ -1775,5 +1774,6 @@ body { opacity: 0; transition: opacity 0.2s; }
 
 </body>
 </html>
+
 
 
