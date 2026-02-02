@@ -179,6 +179,10 @@
             color: #fbbf24;
             border-left-color: #81D8D0; 
         }
+        /* 💡 核心修正：解決頁面載入時底欄向上跳閃 (CLS) */
+        #content-area {
+            min-height: 70vh; /* 💡 預留螢幕高度的 70%，確保底欄位置穩定不閃動 */
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -284,8 +288,7 @@
             </div>
         </div>
 
-        <div id="content-area" class="animate-fade-in">
-            </div>
+        <div id="content-area" class="animate-fade-in min-h-[70vh]"></div>
 
     </main>
 
