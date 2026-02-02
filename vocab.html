@@ -95,9 +95,8 @@
                 </div>
             </div>
         </div>
-    </nav>
-<div id="main-stage" class="premium-stage">
-<header class="bg-gradient-to-r from-blue-700 to-indigo-800 text-white pt-12 pb-24 px-6 relative overflow-hidden premium-fade-in-up">
+   </nav> <div id="main-stage" class="premium-stage">
+<header class="bg-gradient-to-r from-blue-700 to-indigo-800 text-white pt-12 pb-24 px-6 relative overflow-hidden">
         <div class="max-w-5xl mx-auto relative z-10">
             <div class="flex items-center gap-3 mb-4 opacity-80">
                 <i data-lucide="graduation-cap" class="w-6 h-6"></i>
@@ -111,7 +110,7 @@
         <div class="absolute bottom-0 left-10 w-48 h-48 bg-blue-400 opacity-10 rounded-full blur-2xl"></div>
     </header>
 
-<main class="max-w-5xl mx-auto px-4 -mt-16 relative z-20 pb-6 flex-grow w-full premium-fade-in-up" style="animation-delay: 0.1s;">
+<main class="max-w-5xl mx-auto px-4 -mt-16 relative z-20 pb-6 flex-grow w-full">
         
         <div class="bg-white rounded-xl shadow-lg p-5 mb-8">
             <div class="flex flex-col lg:flex-row gap-4 justify-between items-center">
@@ -868,16 +867,20 @@
         const overlay = document.getElementById('menu-overlay');
         const iconBox = document.getElementById('icon-container-box');
         const mainLogo = document.getElementById('main-logo-area');
-        const mainStage = document.getElementById('main-stage');
+        const mainStage = document.getElementById('main-stage'); // 💡 確保這行有抓到 ID
 
         function toggleDrawer() {
             const isOpen = menu.classList.toggle('open');
             overlay.classList.toggle('show');
+            
+            // 💡 開啟選單時隱藏背景 Logo
             if (mainLogo) {
                 if (isOpen) mainLogo.classList.add('header-content-hidden');
                 else mainLogo.classList.remove('header-content-hidden');
             }
+            
             document.body.style.overflow = isOpen ? 'hidden' : '';
+
             if (isOpen) {
                 iconBox.innerHTML = `<i data-lucide="x" class="w-8 h-8 text-white"></i>`;
             } else {
@@ -889,7 +892,7 @@
         if (btn) btn.addEventListener('click', toggleDrawer);
         if (overlay) overlay.addEventListener('click', toggleDrawer);
 
-        // 分頁自動高亮
+        // 分頁高亮邏輯
         const currentPath = window.location.pathname.split('/').pop() || 'index.html';
         document.querySelectorAll('.mobile-nav-link').forEach(link => {
             if (link.getAttribute('href') === currentPath) {
@@ -899,13 +902,11 @@
             }
         });
 
-        // 💡 核心校準：在頁面顯示前先完成單字渲染，確保高度已固定
+        // 💡 執行渲染與歸位
         render(); 
-
-        // 💡 強制回到頂部，解決重新整理時的捲動落差問題
         window.scrollTo(0, 0);
 
-        // 💡 延遲 50ms 確保高度穩定後，再啟動同步滑入動畫
+        // 💡 帷幕啟動：確保 Stage 存在才執行
         setTimeout(() => {
             document.body.style.opacity = "1";
             if (mainStage) mainStage.classList.add('stage-ready');
