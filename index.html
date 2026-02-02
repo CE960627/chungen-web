@@ -279,7 +279,7 @@ body { opacity: 0; transition: opacity 0.2s; }
         .subtle-pulse {
             animation: subtle-pulse 3s infinite ease-in-out;
         }
-		/* 💡 修正 1：抽屜定位 - 使用 dvh 確保高度完美契合螢幕，不產生多餘捲動 */
+		/* 💡 修正 1：精品抽屜定位 - 使用 dvh 確保不捲動，佈局撐開不空虛 */
         #mobile-menu {
             position: fixed;
             top: 0;
@@ -292,36 +292,36 @@ body { opacity: 0; transition: opacity 0.2s; }
             transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             flex-direction: column;
-            justify-content: space-between; /* 讓頭部與底部自動撐開，解決空虛感 */
-            box-shadow: -10px 0 30px rgba(0,0,0,0.3);
+            justify-content: space-between; /* 撐開頭部與底部 */
+            box-shadow: -15px 0 35px rgba(0,0,0,0.5);
         }
         #mobile-menu.open { transform: translateX(0); }
         
-        /* 💡 修正 2：背景遮罩與模糊 */
+        /* 💡 修正 2：強化模糊遮罩 - 解決背景標題混淆問題 */
         #menu-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(4px); 
+            background: rgba(0, 0, 0, 0.75); /* 顏色更深 */
+            backdrop-filter: blur(12px);    /* 模糊大幅加強，讓背景標題完全隱形 */
             z-index: 100;
             opacity: 0;
             visibility: hidden;
-            transition: all 0.3s ease;
+            transition: all 0.4s ease;
         }
         #menu-overlay.show { opacity: 1; visibility: visible; }
 
-        /* 💡 修正 3：按鈕邊界與觸感 */
+        /* 💡 修正 3：按鈕質感強化 - 增加分界線與點擊感 */
         .mobile-nav-link {
             border-left: 4px solid transparent;
-            border-bottom: 1px solid rgba(255,255,255,0.05); 
-            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.08); 
+            padding: 1.75rem 1.5rem; /* 高度加高更霸氣 */
             display: flex;
             align-items: center;
             gap: 1rem;
-            color: #cbd5e1;
+            color: #e2e8f0;
             transition: all 0.2s;
         }
         .mobile-nav-link:active { background-color: rgba(255,255,255,0.1); } 
@@ -355,7 +355,7 @@ body { opacity: 0; transition: opacity 0.2s; }
                 <div class="md:hidden flex items-center">
                     <button id="mobile-menu-btn" class="text-gray-300 hover:text-white focus:outline-none p-2 relative z-[102]">
                         <i data-lucide="menu" id="icon-menu" class="w-7 h-7"></i>
-                        <i data-lucide="x" id="icon-close" class="w-7 h-7 hidden"></i>
+                        <i data-lucide="x" id="icon-close" class="w-7 h-7 hidden text-white"></i>
                     </button>
                 </div>
             </div>
@@ -363,13 +363,13 @@ body { opacity: 0; transition: opacity 0.2s; }
 
         <div id="mobile-menu">
             <div class="h-16 flex items-center px-6 border-b border-gray-700 bg-gray-900/50 flex-shrink-0">
-                <div class="flex items-center gap-2 whitespace-nowrap">
+                <div class="flex items-center gap-2 whitespace-nowrap overflow-hidden">
                     <span class="text-2xl">🎓</span>
                     <span class="text-xl font-black tracking-tight text-white">Chungen English</span>
                 </div>
             </div>
 
-            <div class="flex-grow flex flex-col justify-start pt-4">
+            <div class="flex-grow flex flex-col justify-start pt-6">
                 <a href="index.html" class="mobile-nav-link text-lg font-bold">
                     <i data-lucide="compass" class="w-6 h-6 text-blue-400"></i> 學測英文全攻略
                 </a>
@@ -381,9 +381,9 @@ body { opacity: 0; transition: opacity 0.2s; }
                 </a>
             </div>
 
-            <div class="p-8 border-t border-gray-700 bg-gray-900/80 mb-[env(safe-area-inset-bottom)]">
-                <p class="text-xs text-yellow-400 font-black mb-2 tracking-widest uppercase">● 全國前 0.04% 寫作實績</p>
-                <p class="text-[11px] text-gray-400 leading-relaxed text-left">用理科邏輯拆解英文寫作，打造頂尖考生的提分公式</p>
+            <div class="p-8 border-t border-gray-700 bg-gray-900/80 mb-[env(safe-area-inset-bottom)] flex-shrink-0">
+                <p class="text-xs text-yellow-400 font-black mb-2 tracking-widest">● 全國前 0.04% 寫作實績</p>
+                <p class="text-[11px] text-gray-300 leading-relaxed text-left font-medium opacity-80">用理科邏輯拆解英文寫作，打造頂尖考生的提分公式</p>
             </div>
         </div>
     </nav>
@@ -1714,7 +1714,7 @@ body { opacity: 0; transition: opacity 0.2s; }
         });
     }
 
-    /* 💡 2. 一次到位邏輯：驅動叉叉、鎖定背景捲動 */
+    /* 💡 2. 精準控制：三條線變叉叉、鎖定背景、啟動圖示 */
     document.addEventListener('DOMContentLoaded', () => {
         const btn = document.getElementById('mobile-menu-btn');
         const menu = document.getElementById('mobile-menu');
@@ -1726,10 +1726,10 @@ body { opacity: 0; transition: opacity 0.2s; }
             const isOpen = menu.classList.toggle('open');
             overlay.classList.toggle('show');
             
-            // 💡 修正：選單開啟時鎖定背景主體，不讓它亂動
+            // 鎖定主頁面捲動，防止滑動選單時背景亂跑
             document.body.style.overflow = isOpen ? 'hidden' : '';
 
-            // 💡 修正：精確切換 ☰ 與 ✕
+            // 精確切換漢堡圖示
             if (isOpen) {
                 iconMenu.classList.add('hidden');
                 iconClose.classList.remove('hidden');
@@ -1737,7 +1737,7 @@ body { opacity: 0; transition: opacity 0.2s; }
                 iconMenu.classList.remove('hidden');
                 iconClose.classList.add('hidden');
             }
-            // 💡 關鍵：每次切換都強制重新整理圖示
+            // 💡 關鍵：啟動 Lucide 的「叉叉」圖示
             if (window.lucide) lucide.createIcons();
         }
 
@@ -1754,16 +1754,17 @@ body { opacity: 0; transition: opacity 0.2s; }
             }
         });
 
-        // 原有初始化邏輯
+        // 頁面 Part 3 初始化
         document.querySelectorAll('.page-content').forEach(page => { if (page.id !== 'part3') page.style.display = 'none'; });
         const initialBtn = document.getElementById('nav-part3');
         if (initialBtn) initialBtn.classList.add('active');
         document.body.style.opacity = "1";
         
-        // 啟動圖示
+        // 初次加載圖示
         if (window.lucide) lucide.createIcons();
     });
     </script>
 
 </body>
 </html>
+
