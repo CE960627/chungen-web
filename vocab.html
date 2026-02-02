@@ -10,38 +10,175 @@
     <style>
         body { font-family: 'Inter', 'Noto Sans TC', sans-serif; background-color: #f8fafc; color: #334155; }
         
-        /* 💡 穩定版進場動畫 */
-        body { 
-            opacity: 0; 
-            transition: opacity 0.5s ease-in; 
-            overflow-x: hidden;
-        }
+        /* 動畫設定 */
+        .animate-fade-in { animation: fadeIn 0.4s ease-out; }
+        .animate-fade-in-up { animation: fadeInUp 0.5s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* 1. 精品舞台：統一進場位移與曲線 */
-/* 修正 1：精品舞台同步滑入曲線（20px 位移最優雅） */
-        .premium-stage {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .stage-ready { opacity: 1; transform: translateY(0); }
-
-        /* 修正 2：強制中文釋義在格子內「絕對置中」 */
-        .reveal-wrapper { 
-            display: grid !important; 
-            place-items: center !important; 
-            min-height: 2.8rem; 
-        }
-
-        /* 修正 3：側邊選單保護區，確保 English 不被叉叉擋住 */
-        #mobile-menu .pr-20 { padding-right: 6rem !important; }
-        
-        /* 修正 4：無感漸隱邏輯元件 */
-        .header-content-hidden { opacity: 0 !important; pointer-events: none; transition: opacity 0.3s; }
-
-        #content-area { min-height: 80vh; }
+        /* 隱藏滾動條 */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* --- 遮罩效果核心 CSS (視覺絕對穩定防爆版) --- */
+.reveal-wrapper {
+    position: relative;
+    transition: all 0.2s;
+    border-radius: 0.5rem;
+    /* 💡 核心修正 1：加上 border-box，Padding 再多也不會爆開螢幕 */
+    box-sizing: border-box; 
+    padding: 0.5rem 1rem; 
+    /* 💡 核心修正 2：改用 Grid 疊加，確保隱藏前後高度完全一致，徹底根除跳針 */
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: center;
+    width: 100%; 
+    min-height: 2.8rem; 
+    vertical-align: middle;
+    cursor: default;
+    user-select: none;
+    overflow: hidden;
+}
+
+.reveal-wrapper.masked-mode {
+    cursor: pointer;
+    background-color: #f1f5f9;
+    border: 1.5px solid #e2e8f0;
+}
+
+.reveal-text, .reveal-overlay {
+    /* 💡 核心修正 3：將文字與提示疊在同一個空間 */
+    grid-area: 1 / 1 / 2 / 2;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.reveal-text {
+    /* 💡 修正 4：開啟時文字位置一樣靠左 */
+    text-align: left; 
+    font-weight: 700;
+    width: 100%;
+    line-height: 1.4;
+    white-space: nowrap; /* 💡 修正 5：表格內維持水平一行 */
+}
+
+/* 穩定核心：僅改變透明度，物理空間保留防止表格縮放 */
+.reveal-wrapper.is-hidden .reveal-text {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.reveal-overlay {
+    display: none;
+    align-items: center;
+    /* 💡 修正 6：隱藏時提示文字 (主動回想等) 置中 */
+    justify-content: center; 
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #64748b;
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+.reveal-wrapper.is-hidden .reveal-overlay { 
+    display: flex; 
+}
+
+/* 高級感微呼吸燈 */
+@keyframes alluring-glow-only {
+    0%, 100% { box-shadow: 0 0 4px rgba(79, 70, 229, 0.1); border-color: rgba(79, 70, 229, 0.4); }
+    50% { box-shadow: 0 0 10px rgba(79, 70, 229, 0.25); border-color: rgba(79, 70, 229, 0.8); }
+}
+.alluring-glow {
+    animation: alluring-glow-only 2s infinite ease-in-out;
+}
+        /* 💡 修正：Tiffany 藍精品分頁按鈕樣式 (對齊穩定版) */
+        .tab-btn { 
+            transition: all 0.2s ease-in-out; 
+            border: 1.5px solid #81D8D0; /* Tiffany 藍外框 */
+            background-color: white;
+            color: #475569;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* 💡 修正：確保高度固定，避免文字換行擠壓 */
+            height: 42px; 
+        }
+
+        /* 當前選中狀態：移除物理位移，改用顏色與內陰影 */
+        .tab-btn.active {
+            background-color: #81D8D0 !important;
+            color: #0f172a !important; 
+            border-color: #81D8D0 !important;
+            /* 💡 核心修正 1：移除 translateY(-2px)，解決底部不對齊與頂部被遮擋問題 */
+            transform: none !important; 
+            /* 💡 核心修正 2：改用較柔和的陰影，不產生位移 */
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.06), 0 4px 12px rgba(129, 216, 208, 0.3);
+            font-weight: 700;
+        }
+
+        /* 滑鼠移過效果 */
+        .tab-btn:hover:not(.active) {
+            background-color: #f0fdfa;
+            border-color: #5eead4;
+            transform: translateY(-1px); /* 僅微幅浮動增加互動感 */
+        }
+        /* 💡 全站同步：精品抽屜 78% 寬度與「極致通透」背景 */
+        #mobile-menu {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 78%; 
+            height: 100dvh; 
+            background-color: #1e293b;
+            z-index: 101;
+            transform: translateX(100%); 
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; 
+            box-shadow: none;
+            overflow: hidden;
+        }
+        #mobile-menu.open { 
+            transform: translateX(0); 
+            box-shadow: -2px 0 15px rgba(0,0,0,0.08); 
+        }
+        
+        #menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* 💡 維持 0.08 極致透明感 */
+            background: rgba(0, 0, 0, 0.08); 
+            backdrop-filter: blur(8px); 
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        #menu-overlay.show { opacity: 1; visibility: visible; }
+
+        /* 💡 修正：Logo 漸隱，解決左上角標籤重疊感 */
+        .header-content-fade { transition: opacity 0.25s ease; }
+        .header-content-hidden { opacity: 0 !important; pointer-events: none; }
+
+        .mobile-nav-link {
+            border-left: 4px solid transparent;
+            border-bottom: 1px solid rgba(255,255,255,0.03); 
+            padding: 2.2rem 1.5rem; 
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            color: #cbd5e1;
+            transition: all 0.2s;
+        }
+        .mobile-nav-link.active-page {
+            background-color: #111827;
+            color: #fbbf24;
+            border-left-color: #81D8D0; 
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -99,9 +236,9 @@
                 </div>
             </div>
         </div>
-   </nav> 
-    <div id="main-stage" class="premium-stage">
-<header class="bg-gradient-to-r from-blue-700 to-indigo-800 text-white pt-12 pb-24 px-6 relative overflow-hidden">
+    </nav>
+
+    <header class="bg-gradient-to-r from-blue-700 to-indigo-800 text-white pt-12 pb-24 px-6 relative overflow-hidden">
         <div class="max-w-5xl mx-auto relative z-10">
             <div class="flex items-center gap-3 mb-4 opacity-80">
                 <i data-lucide="graduation-cap" class="w-6 h-6"></i>
@@ -115,7 +252,7 @@
         <div class="absolute bottom-0 left-10 w-48 h-48 bg-blue-400 opacity-10 rounded-full blur-2xl"></div>
     </header>
 
-<main class="max-w-5xl mx-auto px-4 -mt-16 relative z-20 pb-6 flex-grow w-full">
+    <main class="max-w-5xl mx-auto px-4 -mt-16 relative z-20 pb-6 flex-grow w-full">
         
         <div class="bg-white rounded-xl shadow-lg p-5 mb-8">
             <div class="flex flex-col lg:flex-row gap-4 justify-between items-center">
@@ -144,11 +281,14 @@
                 <button id="mask-toggle" onclick="toggleMask()" class="flex items-center gap-2 px-4 py-2.5 rounded-lg font-bold text-sm transition-all shadow-sm border bg-white text-slate-600 border-slate-200 hover:bg-slate-50">
                     <i data-lucide="eye" class="w-4 h-4"></i> <span>背單字模式：關閉</span>
                 </button>
-                </div>
             </div>
-            <div id="content-area" class="animate-fade-in min-h-[70vh]"></div>
-        </main>
-    </div>
+        </div>
+
+        <div id="content-area" class="animate-fade-in">
+            </div>
+
+    </main>
+
     <footer class="bg-slate-800 text-slate-400 py-6 text-center text-sm mt-auto">
         <p>學測英文：高頻單字彙整與考點解析</p>
         <p class="mt-2 text-slate-500">Based on GSAT English Exam Trends</p>
@@ -872,23 +1012,20 @@
         const overlay = document.getElementById('menu-overlay');
         const iconBox = document.getElementById('icon-container-box');
         const mainLogo = document.getElementById('main-logo-area');
-        const mainStage = document.getElementById('main-stage'); // 💡 確保這行有抓到 ID
 
         function toggleDrawer() {
             const isOpen = menu.classList.toggle('open');
             overlay.classList.toggle('show');
             
-            // 核心修正：開啟選單時，讓背景 Logo 徹底消失，避免重疊
+            // 💡 修正：漸隱背景標題，消除重疊干擾
             if (mainLogo) {
-                if (isOpen) {
-                    mainLogo.classList.add('header-content-hidden');
-                } else {
-                    mainLogo.classList.remove('header-content-hidden');
-                }
+                if (isOpen) mainLogo.classList.add('header-content-hidden');
+                else mainLogo.classList.remove('header-content-hidden');
             }
             
             document.body.style.overflow = isOpen ? 'hidden' : '';
 
+            // 💡 暴力切換圖標邏輯
             if (isOpen) {
                 iconBox.innerHTML = `<i data-lucide="x" class="w-8 h-8 text-white"></i>`;
             } else {
@@ -900,7 +1037,7 @@
         if (btn) btn.addEventListener('click', toggleDrawer);
         if (overlay) overlay.addEventListener('click', toggleDrawer);
 
-        // 分頁高亮邏輯
+        // 分頁自動高亮
         const currentPath = window.location.pathname.split('/').pop() || 'index.html';
         document.querySelectorAll('.mobile-nav-link').forEach(link => {
             if (link.getAttribute('href') === currentPath) {
@@ -910,18 +1047,9 @@
             }
         });
 
-        // 核心修正：先在隱身狀態下把單字表畫好，並強制回到頂部，避免跳針
-        render(); 
-        window.scrollTo(0, 0); 
-
-        // 像拉開帷幕一樣，50毫秒後讓整體精品舞台同步滑入
-        setTimeout(() => {
-            document.body.style.opacity = "1";
-            const stage = document.getElementById('main-stage');
-            if (stage) stage.classList.add('stage-ready');
-        }, 50);
-
+        // 💡 初始渲染：同時啟動圖示與單字表格
         if (window.lucide) lucide.createIcons();
+        render(); // 💡 確保原本好的單字功能在這裡被正確啟動
     });
 
     </script>
