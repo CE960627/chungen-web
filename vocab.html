@@ -10,32 +10,27 @@
     <style>
         body { font-family: 'Inter', 'Noto Sans TC', sans-serif; background-color: #f8fafc; color: #334155; }
         
-        /* 💡 最終精品進場設定：確保全頁面同步滑入 */
+        /* 💡 穩定版進場動畫 */
         body { 
             opacity: 0; 
-            /* 預防跳針：隱藏捲動條直到動畫完成 */
+            transition: opacity 0.5s ease-in; 
             overflow-x: hidden;
-            transition: opacity 0.6s ease-out;
         }
 
-        /* 💡 舞台包裝：讓 Header 與 Main 同時進場，不再各跳各的 */
+        /* 舞台容器：負責把 Header 和 Main 一起滑進來 */
         .premium-stage {
             opacity: 0;
-            transform: translateY(40px);
-            transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
+        /* 當 JS 準備好時，加上這個 class 就會顯現 */
         .stage-ready {
             opacity: 1;
             transform: translateY(0);
         }
 
-        /* 💡 核心修正：解決頁面載入時底欄向上跳閃 (CLS) */
-        #content-area {
-            min-height: 85vh; /* 💡 預留足夠高度，防止底欄彈上來 */
-        }
-        
-        /* 隱藏滾動條 */
+        #content-area { min-height: 80vh; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
@@ -95,7 +90,8 @@
                 </div>
             </div>
         </div>
-   </nav> <div id="main-stage" class="premium-stage">
+   </nav> 
+    <div id="main-stage" class="premium-stage">
 <header class="bg-gradient-to-r from-blue-700 to-indigo-800 text-white pt-12 pb-24 px-6 relative overflow-hidden">
         <div class="max-w-5xl mx-auto relative z-10">
             <div class="flex items-center gap-3 mb-4 opacity-80">
