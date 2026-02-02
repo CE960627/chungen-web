@@ -7,6 +7,7 @@
 	<meta name="description" content="全國前 0.04% 英文作文實戰模型。北中南指標高中生一致認證，專為追求頂標學生設計。將語感轉化為理科邏輯得分公式，精準拆解大考命題脈絡，優化敘述深度與提分穩定度。">
     <!-- 引入 Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+	<script src="https://unpkg.com/lucide@latest"></script>
     <!-- 使用 Google Inter 和 Noto Sans TC 字體 -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -278,11 +279,30 @@ body { opacity: 0; transition: opacity 0.2s; }
         .subtle-pulse {
             animation: subtle-pulse 3s infinite ease-in-out;
         }
-		
+		/* 💡 手機選單精品化動畫與高亮 */
+        .mobile-nav-link {
+            transition: all 0.2s ease;
+            border-left: 4px solid transparent;
+        }
+        /* 當前分頁高亮狀態：Tiffany 藍左邊框 */
+        .mobile-nav-link.active-page {
+            background-color: #111827; /* gray-900 */
+            color: #fbbf24; /* yellow-400 */
+            border-left-color: #81D8D0; /* Tiffany 藍 */
+            font-weight: 700;
+        }
+        /* 選單漸現動畫 */
+        .animate-menu-slide {
+            animation: menuSlideDown 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+        @keyframes menuSlideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 <body class="bg-slate-50 text-gray-800">
-	<nav class="bg-gray-900 text-white shadow-lg">
+	<nav class="bg-gray-900 text-white shadow-lg sticky top-0 z-[100]">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex-shrink-0 font-bold text-xl tracking-wider">
@@ -290,23 +310,35 @@ body { opacity: 0; transition: opacity 0.2s; }
                         <span class="text-2xl">🎓</span> Chungen English
                     </a>
                 </div>
+                
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-baseline space-x-4">
-                        <a href="index.html" class="bg-gray-800 text-yellow-400 px-3 py-2 rounded-md text-sm font-bold border border-gray-700">116 學測英文全攻略</a>
-                        <a href="vocab.html" class="text-gray-300 hover:text-white hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium transition">學測高頻單字考點</a>
-                        <a href="tutoring.html" class="text-gray-300 hover:text-white hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium transition">師資背景 / 課程諮詢</a>
+                        <a href="index.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium transition">116 學測英文全攻略</a>
+                        <a href="vocab.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium transition">學測高頻單字考點</a>
+                        <a href="tutoring.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium transition">師資背景 / 課程諮詢</a>
                     </div>
                 </div>
+
                 <div class="md:hidden flex items-center">
-                    <button onclick="document.getElementById('mobile-menu').classList.toggle('hidden')" class="text-gray-300 hover:text-white focus:outline-none p-2">☰</button>
+                    <button id="mobile-menu-btn" class="text-gray-300 hover:text-white focus:outline-none p-2 transition-all">
+                        <i data-lucide="menu" id="icon-menu"></i>
+                        <i data-lucide="x" id="icon-close" class="hidden"></i>
+                    </button>
                 </div>
             </div>
         </div>
-        <div id="mobile-menu" class="hidden md:hidden bg-gray-800 border-t border-gray-700">
-            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                <a href="index.html" class="text-yellow-400 block px-3 py-2 rounded-md text-base font-bold bg-gray-900">116 學測英文全攻略</a>
-                <a href="vocab.html" class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">學測高頻單字考點</a>
-                <a href="tutoring.html" class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">師資背景 / 課程諮詢</a>
+
+        <div id="mobile-menu" class="hidden md:hidden bg-gray-800 border-t border-gray-700 shadow-2xl">
+            <div class="px-4 pt-4 pb-8 space-y-3">
+                <a href="index.html" class="mobile-nav-link flex items-center gap-3 px-4 py-4 rounded-xl text-base font-medium transition">
+                    <i data-lucide="compass" class="w-5 h-5 text-blue-400"></i> 116 學測英文全攻略
+                </a>
+                <a href="vocab.html" class="mobile-nav-link flex items-center gap-3 px-4 py-4 rounded-xl text-base font-medium transition">
+                    <i data-lucide="book-marked" class="w-5 h-5 text-blue-400"></i> 學測高頻單字考點
+                </a>
+                <a href="tutoring.html" class="mobile-nav-link flex items-center gap-3 px-4 py-4 rounded-xl text-base font-medium transition">
+                    <i data-lucide="award" class="w-5 h-5 text-blue-400"></i> 師資背景 / 課程諮詢
+                </a>
             </div>
         </div>
     </nav>
@@ -1623,51 +1655,83 @@ body { opacity: 0; transition: opacity 0.2s; }
     </footer>
 
     <script>
-        // 樣式定義
-        const activeNavClass = 'border-blue-600 text-blue-600 font-bold border-b-2';
-        const inactiveNavClass = 'border-transparent text-gray-500 hover:text-gray-700 py-2 px-3 font-medium text-sm md:text-base transition';
-
-        /* 寶貝，這是幫你寫的點擊魔法：負責切換畫面＋讓按鈕發光 */
-function showPage(pageId) {
-    // 1. 先把所有的內容頁面都藏起來
-    document.querySelectorAll('.page-content').forEach(page => {
-        page.style.display = 'none';
-    });
-
-    // 2. 只把寶貝點選的那一頁顯示出來
-    const targetPage = document.getElementById(pageId);
-    if (targetPage) {
-        targetPage.style.display = 'block';
-        // 點選後自動貼心地捲動回頂部
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        /* 💡 1. 頁面內容切換邏輯 (保留您原本的 Part 1~6 切換功能) */
+    function showPage(pageId) {
+        document.querySelectorAll('.page-content').forEach(page => {
+            page.style.display = 'none';
+        });
+        const targetPage = document.getElementById(pageId);
+        if (targetPage) {
+            targetPage.style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        document.querySelectorAll('.nav-button').forEach(button => {
+            button.classList.remove('active');
+            if (button.id === 'nav-' + pageId) {
+                button.classList.add('active');
+            }
+        });
     }
 
-    // 3. 更新按鈕的「發光標籤」
-    document.querySelectorAll('.nav-button').forEach(button => {
-        // 先把所有按鈕的發光效果（active）拿掉
-        button.classList.remove('active');
-        
-        // 如果這個按鈕的 ID 符合，就幫它加上 active 讓它變色發光
-        if (button.id === 'nav-' + pageId) {
-            button.classList.add('active');
-        }
-    });
-}
+    /* 💡 2. 手機選單開關與自動高亮偵測 */
+    document.addEventListener('DOMContentLoaded', () => {
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+        const iconMenu = document.getElementById('icon-menu');
+        const iconClose = document.getElementById('icon-close');
 
-/* 寶貝，這是初始化：確保一進來畫面是乾淨的，且按鈕會乖乖亮起來 */
-document.addEventListener('DOMContentLoaded', () => {
-    // 確保預設只顯示作文系統（Part 3）
-    document.querySelectorAll('.page-content').forEach(page => {
-        if (page.id !== 'part3') page.style.display = 'none';
+        // 漢堡選單：點擊變換圖示與滑動效果
+        if (btn && menu) {
+            btn.addEventListener('click', () => {
+                const isHidden = menu.classList.toggle('hidden');
+                if (!isHidden) {
+                    menu.classList.add('animate-menu-slide');
+                    iconMenu.classList.add('hidden');
+                    iconClose.classList.remove('hidden');
+                } else {
+                    menu.classList.remove('animate-menu-slide');
+                    iconMenu.classList.remove('hidden');
+                    iconClose.classList.add('hidden');
+                }
+            });
+        }
+
+        // 自動偵測當前分頁並高亮 (針對 index.html)
+        const currentPath = window.location.pathname.split('/').pop() || 'index.html';
+        
+        // 手機版選單：亮起黃字與 Tiffany 藍邊框
+        document.querySelectorAll('.mobile-nav-link').forEach(link => {
+            if (link.getAttribute('href') === currentPath) {
+                link.classList.add('active-page');
+                const icon = link.querySelector('i');
+                if(icon) icon.classList.add('text-yellow-400');
+            }
+        });
+
+        // 電腦版頂部導覽列：亮起黃字與外框
+        document.querySelectorAll('.nav-link').forEach(link => {
+            if (link.getAttribute('href') === currentPath) {
+                link.className = "bg-gray-800 text-yellow-400 px-3 py-2 rounded-md text-sm font-bold border border-gray-700";
+            } else {
+                link.className = "text-gray-300 hover:text-white hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium transition";
+            }
+        });
+
+        // 初始化：預設只顯示作文系統（Part 3）
+        document.querySelectorAll('.page-content').forEach(page => {
+            if (page.id !== 'part3') page.style.display = 'none';
+        });
+        const initialBtn = document.getElementById('nav-part3');
+        if (initialBtn) initialBtn.classList.add('active');
+        
+        // 渲染完畢顯示主體
+        document.body.style.opacity = "1";
+
+        // 啟動 Lucide 圖示
+        if (window.lucide) lucide.createIcons();
     });
-    // 確保「作文系統」按鈕一開始就是亮的
-    const initialBtn = document.getElementById('nav-part3');
-    if (initialBtn) initialBtn.classList.add('active');
-    
-    // 渲染完畢才顯示畫面
-    document.body.style.opacity = "1";
-});
     </script>
 
 </body>
 </html>
+
