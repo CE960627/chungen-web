@@ -279,7 +279,7 @@ body { opacity: 0; transition: opacity 0.2s; }
         .subtle-pulse {
             animation: subtle-pulse 3s infinite ease-in-out;
         }
-		/* 💡 最終修正：精品抽屜黃金比例與「極輕量」透明背景 */
+		/* 💡 最終校準：精品抽屜 78% 寬度與「極致通透」背景 */
         #mobile-menu {
             position: fixed;
             top: 0;
@@ -298,8 +298,8 @@ body { opacity: 0; transition: opacity 0.2s; }
         }
         #mobile-menu.open { 
             transform: translateX(0); 
-            /* 💡 修正：大幅調淺抽屜陰影 */
-            box-shadow: -4px 0 15px rgba(0,0,0,0.1); 
+            /* 💡 修正：極細微的邊界陰影 */
+            box-shadow: -2px 0 15px rgba(0,0,0,0.08); 
         }
         
         #menu-overlay {
@@ -308,8 +308,8 @@ body { opacity: 0; transition: opacity 0.2s; }
             left: 0;
             width: 100%;
             height: 100%;
-            /* 💡 修正：背景陰影調至極淺 (0.15)，呈現清透感 */
-            background: rgba(0, 0, 0, 0.15); 
+            /* 💡 修正：背景陰影降至 0.08，達成極致通透感 */
+            background: rgba(0, 0, 0, 0.08); 
             backdrop-filter: blur(8px); 
             z-index: 100;
             opacity: 0;
@@ -369,10 +369,10 @@ body { opacity: 0; transition: opacity 0.2s; }
         </div>
 
         <div id="mobile-menu">
-            <div class="h-16 flex items-center px-6 pr-16 border-b border-gray-700 bg-gray-900 flex-shrink-0">
-                <div class="flex items-center gap-2 whitespace-nowrap overflow-hidden font-bold text-xl tracking-wider">
+            <div class="h-16 flex items-center pl-6 pr-24 border-b border-gray-700 bg-gray-900 flex-shrink-0">
+                <div class="flex items-center gap-2 whitespace-nowrap overflow-hidden font-bold text-xl tracking-wider text-white">
                     <span class="text-2xl">🎓</span>
-                    <span class="text-white">Chungen English</span>
+                    <span>Chungen English</span>
                 </div>
             </div>
 
@@ -1737,7 +1737,6 @@ body { opacity: 0; transition: opacity 0.2s; }
             const isOpen = menu.classList.toggle('open');
             overlay.classList.toggle('show');
             
-            // 💡 漸隱背景 Logo，消除視覺重疊
             if (mainLogo) {
                 if (isOpen) mainLogo.classList.add('header-content-hidden');
                 else mainLogo.classList.remove('header-content-hidden');
@@ -1745,7 +1744,6 @@ body { opacity: 0; transition: opacity 0.2s; }
             
             document.body.style.overflow = isOpen ? 'hidden' : '';
 
-            // 💡 強制切換 ☰ 與 ✕
             if (isOpen) {
                 iconBox.innerHTML = `<i data-lucide="x" class="w-8 h-8 text-white"></i>`;
             } else {
@@ -1757,7 +1755,6 @@ body { opacity: 0; transition: opacity 0.2s; }
         if (btn) btn.addEventListener('click', toggleDrawer);
         if (overlay) overlay.addEventListener('click', toggleDrawer);
 
-        // 分頁自動亮起
         const currentPath = window.location.pathname.split('/').pop() || 'index.html';
         document.querySelectorAll('.mobile-nav-link').forEach(link => {
             if (link.getAttribute('href') === currentPath) {
@@ -1777,8 +1774,3 @@ body { opacity: 0; transition: opacity 0.2s; }
 
 </body>
 </html>
-
-
-
-
-
