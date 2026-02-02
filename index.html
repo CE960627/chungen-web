@@ -279,30 +279,59 @@ body { opacity: 0; transition: opacity 0.2s; }
         .subtle-pulse {
             animation: subtle-pulse 3s infinite ease-in-out;
         }
-		/* 💡 手機選單精品化動畫與高亮 */
+		/* 💡 精品抽屜式選單：右往左滑動 */
+        #mobile-menu {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 75%; /* 佔據螢幕 75% */
+            height: 100vh;
+            background-color: #1e293b; /* gray-800 */
+            z-index: 101;
+            transform: translateX(100%); /* 預設在右側畫面外 */
+            transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            box-shadow: -10px 0 30px rgba(0,0,0,0.3);
+        }
+        #mobile-menu.open {
+            transform: translateX(0); /* 進入畫面 */
+        }
+        /* 背景變暗遮罩 */
+        #menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(2px);
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+        }
+        #menu-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        /* 選單內的高亮狀態 */
         .mobile-nav-link {
-            transition: all 0.2s ease;
             border-left: 4px solid transparent;
+            padding: 1.25rem 1.5rem;
+            transition: all 0.3s;
         }
-        /* 當前分頁高亮狀態：Tiffany 藍左邊框 */
         .mobile-nav-link.active-page {
-            background-color: #111827; /* gray-900 */
-            color: #fbbf24; /* yellow-400 */
+            background-color: #111827;
+            color: #fbbf24;
             border-left-color: #81D8D0; /* Tiffany 藍 */
-            font-weight: 700;
-        }
-        /* 選單漸現動畫 */
-        .animate-menu-slide {
-            animation: menuSlideDown 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-        }
-        @keyframes menuSlideDown {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body class="bg-slate-50 text-gray-800">
-	<nav class="bg-gray-900 text-white shadow-lg sticky top-0 z-[100]">
+	<div id="menu-overlay"></div>
+
+    <nav class="bg-gray-900 text-white shadow-lg sticky top-0 z-[100]">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex-shrink-0 font-bold text-xl tracking-wider">
@@ -320,25 +349,45 @@ body { opacity: 0; transition: opacity 0.2s; }
                 </div>
 
                 <div class="md:hidden flex items-center">
-                    <button id="mobile-menu-btn" class="text-gray-300 hover:text-white focus:outline-none p-2 transition-all">
-                        <i data-lucide="menu" id="icon-menu"></i>
-                        <i data-lucide="x" id="icon-close" class="hidden"></i>
+                    <button id="mobile-menu-btn" class="text-gray-300 hover:text-white focus:outline-none p-2 relative z-[102]">
+                        <i data-lucide="menu" id="icon-menu" class="w-7 h-7"></i>
+                        <i data-lucide="x" id="icon-close" class="w-7 h-7 hidden"></i>
                     </button>
                 </div>
             </div>
         </div>
 
-        <div id="mobile-menu" class="hidden md:hidden bg-gray-800 border-t border-gray-700 shadow-2xl">
-            <div class="px-4 pt-4 pb-8 space-y-3">
-                <a href="index.html" class="mobile-nav-link flex items-center gap-3 px-4 py-4 rounded-xl text-base font-medium transition">
-                    <i data-lucide="compass" class="w-5 h-5 text-blue-400"></i> 116 學測英文全攻略
-                </a>
-                <a href="vocab.html" class="mobile-nav-link flex items-center gap-3 px-4 py-4 rounded-xl text-base font-medium transition">
-                    <i data-lucide="book-marked" class="w-5 h-5 text-blue-400"></i> 學測高頻單字考點
-                </a>
-                <a href="tutoring.html" class="mobile-nav-link flex items-center gap-3 px-4 py-4 rounded-xl text-base font-medium transition">
-                    <i data-lucide="award" class="w-5 h-5 text-blue-400"></i> 師資背景 / 課程諮詢
-                </a>
+        <div id="mobile-menu">
+            <div class="p-8 border-b border-gray-700 bg-gray-900/30">
+                <div class="flex items-center gap-3">
+                    <span class="text-3xl">🎓</span>
+                    <div class="flex flex-col text-left">
+                        <span class="text-xl font-black tracking-tight text-white">Chungen</span>
+                        <span class="text-xs text-gray-400 font-bold tracking-widest uppercase">English</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex-grow pt-6">
+                <div class="space-y-1">
+                    <a href="index.html" class="mobile-nav-link text-base font-bold">
+                        <i data-lucide="compass" class="w-6 h-6 text-blue-400"></i> 學測英文全攻略
+                    </a>
+                    <a href="vocab.html" class="mobile-nav-link text-base font-bold">
+                        <i data-lucide="book-marked" class="w-6 h-6 text-blue-400"></i> 學測高頻單字考點
+                    </a>
+                    <a href="tutoring.html" class="mobile-nav-link text-base font-bold">
+                        <i data-lucide="award" class="w-6 h-6 text-blue-400"></i> 師資背景 / 課程諮詢
+                    </a>
+                </div>
+            </div>
+
+            <div class="p-8 border-t border-gray-700 bg-gray-900/50">
+                <p class="text-xs text-yellow-400 font-black mb-3 tracking-widest">● 全國前 0.04% 寫作實績</p>
+                <p class="text-[11px] text-gray-400 leading-relaxed text-left">
+                    用理科邏輯拆解英文寫作<br>
+                    打造頂尖考生的提分公式
+                </p>
             </div>
         </div>
     </nav>
@@ -1673,42 +1722,45 @@ body { opacity: 0; transition: opacity 0.2s; }
         });
     }
 
-    /* 💡 2. 手機選單開關與自動高亮偵測 */
+    /* 💡 2. 精密抽屜選單切換與自動高亮 */
     document.addEventListener('DOMContentLoaded', () => {
         const btn = document.getElementById('mobile-menu-btn');
         const menu = document.getElementById('mobile-menu');
+        const overlay = document.getElementById('menu-overlay');
         const iconMenu = document.getElementById('icon-menu');
         const iconClose = document.getElementById('icon-close');
 
-        // 漢堡選單：點擊變換圖示與滑動效果
-        if (btn && menu) {
-            btn.addEventListener('click', () => {
-                const isHidden = menu.classList.toggle('hidden');
-                if (!isHidden) {
-                    menu.classList.add('animate-menu-slide');
-                    iconMenu.classList.add('hidden');
-                    iconClose.classList.remove('hidden');
-                } else {
-                    menu.classList.remove('animate-menu-slide');
-                    iconMenu.classList.remove('hidden');
-                    iconClose.classList.add('hidden');
-                }
-            });
+        // 核心切換邏輯
+        function toggleDrawer() {
+            const isOpen = menu.classList.toggle('open');
+            overlay.classList.toggle('show');
+            
+            // 漢堡變叉叉：切換 hidden 類別
+            if (isOpen) {
+                iconMenu.classList.add('hidden');
+                iconClose.classList.remove('hidden');
+            } else {
+                iconMenu.classList.remove('hidden');
+                iconClose.classList.add('hidden');
+            }
         }
 
-        // 自動偵測當前分頁並高亮 (針對 index.html)
+        if (btn) btn.addEventListener('click', toggleDrawer);
+        if (overlay) overlay.addEventListener('click', toggleDrawer); // 點擊陰影處可收回選單
+
+        // 分頁高亮邏輯
         const currentPath = window.location.pathname.split('/').pop() || 'index.html';
         
-        // 手機版選單：亮起黃字與 Tiffany 藍邊框
+        // 手機版高亮
         document.querySelectorAll('.mobile-nav-link').forEach(link => {
             if (link.getAttribute('href') === currentPath) {
                 link.classList.add('active-page');
                 const icon = link.querySelector('i');
-                if(icon) icon.classList.add('text-yellow-400');
+                if(icon) icon.classList.replace('text-blue-400', 'text-yellow-400');
             }
         });
 
-        // 電腦版頂部導覽列：亮起黃字與外框
+        // 電腦版高亮
         document.querySelectorAll('.nav-link').forEach(link => {
             if (link.getAttribute('href') === currentPath) {
                 link.className = "bg-gray-800 text-yellow-400 px-3 py-2 rounded-md text-sm font-bold border border-gray-700";
@@ -1717,14 +1769,12 @@ body { opacity: 0; transition: opacity 0.2s; }
             }
         });
 
-        // 初始化：預設只顯示作文系統（Part 3）
+        // 頁面初始化
         document.querySelectorAll('.page-content').forEach(page => {
             if (page.id !== 'part3') page.style.display = 'none';
         });
         const initialBtn = document.getElementById('nav-part3');
         if (initialBtn) initialBtn.classList.add('active');
-        
-        // 渲染完畢顯示主體
         document.body.style.opacity = "1";
 
         // 啟動 Lucide 圖示
@@ -1734,4 +1784,5 @@ body { opacity: 0; transition: opacity 0.2s; }
 
 </body>
 </html>
+
 
