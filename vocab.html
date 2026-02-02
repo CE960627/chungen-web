@@ -10,11 +10,26 @@
     <style>
         body { font-family: 'Inter', 'Noto Sans TC', sans-serif; background-color: #f8fafc; color: #334155; }
         
-        /* 動畫設定 */
-        .animate-fade-in { animation: fadeIn 0.4s ease-out; }
-        .animate-fade-in-up { animation: fadeInUp 0.5s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        /* 💡 精品級進場動畫：使用特殊的 cubic-bezier 曲線，讓動作像名車懸吊一樣絲滑 */
+        body { 
+            opacity: 0; 
+            transition: opacity 0.8s ease-out; 
+        }
+
+        .premium-fade-in-up {
+            animation: fadeInUpPremium 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes fadeInUpPremium {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
         /* 隱藏滾動條 */
         .no-scrollbar::-webkit-scrollbar { display: none; }
@@ -242,7 +257,7 @@
         </div>
     </nav>
 
-    <header class="bg-gradient-to-r from-blue-700 to-indigo-800 text-white pt-12 pb-24 px-6 relative overflow-hidden">
+<header class="bg-gradient-to-r from-blue-700 to-indigo-800 text-white pt-12 pb-24 px-6 relative overflow-hidden premium-fade-in-up">
         <div class="max-w-5xl mx-auto relative z-10">
             <div class="flex items-center gap-3 mb-4 opacity-80">
                 <i data-lucide="graduation-cap" class="w-6 h-6"></i>
@@ -256,7 +271,7 @@
         <div class="absolute bottom-0 left-10 w-48 h-48 bg-blue-400 opacity-10 rounded-full blur-2xl"></div>
     </header>
 
-    <main class="max-w-5xl mx-auto px-4 -mt-16 relative z-20 pb-6 flex-grow w-full">
+<main class="max-w-5xl mx-auto px-4 -mt-16 relative z-20 pb-6 flex-grow w-full premium-fade-in-up" style="animation-delay: 0.1s;">
         
         <div class="bg-white rounded-xl shadow-lg p-5 mb-8">
             <div class="flex flex-col lg:flex-row gap-4 justify-between items-center">
@@ -1050,9 +1065,11 @@
             }
         });
 
-        // 💡 初始渲染：同時啟動圖示與單字表格
+        // 💡 帷幕啟動：讓整個頁面以 0.8 秒的時間優雅顯現
+        document.body.style.opacity = "1";
+        
         if (window.lucide) lucide.createIcons();
-        render(); // 💡 確保原本好的單字功能在這裡被正確啟動
+        render(); // 啟動單字渲染
     });
 
     </script>
