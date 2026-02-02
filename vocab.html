@@ -17,18 +17,27 @@
             overflow-x: hidden;
         }
 
-        /* 舞台容器：負責把 Header 和 Main 一起滑進來 */
+        /* 1. 精品舞台：統一進場位移與曲線 */
+/* 修正 1：精品舞台同步滑入曲線（20px 位移最優雅） */
         .premium-stage {
             opacity: 0;
-            transform: translateY(30px);
+            transform: translateY(20px);
             transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
+        .stage-ready { opacity: 1; transform: translateY(0); }
 
-        /* 當 JS 準備好時，加上這個 class 就會顯現 */
-        .stage-ready {
-            opacity: 1;
-            transform: translateY(0);
+        /* 修正 2：強制中文釋義在格子內「絕對置中」 */
+        .reveal-wrapper { 
+            display: grid !important; 
+            place-items: center !important; 
+            min-height: 2.8rem; 
         }
+
+        /* 修正 3：側邊選單保護區，確保 English 不被叉叉擋住 */
+        #mobile-menu .pr-20 { padding-right: 6rem !important; }
+        
+        /* 修正 4：無感漸隱邏輯元件 */
+        .header-content-hidden { opacity: 0 !important; pointer-events: none; transition: opacity 0.3s; }
 
         #content-area { min-height: 80vh; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
@@ -869,10 +878,13 @@
             const isOpen = menu.classList.toggle('open');
             overlay.classList.toggle('show');
             
-            // 💡 開啟選單時隱藏背景 Logo
+            // 核心修正：開啟選單時，讓背景 Logo 徹底消失，避免重疊
             if (mainLogo) {
-                if (isOpen) mainLogo.classList.add('header-content-hidden');
-                else mainLogo.classList.remove('header-content-hidden');
+                if (isOpen) {
+                    mainLogo.classList.add('header-content-hidden');
+                } else {
+                    mainLogo.classList.remove('header-content-hidden');
+                }
             }
             
             document.body.style.overflow = isOpen ? 'hidden' : '';
@@ -898,14 +910,15 @@
             }
         });
 
-        // 💡 執行渲染與歸位
+        // 核心修正：先在隱身狀態下把單字表畫好，並強制回到頂部，避免跳針
         render(); 
-        window.scrollTo(0, 0);
+        window.scrollTo(0, 0); 
 
-        // 💡 帷幕啟動：確保 Stage 存在才執行
+        // 像拉開帷幕一樣，50毫秒後讓整體精品舞台同步滑入
         setTimeout(() => {
             document.body.style.opacity = "1";
-            if (mainStage) mainStage.classList.add('stage-ready');
+            const stage = document.getElementById('main-stage');
+            if (stage) stage.classList.add('stage-ready');
         }, 50);
 
         if (window.lucide) lucide.createIcons();
