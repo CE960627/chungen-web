@@ -279,12 +279,12 @@ body { opacity: 0; transition: opacity 0.2s; }
         .subtle-pulse {
             animation: subtle-pulse 3s infinite ease-in-out;
         }
-		/* 💡 修正：精品抽屜黃金比例 75% 與「極輕量」透明感 */
+		/* 💡 修正：精品抽屜 78% 黃金寬度與「通透感」背景 */
         #mobile-menu {
             position: fixed;
             top: 0;
             right: 0;
-            width: 75%; 
+            width: 78%; 
             height: 100dvh; 
             background-color: #1e293b;
             z-index: 101;
@@ -298,8 +298,7 @@ body { opacity: 0; transition: opacity 0.2s; }
         }
         #mobile-menu.open { 
             transform: translateX(0); 
-            /* 💡 修正：陰影調得更淺，僅提供極細微的邊界感 */
-            box-shadow: -4px 0 20px rgba(0,0,0,0.15); 
+            box-shadow: -4px 0 20px rgba(0,0,0,0.1); 
         }
         
         #menu-overlay {
@@ -308,8 +307,8 @@ body { opacity: 0; transition: opacity 0.2s; }
             left: 0;
             width: 100%;
             height: 100%;
-            /* 💡 修正：背景遮罩調淺，讓整體視覺更通透 */
-            background: rgba(0, 0, 0, 0.45); 
+            /* 💡 修正：陰影調更淺 (0.3)，讓整體視覺更通透 */
+            background: rgba(0, 0, 0, 0.3); 
             backdrop-filter: blur(8px); 
             z-index: 100;
             opacity: 0;
@@ -369,9 +368,9 @@ body { opacity: 0; transition: opacity 0.2s; }
         </div>
 
         <div id="mobile-menu">
-            <div class="h-16 flex items-center pl-6 pr-20 border-b border-gray-700 bg-gray-900 flex-shrink-0">
+            <div class="h-16 flex items-center pl-6 pr-14 border-b border-gray-700 bg-gray-900 flex-shrink-0">
                 <div class="flex items-center gap-2 whitespace-nowrap overflow-hidden">
-                    <span class="text-2xl">🎓</span>
+                    <span class="text-xl">🎓</span>
                     <span class="text-lg font-black text-white">Chungen English</span>
                 </div>
             </div>
@@ -1725,7 +1724,7 @@ body { opacity: 0; transition: opacity 0.2s; }
         });
     }
 
-    /* 💡 2. 抽屜切換與 Logo 漸隱邏輯 */
+    /* 💡 2. 完美校準邏輯 */
     document.addEventListener('DOMContentLoaded', () => {
         const btn = document.getElementById('mobile-menu-btn');
         const menu = document.getElementById('mobile-menu');
@@ -1774,6 +1773,7 @@ body { opacity: 0; transition: opacity 0.2s; }
 
 </body>
 </html>
+
 
 
 
