@@ -122,35 +122,118 @@
             border-color: #5eead4;
             transform: translateY(-1px); /* 僅微幅浮動增加互動感 */
         }
+        /* 💡 全站同步：精品抽屜 78% 寬度與「極致通透」背景 */
+        #mobile-menu {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 78%; 
+            height: 100dvh; 
+            background-color: #1e293b;
+            z-index: 101;
+            transform: translateX(100%); 
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; 
+            box-shadow: none;
+            overflow: hidden;
+        }
+        #mobile-menu.open { 
+            transform: translateX(0); 
+            box-shadow: -2px 0 15px rgba(0,0,0,0.08); 
+        }
+        
+        #menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* 💡 維持 0.08 極致透明感 */
+            background: rgba(0, 0, 0, 0.08); 
+            backdrop-filter: blur(8px); 
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        #menu-overlay.show { opacity: 1; visibility: visible; }
+
+        /* 💡 修正：Logo 漸隱，解決左上角標籤重疊感 */
+        .header-content-fade { transition: opacity 0.25s ease; }
+        .header-content-hidden { opacity: 0 !important; pointer-events: none; }
+
+        .mobile-nav-link {
+            border-left: 4px solid transparent;
+            border-bottom: 1px solid rgba(255,255,255,0.03); 
+            padding: 2.2rem 1.5rem; 
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            color: #cbd5e1;
+            transition: all 0.2s;
+        }
+        .mobile-nav-link.active-page {
+            background-color: #111827;
+            color: #fbbf24;
+            border-left-color: #81D8D0; 
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
 
-    <nav class="bg-gray-900 text-white shadow-lg sticky top-0 z-[60]">
+    <div id="menu-overlay"></div>
+
+    <nav class="bg-gray-900 text-white shadow-lg sticky top-0 z-[100]">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
-                <div class="flex-shrink-0 font-bold text-xl tracking-wider">
+                <div id="main-logo-area" class="flex-shrink-0 font-bold text-xl tracking-wider header-content-fade">
                     <a href="index.html" class="text-white hover:text-yellow-400 transition flex items-center gap-2">
                         <span class="text-2xl">🎓</span> Chungen English
                     </a>
                 </div>
+                
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-baseline space-x-4">
-                        <a href="index.html" class="text-gray-300 hover:text-white hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium transition">116 學測英文全攻略</a>
+                        <a href="index.html" class="nav-link text-gray-300 hover:text-white hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium transition">116 學測英文全攻略</a>
                         <a href="vocab.html" class="bg-gray-800 text-yellow-400 px-3 py-2 rounded-md text-sm font-bold border border-gray-700">學測高頻單字考點</a>
                         <a href="tutoring.html" class="text-gray-300 hover:text-white hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium transition">師資背景 / 課程諮詢</a>
                     </div>
                 </div>
+
                 <div class="md:hidden flex items-center">
-                    <button onclick="document.getElementById('mobile-menu').classList.toggle('hidden')" class="text-gray-300 hover:text-white focus:outline-none p-2">☰</button>
+                    <button id="mobile-menu-btn" class="text-gray-300 hover:text-white focus:outline-none p-2 relative z-[102]">
+                        <div id="icon-container-box" style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;">
+                            <i data-lucide="menu" class="w-8 h-8"></i>
+                        </div>
+                    </button>
                 </div>
             </div>
         </div>
-        <div id="mobile-menu" class="hidden md:hidden bg-gray-800 border-t border-gray-700">
-            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                <a href="index.html" class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">116 學測英文全攻略</a>
-                <a href="vocab.html" class="text-yellow-400 block px-3 py-2 rounded-md text-base font-bold bg-gray-900">學測高頻單字考點</a>
-                <a href="tutoring.html" class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">師資背景 / 課程諮詢</a>
+
+        <div id="mobile-menu">
+            <div class="h-16 flex items-center pl-6 pr-20 border-b border-gray-700 bg-gray-900 flex-shrink-0">
+                <div class="flex items-center gap-2 whitespace-nowrap overflow-hidden font-bold text-lg tracking-normal text-white">
+                    <span class="text-2xl">🎓</span>
+                    <span>Chungen English</span>
+                </div>
+            </div>
+
+            <div class="flex-grow flex flex-col justify-start pt-4">
+                <a href="index.html" class="mobile-nav-link text-lg font-bold"><i data-lucide="compass" class="w-6 h-6 text-blue-400"></i> 116 學測英文全攻略</a>
+                <a href="vocab.html" class="mobile-nav-link text-lg font-bold"><i data-lucide="book-marked" class="w-6 h-6 text-blue-400"></i> 學測高頻單字考點</a>
+                <a href="tutoring.html" class="mobile-nav-link text-lg font-bold"><i data-lucide="award" class="w-6 h-6 text-blue-400"></i> 師資背景 / 課程諮詢</a>
+            </div>
+
+            <div class="p-8 border-t border-gray-700 bg-gray-900/90 mb-[env(safe-area-inset-bottom)] text-center">
+                <div class="inline-block px-4 py-1.5 rounded-full bg-yellow-500/10 border border-yellow-500/20 mb-5">
+                    <p class="text-[14px] text-yellow-400 font-black tracking-widest uppercase whitespace-nowrap">老師全國前 0.04% 寫作實績</p>
+                </div>
+                <div class="space-y-1.5 text-center">
+                    <p class="text-[14px] text-gray-100 font-bold tracking-[0.08em] whitespace-nowrap">將系統邏輯帶入英文學習</p>
+                    <p class="text-[14px] text-gray-100 font-bold tracking-[0.08em] whitespace-nowrap">打造頂尖考生的提分公式</p>
+                </div>
             </div>
         </div>
     </nav>
@@ -922,7 +1005,52 @@
         }
 
         // 初始執行
-        render();
+        /* 💡 2. 手機精品選單核心邏輯 (與單字功能無縫整合) */
+    document.addEventListener('DOMContentLoaded', () => {
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+        const overlay = document.getElementById('menu-overlay');
+        const iconBox = document.getElementById('icon-container-box');
+        const mainLogo = document.getElementById('main-logo-area');
+
+        function toggleDrawer() {
+            const isOpen = menu.classList.toggle('open');
+            overlay.classList.toggle('show');
+            
+            // 💡 修正：漸隱背景標題，消除重疊干擾
+            if (mainLogo) {
+                if (isOpen) mainLogo.classList.add('header-content-hidden');
+                else mainLogo.classList.remove('header-content-hidden');
+            }
+            
+            document.body.style.overflow = isOpen ? 'hidden' : '';
+
+            // 💡 暴力切換圖標邏輯
+            if (isOpen) {
+                iconBox.innerHTML = `<i data-lucide="x" class="w-8 h-8 text-white"></i>`;
+            } else {
+                iconBox.innerHTML = `<i data-lucide="menu" class="w-8 h-8 text-gray-300"></i>`;
+            }
+            if (window.lucide) lucide.createIcons({ root: iconBox });
+        }
+
+        if (btn) btn.addEventListener('click', toggleDrawer);
+        if (overlay) overlay.addEventListener('click', toggleDrawer);
+
+        // 分頁自動高亮
+        const currentPath = window.location.pathname.split('/').pop() || 'index.html';
+        document.querySelectorAll('.mobile-nav-link').forEach(link => {
+            if (link.getAttribute('href') === currentPath) {
+                link.classList.add('active-page');
+                const icon = link.querySelector('i');
+                if(icon) icon.style.color = '#fbbf24'; 
+            }
+        });
+
+        // 💡 初始渲染：同時啟動圖示與單字表格
+        if (window.lucide) lucide.createIcons();
+        render(); // 💡 確保原本好的單字功能在這裡被正確啟動
+    });
 
     </script>
 </body>
